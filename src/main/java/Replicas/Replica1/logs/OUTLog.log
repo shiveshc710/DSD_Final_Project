@@ -1,0 +1,46 @@
+Mar 08, 2023 9:43:09 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : UDP request sent from Outremont to port 7000
+Mar 08, 2023 9:43:09 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : UDP request sent from Outremont to port 7001
+Mar 08, 2023 9:43:09 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : UDP response received from port 7000
+Mar 08, 2023 9:43:09 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : UDP response received from port 7001
+Mar 08, 2023 9:43:11 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found from all servers for user : OUTC1234
+Mar 08, 2023 9:43:31 PM server.OUTAServer writeLog
+INFO: Log from  Atwater : Received response
+Mar 08, 2023 9:43:31 PM server.OUTAServer writeLog
+INFO: Log from  Atwater : Outremont : Get Bookings for Atwater | Request Parameters : customerID: ATWC1234
+Mar 08, 2023 9:43:31 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 08, 2023 9:43:31 PM server.OUTAServer writeLog
+INFO: Log from  Atwater : Sending response to the request server.
+Mar 08, 2023 9:44:02 PM server.OUTAServer writeLog
+INFO: Log from  Atwater : Received response
+Mar 08, 2023 9:44:02 PM server.OUTAServer writeLog
+INFO: Log from  Atwater : Outremont : Check remote Tickets | Request Parameters : Data: ATWC1234 Avatar ATWM080323 OUTM150223 Avatar 1
+Mar 08, 2023 9:51:15 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 08, 2023 9:53:21 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 12, 2023 9:39:28 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 12, 2023 9:48:21 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 12, 2023 9:48:51 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 12, 2023 9:51:59 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 12, 2023 9:57:36 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 12, 2023 9:58:08 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 21, 2023 8:17:03 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 21, 2023 8:17:57 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 21, 2023 8:45:04 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234
+Mar 21, 2023 8:45:22 PM implementation.OUTImplementation writeLog
+INFO: Log from Outremont : Bookings found for Outremont server for user ATWC1234

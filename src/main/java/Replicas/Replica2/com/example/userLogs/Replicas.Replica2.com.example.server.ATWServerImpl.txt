@@ -1,0 +1,1 @@
+2023-04-03 17:33:12 | Reqeuest Type: Add Movie Slots | Request Parameters: ATWA123,ATWA100223,AVATAR,100 | Status: Success! | Server Response: Success!

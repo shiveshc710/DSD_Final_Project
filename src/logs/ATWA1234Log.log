@@ -1,0 +1,4 @@
+Apr 03, 2023 6:13:01 PM client.Admin writeLog
+INFO: Log from ATWA1234(Customer) : ATWA1234 : Add slot | Request Parameters : Movie Id: ATWA100223 Movie Name: Avatar Number of Slots: 100
+Apr 03, 2023 6:15:23 PM client.Admin writeLog
+INFO: Log from ATWA1234(Customer) : ATWA1234 : Add slot | Request Parameters : Movie Id: ATWA100223 Movie Name: Avatar Number of Slots: 100
