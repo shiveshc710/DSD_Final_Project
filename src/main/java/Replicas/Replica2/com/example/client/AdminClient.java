@@ -6,6 +6,10 @@ import config.CONFIGURATION;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.*;
 
@@ -33,7 +37,7 @@ public class AdminClient {
 
 
     /**
-     * Main menu for ADMIN Client.
+     * client.Main menu for ADMIN Client.
      *
      * @param obj       The object of interface.
      */
@@ -76,13 +80,14 @@ public class AdminClient {
                 String requestParameters = id + "," + movieID + "," + movieName + "," + bookingCapacity;
 
                 try {
-                    String ans = obj.addMovieSlots(id, movieID, movieName, bookingCapacity);
+//                    String ans = obj.addMovieSlots(id, movieID, movieName, bookingCapacity);
+                    String req = "addSlot,"+requestParameters;
+                    sendRequest(req);
+
+//                    LoggingHelper.log(id, "ADD MOVIE SLOT", requestParameters, "Success!", "Success!");
 
 
-                    LoggingHelper.log(id, "ADD MOVIE SLOT", requestParameters, "Success!", "Success!");
-
-
-                    System.out.println(ans);
+//                    System.out.println(ans);
 
 
                     displayMenu(obj);
@@ -260,5 +265,25 @@ public class AdminClient {
         } catch (Exception e) {
             System.out.println("Exception in admin client: " + e);
         }
+    }
+
+    public static void sendRequest(String requestData1) throws IOException {
+// Create a socket to send the request
+        DatagramSocket socket = new DatagramSocket();
+
+        // Define the front end's IP address and port number
+        InetAddress frontEndAddress = InetAddress.getByName("localhost");
+        int frontEndPort = 9000;
+
+        // Create the request data
+        String requestData = requestData1;
+        byte[] requestBuffer = requestData.getBytes();
+
+        // Create the UDP packet with the request data
+        DatagramPacket requestPacket = new DatagramPacket(requestBuffer, requestBuffer.length, frontEndAddress, frontEndPort);
+
+        // Send the request packet to the front end
+        socket.send(requestPacket);
+
     }
 }

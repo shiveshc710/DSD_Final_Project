@@ -28,24 +28,28 @@ public class Sequencer {
                         buffer.length);
 
                 aSocket.receive(request);
+                String sentence = new String(request.getData(),0, request.getLength());
+                System.out.println(sentence);
+                sendRequest(sentence);
 
-                String sentence = new String(request.getData());
 
-                String[] parts = sentence.split(";");
-
-                if(parts[1].equals("Add")){
-                    parts[1] = "1";
-                }
-
-                byte[] SeqId = (CONFIGURATION.SEQUENCER_IP).getBytes();
-                InetAddress aHost1 = request.getAddress();
-                int port1 = request.getPort();
-
-                System.out.println(aHost1 + ":" + port1);
-                DatagramPacket request1 = new DatagramPacket(SeqId,
-                        SeqId.length, aHost1, port1);
-                aSocket.send(request1);
-                sequencerId++;
+//                String sentence = new String(request.getData());
+//
+//                String[] parts = sentence.split(";");
+//
+//                if(parts[1].equals("Add")){
+//                    parts[1] = "1";
+//                }
+//
+//                byte[] SeqId = (CONFIGURATION.SEQUENCER_IP).getBytes();
+//                InetAddress aHost1 = request.getAddress();
+//                int port1 = request.getPort();
+//
+//                System.out.println(aHost1 + ":" + port1);
+//                DatagramPacket request1 = new DatagramPacket(SeqId,
+//                        SeqId.length, aHost1, port1);
+//                aSocket.send(request1);
+//                sequencerId++;
             }
 
         } catch (SocketException e) {
@@ -80,4 +84,25 @@ public class Sequencer {
         }
 
     }
+
+    public static void sendRequest(String requestData1) throws IOException {
+// Create a socket to send the request
+        DatagramSocket socket = new DatagramSocket();
+
+        // Define the front end's IP address and port number
+        InetAddress rm1Address = InetAddress.getByName("localhost");
+        int rm1Port = 5000;
+
+        // Create the request data
+        String requestData = requestData1;
+        byte[] requestBuffer = requestData.getBytes();
+
+        // Create the UDP packet with the request data
+        DatagramPacket requestPacket = new DatagramPacket(requestBuffer, requestBuffer.length, rm1Address, rm1Port);
+
+        // Send the request packet to the front end
+        socket.send(requestPacket);
+
+    }
+
 }

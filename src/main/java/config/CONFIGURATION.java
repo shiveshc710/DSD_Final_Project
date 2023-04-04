@@ -29,7 +29,7 @@ public class CONFIGURATION {
 
 //    Sequencer Configuration
 
-    public static final String SEQUENCER_IP = "192.168.2.28";
+    public static final String SEQUENCER_IP = "192.168.2.18";
     public static final int SEQUENCER_PORT = 1333;
 
 //    Replica Manager Configuration

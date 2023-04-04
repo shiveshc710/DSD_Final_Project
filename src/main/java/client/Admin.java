@@ -8,6 +8,9 @@ import config.CONFIGURATION;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -121,9 +124,13 @@ public class Admin {
                             System.out.print("\nPlease Enter the Movie ID {ATW/VER/OUT}{M/A/E}{DDMMYY}: ");
                             movieId = sc.next();
                             writeLog(userID + " : Add slot | Request Parameters : Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Slots: " + numberOfSlots);
-                            FrontEnd requestFE = new FrontEnd(CONFIGURATION.SEQUENCER_IP,CONFIGURATION.SEQUENCER_PORT,0,0,0);
-                            String message = "Add;"+ movieId +";"+ movieName +";"+ numberOfSlots;
-                            requestFE.sendRequest(message);
+
+
+                            ///////////////////
+                            String req = "addSlot;"+movieId+";"+movieName+";"+numberOfSlots;
+                            sendRequest(req);
+
+                            ////////////////////
 //                            mtbsInterface = service.getPort(MTBSInterface.class);
 //                            String result = mtbsInterface.addMovieSlots(movieId,movieName,numberOfSlots);
 //                            System.out.println(result);
@@ -305,5 +312,25 @@ public class Admin {
             logger.info("File Handler Exception!");
             fh.close();
         }
+    }
+
+    public static void sendRequest(String requestData1) throws IOException {
+// Create a socket to send the request
+        DatagramSocket socket = new DatagramSocket();
+
+        // Define the front end's IP address and port number
+        InetAddress frontEndAddress = InetAddress.getByName("localhost");
+        int frontEndPort = 9000;
+
+        // Create the request data
+        String requestData = requestData1;
+        byte[] requestBuffer = requestData.getBytes();
+
+        // Create the UDP packet with the request data
+        DatagramPacket requestPacket = new DatagramPacket(requestBuffer, requestBuffer.length, frontEndAddress, frontEndPort);
+
+        // Send the request packet to the front end
+        socket.send(requestPacket);
+
     }
 }

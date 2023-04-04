@@ -32,7 +32,7 @@ public class CustomerClient {
     }
 
     /**
-     * Main menu for Customer Client.
+     * client.Main menu for Customer Client.
      *
      * @param obj       The object of interface.
      */
