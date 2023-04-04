@@ -63,7 +63,13 @@ public class ReplicaManager {
         // call method on replica server and return response
         String[] parts = request.split(",");
         if (parts[0].equals("addSlot")) {
-             ans=  MasterServerRef.addMovieSlots(parts[1], parts[2], parts[3], Integer.parseInt(parts[4]));
+            ans = MasterServerRef.addMovieSlots(parts[1], parts[2], parts[3], Integer.parseInt(parts[4]));
+        } else if (parts[0].equals("remSlot")) {
+            ans = MasterServerRef.removeMovieSlots(parts[1], parts[2], parts[3]);
+        } else if (parts[0].equals("book")) {
+            ans = MasterServerRef.bookMovieTickets(parts[1], parts[2], parts[3], Integer.parseInt(parts[4]));
+        } else if (parts[0].equals("cancel")) {
+            ans = MasterServerRef.cancelMovieTickets(parts[1], parts[2], parts[3], Integer.parseInt(parts[4]));
         }
 
         return ans;
@@ -71,7 +77,7 @@ public class ReplicaManager {
 
     public static void main(String[] args) {
         try {
-            URL url = new URL("http://localhost:"+ CONFIGURATION.Main_PORT_2+"/masterservice?wsdl");
+            URL url = new URL("http://localhost:" + CONFIGURATION.Main_PORT_2 + "/masterservice?wsdl");
             QName qname = new QName("http://example.com/master", "MasterServerImplService");
             Service service = Service.create(url, qname);
             MasterServerRef = service.getPort(MasterServerImpl.class);

@@ -94,17 +94,17 @@ public class VERImpl {
         String serverResponse;
         try {
             if (!movieInfo.containsKey(movieName)) {
-                status = "Failure";
+                status = "Failed";
                 serverResponse = "Movie does not exist in the system";
                 logVER(currentTime, requestType, requestParameters, status, serverResponse, adminID);
-                return serverResponse;
+                return status;
             } else {
                 HashMap<String, Integer> value = movieInfo.get(movieName);
                 if (!value.containsKey(movieID)) {
-                    status = "Failure";
+                    status = "Failed";
                     serverResponse = "Movie slot does not exist in the system";
                     logVER(currentTime, requestType, requestParameters, status, serverResponse, adminID);
-                    return serverResponse;
+                    return status;
                 } else {
                     value.remove(movieID);
                     movieInfo.put(movieName, value);
@@ -126,14 +126,14 @@ public class VERImpl {
                     status = "Success";
                     serverResponse = "Movie slot removed";
                     logVER(currentTime, requestType, requestParameters, status, serverResponse, adminID);
-                    return serverResponse;
+                    return status;
                 }
             }
         } catch (Exception e) {
-            status = "Failure";
+            status = "Failed";
             serverResponse = "Server error";
             logVER(currentTime, requestType, requestParameters, status, serverResponse, adminID);
-            return serverResponse;
+            return status;
         }
     }
 
@@ -259,7 +259,7 @@ public class VERImpl {
                 serverResponse = "Movie ID not found";
                 logVER(currentTime, requestType, requestParameters, status, serverResponse, customerID);
             }
-            return status + "\n" + serverResponse;
+            return status;
         } else {
             status = "Failed";
             serverResponse = "Movie name not found";
@@ -338,12 +338,12 @@ public class VERImpl {
                 serverResponse = "No Booking Found for the Movie";
                 logVER(currentTime, requestType, requestParameters, status, serverResponse, customerID);
             }
-            return serverResponse;
+            return status;
         } catch (Exception e) {
             status = "Failed";
             serverResponse = "Error Occured: " + e.getMessage();
             logVER(currentTime, requestType, requestParameters, status, serverResponse, customerID);
-            return serverResponse;
+            return status;
         }
     }
 

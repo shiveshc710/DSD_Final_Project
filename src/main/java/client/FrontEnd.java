@@ -78,52 +78,68 @@ public class FrontEnd {
                         responses[replicaId-1] = response; // Store the response in the correct position of the responses array
                         numResponses++;
                     } catch (SocketTimeoutException e) {
-                        System.err.println("Replica " + i + " timed out.");
-                        replicaFailures[i]++;
-                        if (replicaFailures[i] > maxFailures) {
-                            System.err.println("Replica " + i + " has failed.");
-                            replicaFailures[i] = 0;
-                            for (int j = 0; j < numReplicas; j++) {
-                                if (i != j) {
-                                    DatagramPacket replicaFailure = new DatagramPacket(new byte[1024], 1024, replicaAddresses[j], replicaPorts[j]);
-                                    replicaSocket.send(replicaFailure);
-                                }
-                            }
-                        }
+                        ///////////////////////////handle everything in this catch. current impl is almost all wrong
+
+
+                        // Identify which replica has timed out and increment its failure count
+                        int replicaId = i + 1;
+                        System.err.println("Replica " + replicaId + " timed out.");
+                        replicaFailures[replicaId-1]++;
+//                        if (replicaFailures[replicaId-1] > maxFailures) {
+//                            System.err.println("Replica " + replicaId + " has failed.");
+//                            replicaFailures[replicaId-1] = 0;
+//                            for (int j = 0; j < numReplicas; j++) {
+//                                if (j != replicaId-1) {
+////                                    DatagramPacket replicaFailure = new DatagramPacket(new byte[1024], 1024, replicaAddresses[j], replicaPorts[j]);
+////                                    replicaSocket.send(replicaFailure);
+//                                }
+//                            }
+//                        }
                     }
                 }
 
+                /////temp response from replica 1
+                responses[0]= "garbage";
                 // Identify correct response
                 String correctResponse = null;
                 for (int i = 0; i < numReplicas; i++) {
                     if (responses[i] != null) {
-                        if (correctResponse == null) {
-                            correctResponse = responses[i];
-                        } else if (!correctResponse.equals(responses[i])) {
-                            System.err.println("Response from replica " + i + " is incorrect.");
-                            replicaFailures[i]++;
-                            if (replicaFailures[i] > maxFailures) {
-                                System.err.println("Replica " + i + " has failed.");
-                                replicaFailures[i] = 0;
-                                for (int j = 0; j < numReplicas; j++) {
-                                    if (i != j) {
-                                        DatagramPacket replicaFailure = new DatagramPacket(new byte[1024], 1024, replicaAddresses[j], replicaPorts[j]);
-                                        replicaSocket.send(replicaFailure);
-                                    }
-                                }
+                        int count = 0;
+                        for (int j = 0; j < numReplicas; j++) {
+                            if (responses[j] != null && responses[i].equals(responses[j])) {
+                                count++;
                             }
                         }
+                        if (count == 2) {
+                            correctResponse = responses[i];
+                            break;
+                        }
+//                        else {
+//                            System.err.println("Response from replica " + i + " is incorrect.");
+//                            replicaFailures[i]++;
+//                            if (replicaFailures[i] > maxFailures) {
+//                                System.err.println("Replica " + i + " has failed.");
+//                                replicaFailures[i] = 0;
+//                                for (int j = 0; j < numReplicas; j++) {
+//                                    if (i != j) {
+//                                        DatagramPacket replicaFailure = new DatagramPacket(new byte[1024], 1024, replicaAddresses[j], replicaPorts[j]);
+//                                        replicaSocket.send(replicaFailure);
+//                                    }
+//                                }
+//                            }
+//                        }
                     }
                 }
+
+
                 if (correctResponse == null) {
                     System.err.println("All replicas timed out.");
-                    continue;
                 }
-
-                // Send correct response back to client
-                byte[] responseBuf = correctResponse.getBytes();
-                DatagramPacket response = new DatagramPacket(responseBuf, responseBuf.length, request.getAddress(), request.getPort());
-                replicaSocket.send(response);
+                else {
+                    // Send correct response back to client
+                    /////////////////////////////////HOW???????
+                    System.out.println(correctResponse);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -136,7 +152,7 @@ public class FrontEnd {
             int sequencerPort = CONFIGURATION.SEQUENCER_PORT;
             String[] replicaAddrs = {"localhost", "localhost", "localhost"};
             int[] replicaPorts = {5000, 6000, 7000};
-            int timeoutMs = 50000;
+            int timeoutMs = 5000;
             int frontEndPort = 9000;
             FrontEnd frontEnd = new FrontEnd(sequencerAddr, sequencerPort, replicaAddrs, replicaPorts, timeoutMs, frontEndPort);
             frontEnd.start();

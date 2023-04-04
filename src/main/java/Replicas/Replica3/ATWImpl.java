@@ -95,17 +95,17 @@ public class ATWImpl {
         String serverResponse;
         try {
             if (!movieInfo.containsKey(movieName)) {
-                status = "Failure";
+                status = "Failed";
                 serverResponse = "Movie does not exist in the system";
                 logATW(currentTime, requestType, requestParameters, status, serverResponse, adminID);
-                return serverResponse;
+                return status;
             } else {
                 HashMap<String, Integer> value = movieInfo.get(movieName);
                 if (!value.containsKey(movieID)) {
-                    status = "Failure";
+                    status = "Failed";
                     serverResponse = "Movie slot does not exist in the system";
                     logATW(currentTime, requestType, requestParameters, status, serverResponse, adminID);
-                    return serverResponse;
+                    return status;
                 } else {
                     value.remove(movieID);
                     movieInfo.put(movieName, value);
@@ -127,14 +127,14 @@ public class ATWImpl {
                     status = "Success";
                     serverResponse = "Movie slot removed";
                     logATW(currentTime, requestType, requestParameters, status, serverResponse, adminID);
-                    return serverResponse;
+                    return status;
                 }
             }
         } catch (Exception e) {
-            status = "Failure";
+            status = "Failed";
             serverResponse = "Server error";
             logATW(currentTime, requestType, requestParameters, status, serverResponse, adminID);
-            return serverResponse;
+            return status;
         }
     }
 
@@ -260,7 +260,7 @@ public class ATWImpl {
                 serverResponse = "Movie ID not found";
                 logATW(currentTime, requestType, requestParameters, status, serverResponse, customerID);
             }
-            return status + "\n" + serverResponse;
+            return status;
         } else {
             status = "Failed";
             serverResponse = "Movie name not found";
@@ -339,12 +339,12 @@ public class ATWImpl {
                 serverResponse = "No Booking Found for the Movie";
                 logATW(currentTime, requestType, requestParameters, status, serverResponse, customerID);
             }
-            return serverResponse;
+            return status;
         } catch (Exception e) {
             status = "Failed";
             serverResponse = "Error Occured: " + e.getMessage();
             logATW(currentTime, requestType, requestParameters, status, serverResponse, customerID);
-            return serverResponse;
+            return status;
         }
     }
 

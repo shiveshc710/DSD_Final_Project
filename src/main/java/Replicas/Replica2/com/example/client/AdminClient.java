@@ -43,6 +43,7 @@ public class AdminClient {
      */
     public static void displayMenu(MasterServerImpl obj) {
         try {
+
             System.out.println();
             System.out.println("Welcome ADMIN!");
             System.out.println("Please enter your ID: ");
@@ -105,10 +106,12 @@ public class AdminClient {
                 String requestParameters = id + "," + movieID + "," + movieName;
 
                 try {
-                    String ans = obj.removeMovieSlots(id, movieID, movieName);
+//                    String ans = obj.removeMovieSlots(id, movieID, movieName);
+//
+//                    System.out.println(ans);
 
-                    System.out.println(ans);
-
+                    String req = "remSlot,"+requestParameters;
+                    sendRequest(req);
 
                     LoggingHelper.log(id, "RemoveMovieSlots", requestParameters, "Success!", "Success!");
 
@@ -182,7 +185,10 @@ public class AdminClient {
                 String requestParameters = id + "," + movieID + "," + movieName + "," + numberOfTickets;
 
                 try {
-                    System.out.println(obj.bookMovieTickets(id, movieID, movieName, numberOfTickets));
+//                    System.out.println(obj.bookMovieTickets(id, movieID, movieName, numberOfTickets));
+
+                    String req = "book,"+requestParameters;
+                    sendRequest(req);
 
                     LoggingHelper.log(id, "Book Movie Ticket", requestParameters, "Success!", "Success!");
                     displayMenuCustomer(obj);
@@ -221,8 +227,10 @@ public class AdminClient {
                 String requestParameters = id + "," + movieID + "," + movieName + "," + numberOfTickets;
                 try {
 
-                    System.out.println(obj.cancelMovieTickets(id, movieID, movieName, numberOfTickets));
+//                    System.out.println(obj.cancelMovieTickets(id, movieID, movieName, numberOfTickets));
 
+                    String req = "cancel,"+requestParameters;
+                    sendRequest(req);
                     LoggingHelper.log(id, "Cancel Movie Tickets", requestParameters, "Success!", "Success!");
                     displayMenuCustomer(obj);
                 }catch (Exception e){

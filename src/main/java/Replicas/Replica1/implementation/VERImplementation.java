@@ -3,7 +3,6 @@ package Replicas.Replica1.implementation;
 import Replicas.Replica1.MTBInterface.MTBSInterface;
 import config.CONFIGURATION;
 import Replicas.Replica1.model.BookingDetails;
-import org.omg.CORBA.ORB;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -35,10 +34,6 @@ public class VERImplementation implements MTBSInterface {
     public String out_result = "", atw_result = "";
     TimeUnit time = TimeUnit.SECONDS;
 
-    private ORB orb;
-    public void setORB(ORB orb_val) {
-        orb = orb_val;
-    }
     public VERImplementation() throws RemoteException {
         super();
 

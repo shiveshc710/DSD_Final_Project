@@ -2,7 +2,6 @@ package Replicas.Replica1.implementation;
 import Replicas.Replica1.MTBInterface.MTBSInterface;
 import config.CONFIGURATION;
 import Replicas.Replica1.model.BookingDetails;
-import org.omg.CORBA.ORB;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -37,10 +36,6 @@ public class ATWImplementation implements MTBSInterface {
     boolean check = false;
     boolean newCheck = false;
 
-    private ORB orb;
-    public void setORB(ORB orb_val) {
-        orb = orb_val;
-    }
 
     SimpleDateFormat dateFormatter = new SimpleDateFormat("ddMMyy");
     Date d = new Date();

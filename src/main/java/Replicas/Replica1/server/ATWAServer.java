@@ -20,7 +20,7 @@ public class ATWAServer {
         System.out.println("Atwater server published : " + endPoint.isPublished());
         System.out.println("Atwater server is Up and Running...");
 
-        Runnable task = () -> listenForUDP(atw_implementation);;
+        Runnable task = () -> listenForUDP(atw_implementation);
         Thread t = new Thread(task);
         t.start();
     }

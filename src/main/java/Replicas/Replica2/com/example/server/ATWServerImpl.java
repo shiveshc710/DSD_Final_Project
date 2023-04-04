@@ -50,7 +50,7 @@ public class ATWServerImpl implements BookingSystemInterface {
         } catch (Exception e) {
             System.out.println("Exception is: " + e);
             LoggingHelper.log(this.getClass().getName(), "Add Movie Slots", requestParameters, "Failed!", "Failed!");
-            return "Unsuccessful!";
+            return "Failed";
         }
     }
 
@@ -85,16 +85,16 @@ public class ATWServerImpl implements BookingSystemInterface {
                 HashMap<String, Integer> possibleMovie = movies.get(movieName);
                 movies.get(movieName).remove(movieID);
                 LoggingHelper.log(this.getClass().getName(), "Remove Movie Slots", requestParameters, "Success!", "Success!");
-                return "Success!";
+                return "Success";
             } else {
                 LoggingHelper.log(this.getClass().getName(), "Remove Movie Slots", requestParameters, "Failed!", "Failed!");
-                return "Movie not found!";
+                return "Failed";
             }
 
         } catch (Exception e) {
             System.out.println("Error Occurred while removing movie slot: " + e);
             LoggingHelper.log(this.getClass().getName(), "Remove Movie Slots", requestParameters, "Failed!", "Failed!");
-            return "Unsuccessful!";
+            return "Failed";
         }
 
     }
@@ -183,19 +183,19 @@ public class ATWServerImpl implements BookingSystemInterface {
                         customerBookings.put(customerID, newBookings);
                     }
                     LoggingHelper.log(this.getClass().getName(), "Book Movie Tickets", requestParameters, "Success!", "Success!");
-                    return "Successfully Booked!";
+                    return "Success";
                 } else {
                     LoggingHelper.log(this.getClass().getName(), "Book Movie Tickets", requestParameters, "Failed!", "Failed!");
-                    return "Number of these many tickets are not available for this show!";
+                    return "Failed";
                 }
             } else {
                 LoggingHelper.log(this.getClass().getName(), "Book Movie Tickets", requestParameters, "Failed!", "Failed!");
-                return "Movie does not exist in your region!";
+                return "Failed";
             }
         } catch (Exception e) {
             System.out.println("Error Occurred!" + e);
             LoggingHelper.log(this.getClass().getName(), "Book Movie Tickets", requestParameters, "Failed!", "Failed!");
-            return "Booking was unsuccessful!";
+            return "Failed";
         }
     }
 
@@ -265,7 +265,7 @@ public class ATWServerImpl implements BookingSystemInterface {
                                     customerBooking.remove(booking);
                                     customerBooking.add(updatedRecord);
                                 } else {
-                                    return "Tickets to be removed are more than the booked tickets.";
+                                    return "Failed";
                                 }
                                 flag = true;
                                 break;
@@ -282,15 +282,15 @@ public class ATWServerImpl implements BookingSystemInterface {
                         movies.put(movieName, currentMovie);
                         LoggingHelper.log(this.getClass().getName(), "Cancel Movie Tickets", requestParameters, "Success!", "Success!");
 
-                        return "Successfully cancelled booking!";
+                        return "Success";
                     } else {
                         LoggingHelper.log(this.getClass().getName(), "Cancel Movie Tickets", requestParameters, "Failed!", "Failed!");
-                        return "There is no booking with this booking ID.";
+                        return "Failed";
                     }
                 }
             } else {
                 LoggingHelper.log(this.getClass().getName(), "Cancel Movie Tickets", requestParameters, "Failed!", "Failed!");
-                return "There are no movies available.";
+                return "Failed";
             }
         } catch (Exception e) {
             System.out.println("Error Occurred in implementer class: " + e);
@@ -298,7 +298,7 @@ public class ATWServerImpl implements BookingSystemInterface {
 
         }
         LoggingHelper.log(this.getClass().getName(), "Cancel Movie Tickets", requestParameters, "Failed!", "Failed!");
-        return "Error occurred while cancelling.";
+        return "Failed";
     }
 
     @Override

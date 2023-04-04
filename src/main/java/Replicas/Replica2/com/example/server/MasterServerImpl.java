@@ -212,7 +212,7 @@ public class MasterServerImpl implements BookingSystemInterface {
         } catch (Exception e) {
             System.out.println("Exception Occurred: " + e);
         }
-        return "Unsuccessful!";
+        return "Failed";
     }
 
     @Override
@@ -274,7 +274,7 @@ public class MasterServerImpl implements BookingSystemInterface {
             }catch(Exception e){
                 System.out.println("Error Occurred in main server: " + e);
             }
-            return "Unsuccessful in cancelling the tickets.";
+            return "Failed";
         }
 
         @Override

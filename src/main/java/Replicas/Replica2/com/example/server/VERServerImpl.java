@@ -46,11 +46,11 @@ public class VERServerImpl implements BookingSystemInterface {
 
 
             LoggingHelper.log(this.getClass().getName(), "Add Movie Slots", requestParameters, "Success!", "Success!");
-            return "Success!";
+            return "Success";
         } catch (Exception e) {
             System.out.println("Exception is: " + e);
             LoggingHelper.log(this.getClass().getName(), "Add Movie Slots", requestParameters, "Failed!", "Failed!");
-            return "Unsuccessful!";
+            return "Failed";
         }
     }
 
@@ -88,13 +88,13 @@ public class VERServerImpl implements BookingSystemInterface {
                 return "Success!";
             } else {
                 LoggingHelper.log(this.getClass().getName(), "Remove Movie Slots", requestParameters, "Failed!", "Failed!");
-                return "Movie not found!";
+                return "Failed";
             }
 
         } catch (Exception e) {
             System.out.println("Error Occurred while removing movie slot: " + e);
             LoggingHelper.log(this.getClass().getName(), "Remove Movie Slots", requestParameters, "Failed!", "Failed!");
-            return "Unsuccessful!";
+            return "Failed";
         }
 
     }
@@ -183,19 +183,19 @@ public class VERServerImpl implements BookingSystemInterface {
                         customerBookings.put(customerID, newBookings);
                     }
                     LoggingHelper.log(this.getClass().getName(), "Book Movie Tickets", requestParameters, "Success!", "Success!");
-                    return "Successfully Booked!";
+                    return "Success";
                 } else {
                     LoggingHelper.log(this.getClass().getName(), "Book Movie Tickets", requestParameters, "Failed!", "Failed!");
-                    return "Number of these many tickets are not available for this show!";
+                    return "Failed";
                 }
             } else {
                 LoggingHelper.log(this.getClass().getName(), "Book Movie Tickets", requestParameters, "Failed!", "Failed!");
-                return "Movie does not exist in your region!";
+                return "Failed";
             }
         } catch (Exception e) {
             System.out.println("Error Occurred!" + e);
             LoggingHelper.log(this.getClass().getName(), "Book Movie Tickets", requestParameters, "Failed!", "Failed!");
-            return "Booking was unsuccessful!";
+            return "Failed";
         }
     }
 
