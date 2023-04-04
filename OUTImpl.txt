@@ -1,0 +1,2 @@
+8:47:31 AM | Request type:List movie shows | Request Parameter: AVATAR | Status: Success | Server Response: Movie shows listed, if any.
+8:49:00 AM | Request type:List movie shows | Request Parameter: AVATAR | Status: Success | Server Response: Movie shows listed, if any.

@@ -1,0 +1,1 @@
+8:52:58 AM | Request type:Add Movie Slots | Request Parameter: VERA123,VERA080808,TITANIC,10 | Status: Success | Server Response: Movie Slots Added

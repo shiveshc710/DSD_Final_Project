@@ -38,7 +38,7 @@ public class ReplicaManager {
 
                 // send response back to frontend
                 InetAddress frontEndAddress = InetAddress.getByName("localhost");
-                int port = 9000;
+                int port = 9001;
                 byte[] responseBytes = response.getBytes();
                 DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
                 socket.send(responsePacket);
@@ -79,7 +79,7 @@ public class ReplicaManager {
         } catch (Exception e) {
             System.out.println("Error in adminClient: " + e);
         }
-        ReplicaManager replicaManager = new ReplicaManager(5000);
+        ReplicaManager replicaManager = new ReplicaManager(6000);
         replicaManager.start();
     }
 }

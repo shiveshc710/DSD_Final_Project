@@ -46,7 +46,7 @@ public class ATWServerImpl implements BookingSystemInterface {
 
 
             LoggingHelper.log(this.getClass().getName(), "Add Movie Slots", requestParameters, "Success!", "Success!");
-            return "Success!";
+            return "Success";
         } catch (Exception e) {
             System.out.println("Exception is: " + e);
             LoggingHelper.log(this.getClass().getName(), "Add Movie Slots", requestParameters, "Failed!", "Failed!");

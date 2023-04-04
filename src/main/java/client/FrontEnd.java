@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.net.*;
 
 public class FrontEnd {
-    private DatagramSocket socket;
+    private DatagramSocket clientSocket;
+    private DatagramSocket replicaSocket;
     private InetAddress sequencerAddress;
     private int sequencerPort;
     private InetAddress[] replicaAddresses;
@@ -18,7 +19,8 @@ public class FrontEnd {
     private int frontEndPort;
 
     public FrontEnd(String sequencerAddr, int sequencerPrt, String[] replicaAddrs, int[] replicaPrt, int timeoutMs, int frontEndPrt) throws UnknownHostException, SocketException {
-        this.socket = new DatagramSocket(frontEndPrt);
+        this.clientSocket = new DatagramSocket(frontEndPrt);
+        this.replicaSocket = new DatagramSocket(frontEndPrt + 1);
         this.sequencerAddress = InetAddress.getByName(sequencerAddr);
         this.sequencerPort = sequencerPrt;
         this.replicaAddresses = new InetAddress[replicaAddrs.length];
@@ -40,7 +42,7 @@ public class FrontEnd {
             byte[] buf = new byte[1024];
             DatagramPacket request = new DatagramPacket(buf, buf.length);
             try {
-                socket.receive(request);
+                clientSocket.receive(request);
                 byte[] data = request.getData();
                 String requestString = new String(data, 0, request.getLength());
                 System.out.println("Received request: " + requestString);
@@ -48,19 +50,32 @@ public class FrontEnd {
                 byte[] requestBuffer = requestString.getBytes();
                 // Send request to sequencer
                 DatagramPacket sequencerRequest = new DatagramPacket(requestBuffer, requestBuffer.length, sequencerAddress, sequencerPort);
-                socket.send(sequencerRequest);
+                clientSocket.send(sequencerRequest);
 
                 // Receive responses from replicas
                 String[] responses = new String[numReplicas];
                 int numResponses = 0;
                 for (int i = 0; i < numReplicas; i++) {
                     try {
-                        socket.setSoTimeout(timeout);
+                        replicaSocket.setSoTimeout(timeout);
                         DatagramPacket replicaResponse = new DatagramPacket(new byte[1024], 1024);
-                        socket.receive(replicaResponse);
+                        replicaSocket.receive(replicaResponse);
+                        int port = replicaResponse.getPort();
                         String response = new String(replicaResponse.getData(), 0, replicaResponse.getLength());
-                        System.out.println("Received response from replica " + i + ": " + response);
-                        responses[i] = response;
+                        System.out.println("Received response from replica on port" + port + ": " + response);
+                        // Identify which replica the response belongs to based on the port number
+                        int replicaId;
+                        if (port == 5000) {
+                            replicaId = 1;
+                        } else if (port == 6000) {
+                            replicaId = 2;
+                        } else if (port == 7000) {
+                            replicaId = 3;
+                        } else {
+                            System.err.println("Received response from unknown port: " + port);
+                            continue;
+                        }
+                        responses[replicaId-1] = response; // Store the response in the correct position of the responses array
                         numResponses++;
                     } catch (SocketTimeoutException e) {
                         System.err.println("Replica " + i + " timed out.");
@@ -71,7 +86,7 @@ public class FrontEnd {
                             for (int j = 0; j < numReplicas; j++) {
                                 if (i != j) {
                                     DatagramPacket replicaFailure = new DatagramPacket(new byte[1024], 1024, replicaAddresses[j], replicaPorts[j]);
-                                    socket.send(replicaFailure);
+                                    replicaSocket.send(replicaFailure);
                                 }
                             }
                         }
@@ -93,7 +108,7 @@ public class FrontEnd {
                                 for (int j = 0; j < numReplicas; j++) {
                                     if (i != j) {
                                         DatagramPacket replicaFailure = new DatagramPacket(new byte[1024], 1024, replicaAddresses[j], replicaPorts[j]);
-                                        socket.send(replicaFailure);
+                                        replicaSocket.send(replicaFailure);
                                     }
                                 }
                             }
@@ -108,7 +123,7 @@ public class FrontEnd {
                 // Send correct response back to client
                 byte[] responseBuf = correctResponse.getBytes();
                 DatagramPacket response = new DatagramPacket(responseBuf, responseBuf.length, request.getAddress(), request.getPort());
-                socket.send(response);
+                replicaSocket.send(response);
             } catch (IOException e) {
                 e.printStackTrace();
             }

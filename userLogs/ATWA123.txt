@@ -1,0 +1,13 @@
+8:32:27 AM | Request type:Book Movie Tickets | Request Parameter: ATWA123,ATWM080808,AVATAR,100 | Status: Failed | Server Response: Movie name not found
+8:32:54 AM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWM080808,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
+8:33:21 AM | Request type:Book Movie Tickets | Request Parameter: ATWA123,ATWM080808,AVATAR,10 | Status: Success | Server Response: Movie Tickets Booked
+8:44:56 AM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080808,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
+8:48:09 AM | Request type:Remove Movie Slots | Request Parameter: ATWA123,ATWM080808,AVATAR | Status: Failure | Server Response: Movie slot does not exist in the system
+8:48:47 AM | Request type:Remove Movie Slots | Request Parameter: ATWA123,ATWA080808,AVATAR | Status: Success | Server Response: Movie slot removed
+8:51:14 AM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWM080808,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
+8:51:29 AM | Request type:Book Movie Tickets | Request Parameter: ATWA123,ATWM080808,AVATAR,16 | Status: Success | Server Response: Movie Tickets Booked
+8:52:04 AM | Request type:Cancel Movie Tickets | Request Parameter: ATWA123,ATWM080808,AVATAR,7 | Status: Success | Server Response: Movie Tickets Cancelled
+8:53:24 AM | Request type:Cancel Movie Tickets | Request Parameter: ATWA123,ATWM080808,AVATAR,3 | Status: Success | Server Response: Movie Tickets Cancelled
+8:53:24 AM | Request type:Book Movie Tickets | Request Parameter: ATWA123,VERA080808,TITANIC,3 | Status: Success | Server Response: Movie Tickets Booked
+8:58:21 AM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080808,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
+9:04:59 AM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080808,AVATAR,100 | Status: Success | Server Response: Movie Slots Added

@@ -1,0 +1,9 @@
+8:47:31 AM | Request type:List movie shows | Request Parameter: AVATAR | Status: Success | Server Response: Movie shows listed, if any.
+8:47:31 AM | Request type:List movie shows | Request Parameter: AVATAR | Status: Success | Server Response: Movie shows listed, if any.
+8:47:31 AM | Request type:List movie shows | Request Parameter: AVATAR | Status: Success | Server Response: Movie shows listed, if any.
+8:49:00 AM | Request type:List movie shows | Request Parameter: AVATAR | Status: Success | Server Response: Movie shows listed, if any.
+8:49:00 AM | Request type:List movie shows | Request Parameter: AVATAR | Status: Success | Server Response: Movie shows listed, if any.
+8:49:00 AM | Request type:List movie shows | Request Parameter: AVATAR | Status: Success | Server Response: Movie shows listed, if any.
+8:51:47 AM | Request type:Get movie booking schedule | Request Parameter: ATWA123 | Status: Success | Server Response: Movie bookings listed, if any.
+8:53:32 AM | Request type:Get movie booking schedule | Request Parameter: ATWA123 | Status: Success | Server Response: Movie bookings listed, if any.
+8:53:32 AM | Request type:Get movie booking schedule | Request Parameter: ATWA123 | Status: Success | Server Response: Movie bookings listed, if any.

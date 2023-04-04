@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://example.com/ver" xmlns:tns="http://example.com/ver" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="addMovieSlotsVER" type="tns:addMovieSlotsVER"/>
+
+  <xs:element name="addMovieSlotsVERResponse" type="tns:addMovieSlotsVERResponse"/>
+
+  <xs:element name="bookMovieTicketsVER" type="tns:bookMovieTicketsVER"/>
+
+  <xs:element name="bookMovieTicketsVERResponse" type="tns:bookMovieTicketsVERResponse"/>
+
+  <xs:element name="cancelMovieTicketsVER" type="tns:cancelMovieTicketsVER"/>
+
+  <xs:element name="cancelMovieTicketsVERResponse" type="tns:cancelMovieTicketsVERResponse"/>
+
+  <xs:element name="getBookingScheduleVER" type="tns:getBookingScheduleVER"/>
+
+  <xs:element name="getBookingScheduleVERResponse" type="tns:getBookingScheduleVERResponse"/>
+
+  <xs:element name="listMovieShowsAvailabilityVER" type="tns:listMovieShowsAvailabilityVER"/>
+
+  <xs:element name="listMovieShowsAvailabilityVERResponse" type="tns:listMovieShowsAvailabilityVERResponse"/>
+
+  <xs:element name="logVER" type="tns:logVER"/>
+
+  <xs:element name="logVERResponse" type="tns:logVERResponse"/>
+
+  <xs:element name="removeMovieSlotsVER" type="tns:removeMovieSlotsVER"/>
+
+  <xs:element name="removeMovieSlotsVERResponse" type="tns:removeMovieSlotsVERResponse"/>
+
+  <xs:complexType name="cancelMovieTicketsVER">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg1" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg2" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg3" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cancelMovieTicketsVERResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="bookMovieTicketsVER">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg1" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg2" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg3" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="bookMovieTicketsVERResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="removeMovieSlotsVER">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg1" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg2" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="removeMovieSlotsVERResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listMovieShowsAvailabilityVER">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listMovieShowsAvailabilityVERResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getBookingScheduleVER">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getBookingScheduleVERResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="logVER">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg1" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg2" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg3" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg4" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg5" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="logVERResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="addMovieSlotsVER">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg1" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg2" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg3" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="addMovieSlotsVERResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

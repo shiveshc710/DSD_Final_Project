@@ -85,24 +85,33 @@ public class Sequencer {
 
     }
 
-    public static void sendRequest(String requestData1) throws IOException {
-// Create a socket to send the request
-        DatagramSocket socket = new DatagramSocket();
-
-        // Define the front end's IP address and port number
-        InetAddress rm1Address = InetAddress.getByName("localhost");
-        int rm1Port = 5000;
+    public static void sendRequest(String requestData) throws IOException {
+        // Define the multicast address and port number
+        InetAddress multicastAddress = InetAddress.getByName("localhost");
+        int multicastPort = 5000;
 
         // Create the request data
-        String requestData = requestData1;
         byte[] requestBuffer = requestData.getBytes();
 
         // Create the UDP packet with the request data
-        DatagramPacket requestPacket = new DatagramPacket(requestBuffer, requestBuffer.length, rm1Address, rm1Port);
+        DatagramPacket requestPacket = new DatagramPacket(requestBuffer, requestBuffer.length, multicastAddress, multicastPort);
 
-        // Send the request packet to the front end
-        socket.send(requestPacket);
+        // Use a for loop to send the request packet to each replica server
+        for (int i = 1; i <= 3; i++) {
+            int replicaPort = 5000 + i * 1000; // calculate the port number for the current replica server
+            InetAddress replicaAddress = InetAddress.getByName("localhost"); // assume all replica servers are running on the same machine
 
+            // Set the port number of the current replica server in the request packet
+            requestPacket.setPort(replicaPort);
+
+            // Set the address of the current replica server in the request packet
+            requestPacket.setAddress(replicaAddress);
+
+            // Send the request packet to the current replica server
+            DatagramSocket socket = new DatagramSocket();
+            socket.send(requestPacket);
+            socket.close();
+            System.out.println("Sent request to replica " + i);
+        }
     }
-
 }
