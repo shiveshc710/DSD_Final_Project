@@ -125,15 +125,9 @@ public class Admin {
                             movieId = sc.next();
                             writeLog(userID + " : Add slot | Request Parameters : Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Slots: " + numberOfSlots);
 
-
-                            ///////////////////
-                            String req = "addSlot;"+movieId+";"+movieName+";"+numberOfSlots;
+                            String req = "addSlot,"+userID+","+movieId+","+movieName+","+numberOfSlots;
                             sendRequest(req);
 
-                            ////////////////////
-//                            mtbsInterface = service.getPort(MTBSInterface.class);
-//                            String result = mtbsInterface.addMovieSlots(movieId,movieName,numberOfSlots);
-//                            System.out.println(result);
                             break;
                         case 2:
                             do {
