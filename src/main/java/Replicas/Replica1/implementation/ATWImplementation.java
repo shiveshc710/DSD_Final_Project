@@ -85,26 +85,28 @@ public class ATWImplementation implements MTBSInterface {
             if (movieID.startsWith(CONFIGURATION.ATWSERVER)) {
                 try {
                     if (!checkDate(movieID)) {
-                        result = "Tickets cannot be booked for Date more than a week or for previous date.";
+                        result = "Failed";
+                        writeLog("Tickets cannot be booked for Date more than a week or for previous date.");
+
                     } else {
                         if (!(movieID.startsWith(CONFIGURATION.ATWSERVER))) {
-                            result = "Invalid movieID!!!";
+                            result = "Failed";
                             writeLog("Unable to add slot : Invalid movieID");
                         } else if (!ATWdata.containsKey(movieName)) {
                             Map<String, BookingDetails> tmp = new ConcurrentHashMap<>();
                             tmp.put(movieID, new BookingDetails(new ArrayList<>(), bookingCapacity));
                             ATWdata.put(movieName, tmp);
-                            result = "Movie Slot added for " + movieName;
+                            result = "Success";
                             writeLog("Movie slot "+ movieID+" added for : "+movieName);
                         } else {
                             if (ATWdata.get(movieName).containsKey(movieID)) {
-                                result = "Movie Slot already exist for movieID!!!";
+                                result = "Failed";
                                 writeLog("Movie Slot already exist for "+movieID);
                             } else {
                                 Map<String, BookingDetails> tmp = ATWdata.get(movieName);
                                 tmp.put(movieID, new BookingDetails(new ArrayList<>(), bookingCapacity));
                                 ATWdata.put(movieName, tmp);
-                                result = "Movie Slot added for " + movieName;
+                                result = "Success";
                                 writeLog("Movie slot "+ movieID+" added for : "+movieName);
                             }
                         }
@@ -115,11 +117,11 @@ public class ATWImplementation implements MTBSInterface {
                     e.printStackTrace();
                 }
             } else {
-                result = "Unable to add slots for other servers.";
+                result = "Failed";
                 writeLog("Unable to add slots for other servers.");
             }
         } else {
-            result = "Invalid MovieID";
+            result = "Failed";
             writeLog("Unable to add slot : Invalid movieID");
         }
 
