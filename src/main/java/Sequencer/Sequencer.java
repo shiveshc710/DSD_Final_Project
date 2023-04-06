@@ -22,7 +22,7 @@ public class Sequencer {
     public static void main(String[] args) {
         DatagramSocket aSocket = null;
         try {
-            aSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT, InetAddress.getByName(CONFIGURATION.SEQUENCER_IP));
+            aSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT, InetAddress.getByName(CONFIGURATION.HOSTNAME));
             byte[] buffer = new byte[1000];
             System.out.println("Sequencer UDP Server Started");
 

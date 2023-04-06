@@ -1,0 +1,4 @@
+Apr 06, 2023 5:26:09 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Tickets cannot be booked for Date more than a week or for previous date.
+Apr 06, 2023 5:27:40 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA080423 added for : AVATAR

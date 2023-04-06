@@ -35,3 +35,5 @@
 12:49:53 PM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080808,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
 1:08:54 PM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080808,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
 1:11:08 PM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080808,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
+5:26:09 PM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080808,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
+5:27:40 PM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080423,AVATAR,50 | Status: Success | Server Response: Movie Slots Added

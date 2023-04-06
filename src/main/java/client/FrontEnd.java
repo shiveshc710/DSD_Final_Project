@@ -99,7 +99,7 @@ public class FrontEnd {
                 }
 
                 /////temp response from replica 1
-                responses[0]= "garbage";
+//                responses[0]= "garbage";
                 // Identify correct response
                 String correctResponse = null;
                 for (int i = 0; i < numReplicas; i++) {
@@ -110,7 +110,7 @@ public class FrontEnd {
                                 count++;
                             }
                         }
-                        if (count == 2) {
+                        if (count >= 2) {
                             correctResponse = responses[i];
                             break;
                         }
@@ -148,7 +148,7 @@ public class FrontEnd {
 
     public static void main(String[] args) throws SocketException {
         try {
-            String sequencerAddr = CONFIGURATION.SEQUENCER_IP;
+            String sequencerAddr = CONFIGURATION.HOSTNAME;
             int sequencerPort = CONFIGURATION.SEQUENCER_PORT;
             String[] replicaAddrs = {"localhost", "localhost", "localhost"};
             int[] replicaPorts = {5000, 6000, 7000};
