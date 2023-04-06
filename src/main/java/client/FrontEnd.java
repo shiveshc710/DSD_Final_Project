@@ -137,8 +137,22 @@ public class FrontEnd {
                 }
                 else {
                     // Send correct response back to client
-                    /////////////////////////////////HOW???????
+
                     System.out.println(correctResponse);
+                    DatagramSocket socket = new DatagramSocket();
+
+                    // Define the front end's IP address and port number
+                    InetAddress clientAddress = InetAddress.getByName("localhost");
+
+                    // Create the request data
+                    String responseData = correctResponse;
+                    byte[] responseBuffer = responseData.getBytes();
+
+                    // Create the UDP packet with the request data
+                    DatagramPacket responsePacket = new DatagramPacket(responseBuffer, responseBuffer.length, clientAddress, CONFIGURATION.CLIENT_PORT);
+
+                    // Send the request packet to the front end
+                    socket.send(responsePacket);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

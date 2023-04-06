@@ -7,23 +7,19 @@ import config.CONFIGURATION;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.URL;
+import java.net.*;
 import java.util.*;
 
 public class AdminClient {
 
     private static MasterServerImpl MasterServerRef;
 
-    public AdminClient() {
-    }
+    static DatagramSocket aSocket = null;
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws UnknownHostException, SocketException {
+        aSocket = new DatagramSocket(CONFIGURATION.CLIENT_PORT, InetAddress.getByName(CONFIGURATION.HOSTNAME));
         try {
-            URL url = new URL("http://localhost:"+CONFIGURATION.Main_PORT_2+"/masterservice?wsdl");
+            URL url = new URL("http://localhost:" + CONFIGURATION.Main_PORT_2 + "/masterservice?wsdl");
             QName qname = new QName("http://example.com/master", "MasterServerImplService");
             Service service = Service.create(url, qname);
             MasterServerRef = service.getPort(MasterServerImpl.class);
@@ -39,7 +35,7 @@ public class AdminClient {
     /**
      * client.Main menu for ADMIN Client.
      *
-     * @param obj       The object of interface.
+     * @param obj The object of interface.
      */
     public static void displayMenu(MasterServerImpl obj) {
         try {
@@ -82,7 +78,7 @@ public class AdminClient {
 
                 try {
 //                    String ans = obj.addMovieSlots(id, movieID, movieName, bookingCapacity);
-                    String req = "addSlot,"+requestParameters;
+                    String req = "addSlot," + requestParameters;
                     sendRequest(req);
 
 //                    LoggingHelper.log(id, "ADD MOVIE SLOT", requestParameters, "Success!", "Success!");
@@ -92,12 +88,11 @@ public class AdminClient {
 
 
                     displayMenu(obj);
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("Exception " + e);
                     LoggingHelper.log(id, "ADD MOVIE SLOT", requestParameters, "Failed!", "Failed!");
                 }
-            }
-            else if (option == 2) {
+            } else if (option == 2) {
                 System.out.println("Please Enter the movie ID: ");
                 String movieID = sc.nextLine();
 
@@ -110,14 +105,14 @@ public class AdminClient {
 //
 //                    System.out.println(ans);
 
-                    String req = "remSlot,"+requestParameters;
+                    String req = "remSlot," + requestParameters;
                     sendRequest(req);
 
                     LoggingHelper.log(id, "RemoveMovieSlots", requestParameters, "Success!", "Success!");
 
                     displayMenu(obj);
-                }catch (Exception e){
-                    System.out.println("Exception: "+ e);
+                } catch (Exception e) {
+                    System.out.println("Exception: " + e);
                     LoggingHelper.log(id, "RemoveMovieSlots", requestParameters, "Failed!", "Failed!");
                 }
             } else if (option == 3) {
@@ -130,18 +125,16 @@ public class AdminClient {
 
                     System.out.println(ans);
 
-                    LoggingHelper.log(id, "List Avaialable Shows", movieName, "Success!","Success!");
+                    LoggingHelper.log(id, "List Avaialable Shows", movieName, "Success!", "Success!");
 
                     displayMenu(obj);
                 } catch (Exception e) {
                     System.out.println("Exception: " + e);
-                    LoggingHelper.log(id, "List Avaialable Shows", movieName, "FAILED!","FAILED!");
+                    LoggingHelper.log(id, "List Avaialable Shows", movieName, "FAILED!", "FAILED!");
                 }
-            }
-            else if(option == 4){
+            } else if (option == 4) {
                 displayMenuCustomer(obj);
-            }
-            else if (option == 0) {
+            } else if (option == 0) {
                 System.exit(0);
             }
         } catch (Exception e) {
@@ -187,7 +180,7 @@ public class AdminClient {
                 try {
 //                    System.out.println(obj.bookMovieTickets(id, movieID, movieName, numberOfTickets));
 
-                    String req = "book,"+requestParameters;
+                    String req = "book," + requestParameters;
                     sendRequest(req);
 
                     LoggingHelper.log(id, "Book Movie Ticket", requestParameters, "Success!", "Success!");
@@ -210,7 +203,7 @@ public class AdminClient {
                     LoggingHelper.log(id, "Get Booking Schedule", id, "Success!", "Success!");
 
                     displayMenuCustomer(obj);
-                }catch (Exception e){
+                } catch (Exception e) {
                     LoggingHelper.log(id, "Get Booking Schedule", id, "Failed!", "Failed!");
                 }
             } else if (option == 3) {
@@ -229,16 +222,15 @@ public class AdminClient {
 
 //                    System.out.println(obj.cancelMovieTickets(id, movieID, movieName, numberOfTickets));
 
-                    String req = "cancel,"+requestParameters;
+                    String req = "cancel," + requestParameters;
                     sendRequest(req);
                     LoggingHelper.log(id, "Cancel Movie Tickets", requestParameters, "Success!", "Success!");
                     displayMenuCustomer(obj);
-                }catch (Exception e){
+                } catch (Exception e) {
                     LoggingHelper.log(id, "Cancel Movie Tickets", requestParameters, "Failed!", "Failed!");
                 }
 
-            }
-            else if(option == 4){
+            } else if (option == 4) {
                 System.out.println("Please enter movie id of existing ticket:");
                 String cMovieID = sc.nextLine();
                 System.out.println("Please enter movie name of existing ticket:");
@@ -250,24 +242,21 @@ public class AdminClient {
                 System.out.println("Please enter the number of tickets:");
                 int numberOfTickets = sc.nextInt();
                 sc.nextLine();
-                String requestParameters = id + "," + cMovieID + "," + cMovieName + ","+ nMovieID + "," +nMovieName + "," + numberOfTickets;
-
+                String requestParameters = id + "," + cMovieID + "," + cMovieName + "," + nMovieID + "," + nMovieName + "," + numberOfTickets;
 
 
                 try {
                     System.out.println(obj.exchangeTickets(id, cMovieID, cMovieName, nMovieID, nMovieName, numberOfTickets));
                     LoggingHelper.log(id, "Exchange Tickets", requestParameters, "Success!", "Success!");
                     displayMenuCustomer(obj);
-                }catch (Exception e){
-                    System.out.println("Exception occured in admin client: "+ e);
+                } catch (Exception e) {
+                    System.out.println("Exception occured in admin client: " + e);
                     LoggingHelper.log(id, "Exchange Tickets", requestParameters, "Failed!", "Failed!");
                 }
 
-            }
-            else if(option == 5){
+            } else if (option == 5) {
                 displayMenu(obj);
-            }
-            else if (option == 0) {
+            } else if (option == 0) {
                 System.exit(0);
             }
         } catch (Exception e) {
@@ -293,5 +282,12 @@ public class AdminClient {
         // Send the request packet to the front end
         socket.send(requestPacket);
 
+        // Receive the response
+        byte[] buffer = new byte[1000];
+        DatagramPacket response = new DatagramPacket(buffer, buffer.length);
+
+        aSocket.receive(response);
+        String sentence = new String(response.getData(), 0, response.getLength());
+        System.out.println(sentence);
     }
 }

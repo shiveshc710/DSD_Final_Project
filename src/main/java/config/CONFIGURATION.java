@@ -35,4 +35,5 @@ public class CONFIGURATION {
 //    Replica Manager Configuration
 
     public static final String RM_IP = "230.1.1.10";
+    public static final int CLIENT_PORT = 4000;
 }
