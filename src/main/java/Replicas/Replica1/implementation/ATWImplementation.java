@@ -137,17 +137,18 @@ public class ATWImplementation implements MTBSInterface {
         int month = Integer.parseInt(movieID.substring(6, 8));
 
         if (!ATWdata.containsKey(movieName)) {
-            result = "No movie slots is available for this type!!!";
-            log = "No movie slots is available.";
+            result = "Failed";
+            log = "No movie slots is available for this type!!!";
         } else {
             Map<String, BookingDetails> tmp = ATWdata.get(movieName);
             if (tmp.containsKey(movieID)) {
                 if (tmp.get(movieID).getCustomerID().size() == 0) {
-                    result = "Movie show found, no shows booked, deleting it without transfer!!";
+                    result = "Failed";
                     ATWdata.get(movieName).remove(movieID);
                     log = "Movie show found, no shows booked, deleting it without transfer";
                 } else {
-                    result = "Movie slot found, customers have booked this shows, unable to find other movie shows for the customers.";
+                    result = "Failed";
+                    log = "Movie slot found, customers have booked this shows, unable to find other movie shows for the customers.";
                     for (Map.Entry<String, BookingDetails> bookingData : tmp.entrySet()) {
                         if ((Integer.parseInt(bookingData.getKey().substring(4, 8)) > month)
                                 || (Integer.parseInt(bookingData.getKey().substring(4, 6)) > day)) {
@@ -160,14 +161,18 @@ public class ATWImplementation implements MTBSInterface {
 
                                 ATWdata.get(movieName).get(bookingData.getKey()).setCustomerID(customers);
                                 ATWdata.get(movieName).remove(movieID);
-                                result = "Slot is deleted and booking is now transferred to show "+bookingData.getKey();
+                                result = "Success";
+                                log = "Slot is deleted and booking is now transferred to show "+bookingData.getKey();
+
                                 break;
                             }
                         }
                     }
                     if (transfer) {
+                        result = "Success";
                         log = "Slot deleted, transferred booking to new show.";
                     } else {
+                        result = "Failed";
                         log = "Booking found for this show, Unable to assign to other shows.";
 
                         String customers = "";
@@ -182,14 +187,14 @@ public class ATWImplementation implements MTBSInterface {
 
                         if (ver_result.contains("success")){
                             ATWdata.get(movieName).remove(movieID);
-                            result = "Slot is deleted and booking is now transferred to Verdun show: " + ver_result.split(" ")[1];
+                            result = "Success";
                             log = "Slot is deleted and booking is now transferred to Verdun show: " + ver_result.split(" ")[1];
 
                         }else {
                             out_result = udpThread("removeSlots:" + finalCustomers + " " + movieName, CONFIGURATION.OUT_LISTENER);
                             if (out_result.contains("success")){
                                 ATWdata.get(movieName).remove(movieID);
-                                result = "Slot is deleted and booking is now transferred to Outremont show: " + out_result.split(" ")[1];
+                                result = "Success";
                                 log = "Slot is deleted and booking is now transferred to Outremont show: " + out_result.split(" ")[1];
                             }
                         }
@@ -197,7 +202,7 @@ public class ATWImplementation implements MTBSInterface {
                 }
 
             } else {
-                result = "No shows are available for "+movieName+"!!!";
+                result = "Failed";
                 ATWdata.get(movieName).remove(movieID);
                 log = "No shows are available for "+movieName+"!!!";
             }
@@ -271,7 +276,7 @@ public class ATWImplementation implements MTBSInterface {
                     }
                     if(!isAvailable)
                     {
-                        result = "You cannot book show with same timing more than once";
+                        result = "Failed";
                         log = "Unable to book show with same timing more than once";
 
                     }
@@ -290,24 +295,23 @@ public class ATWImplementation implements MTBSInterface {
                                         bookings.getCustomerID().add(customerID);
 
                                     }
-                                    result = "Tickets for " + movieName + " for " + movieID.substring(4, 6)
+                                    result = "Success";
+                                    log = "Tickets for " + movieName + " for " + movieID.substring(4, 6)
                                             + "/" + movieID.substring(6, 8);
-                                    log = result;
                                     break;
                                 } else {
                                     System.out.println("Slot not Found");
-                                    result = "Not enough seats available for this show!!!";
+                                    result = "Failed";
                                     log = "Not enough seats available for this show!!!";
 
                                 }
                             }else {
-                                    result = "Unable to book ticket no seats available in show.";
+                                    result = "Failed";
                             }
                         }
                     } else {
-                        result = "No show available for " + movieName + " and with this movieID!!!";
+                        result = "Failed";
                         log = "Unable to book show " + movieID + " for "+ movieName;
-                        status = "failed";
                     }
                 }
             } else {
@@ -320,12 +324,12 @@ public class ATWImplementation implements MTBSInterface {
                     } else if (movieID.contains(CONFIGURATION.VERSERVER)) {
                         result = udpThread("bookTickets:" + customerID + " " + movieID + " " + movieName + " " + numberOfTickets, CONFIGURATION.VER_LISTENER);
                     } else {
-                        result = "Invalid movieID";
+                        result = "Failed";
                         log = "Failed : Invalid movieID";
                     }
 
                 } else {
-                    result = "You cannot book more than 3 tickets for Different Locations";
+                    result = "Failed";
                     log = "Failed : Unable to book more than 3 tickets for Different Locations";
                 }
             }
@@ -447,7 +451,7 @@ public class ATWImplementation implements MTBSInterface {
     public String cancelMovieTickets(String customerID, String movieId, String movieName, int numberOfTickets)  {
         String status = "failed";
         String log = "No bookings found";
-        String result = "No bookings found!!!";
+        String result = "Failed";
 
         String server = movieId.substring(0,3);
 
@@ -465,7 +469,7 @@ public class ATWImplementation implements MTBSInterface {
                                 }
                                 log = "Ticket(s) canceled successfully.";
                                 status = "success";
-                                result = "Ticket(s) canceled!!!";
+                                result = "Success";
                             }
                         }
                     }
@@ -621,7 +625,7 @@ public class ATWImplementation implements MTBSInterface {
 
         }
         else {
-            return "Tickets Exchanged failed";
+            return "Failed";
         }
     }
 
