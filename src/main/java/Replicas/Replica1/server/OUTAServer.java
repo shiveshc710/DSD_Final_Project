@@ -8,6 +8,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.rmi.RemoteException;
 import java.util.logging.FileHandler;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -80,7 +81,7 @@ public class OUTAServer {
     public static void writeLog(String message){
         try {
 
-            fh = new FileHandler("src/logs/ATWLog.log", 0,1,true);
+            fh = new FileHandler("src/main/java/Replicas/Replica1/logs/ATWLog.log", 0,1,true);
 
             fh.setFormatter(formatter);
 
@@ -91,6 +92,8 @@ public class OUTAServer {
             logger.info("Log from  Atwater : "+ message);
 
             fh.close();
+            LogManager.getLogManager().reset();
+
 
         } catch (SecurityException | IOException e) {
             e.printStackTrace();

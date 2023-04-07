@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -582,7 +583,7 @@ public class ATWImplementation implements MTBSInterface {
             System.out.println("Exchange is possible");
             String s1= cancelMovieTickets(customerID,movieID,old_movieName,numberOfTickets);
             String s2=  bookMovieTickets(customerID,new_movieID,new_movieName,numberOfTickets);
-            return s2;
+            return "Success";
 
         }
         else {
@@ -760,7 +761,7 @@ public class ATWImplementation implements MTBSInterface {
         try {
 
             // This block configure the logger with handler and formatter
-            fh = new FileHandler("src/logs/ATWLog.log", 0,1,true);
+            fh = new FileHandler("src/main/java/Replicas/Replica1/logs/ATWLog.log", 0,1,true);
 
             fh.setFormatter(formatter);
 
@@ -772,6 +773,8 @@ public class ATWImplementation implements MTBSInterface {
             logger.info("Log from Atwater : "+ message);
 
             fh.close();
+            LogManager.getLogManager().reset();
+
 
         } catch (SecurityException | IOException e) {
             e.printStackTrace();

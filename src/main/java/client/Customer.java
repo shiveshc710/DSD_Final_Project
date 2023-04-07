@@ -6,10 +6,11 @@ import config.CONFIGURATION;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import java.io.IOException;
-import java.net.URL;
+import java.net.*;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.FileHandler;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -19,14 +20,12 @@ public class Customer {
     SimpleFormatter formatter = new SimpleFormatter();
     static String URL = null;
     static String userID = null;
-    public static void main(String[] args) {
+    static DatagramSocket aSocket = null;
+    public static void main(String[] args) throws UnknownHostException, SocketException {
 
+        aSocket = new DatagramSocket(CONFIGURATION.CLIENT_PORT_CUSTOMER, InetAddress.getByName(CONFIGURATION.HOSTNAME));
         Scanner sc = new Scanner(System.in);
         Customer c = new Customer();
-        MTBSInterface mtbsInterface=null;
-        java.net.URL url = null;
-        QName qname = null;
-        Service service = null;
         try {
              while (true) {
                 if (userID == null) {
@@ -48,22 +47,6 @@ public class Customer {
                     userID = null;
                     c.writeLog("Invalid Customer ID: Invalid Server Name");
                 }else {
-                    if (serverName.equals("ATW")) {
-                        url= new URL("http://localhost:5000/DMTBSATW/?wsdl");
-                        qname= new QName( "http://implementation/", "ATWImplementationService") ;
-                        service = Service.create(url,qname);
-                    }
-                    else if (serverName.equals("OUT")){
-                        url= new URL("http://localhost:5002/DMTBSOUT/?wsdl");
-                        qname= new QName( "http://implementation/", "OUTImplementationService") ;
-                        service = Service.create(url,qname);
-                    }
-                    else {
-                        url= new URL("http://localhost:5001/DMTBSVER/?wsdl");
-                        qname= new QName( "http://implementation/", "VERImplementationService") ;
-                        service = Service.create(url,qname);
-                    }
-
                     System.out.println("=========================================");
                     System.out.println("|               Actions                 |");
                     System.out.println("=========================================");
@@ -111,22 +94,16 @@ public class Customer {
                             sc.nextLine();
                             System.out.print("\nPlease Enter the Movie ID {ATW/VER/OUT}{M/A/E}{DDMMYY}: ");
                             movieId = sc.next();
-                            mtbsInterface = service.getPort(MTBSInterface.class);
                             c.writeLog(userID + " : Book Tickets | Request Parameters : Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Tickets: " + numberOfTicket);
-                            String result = mtbsInterface.bookMovieTickets(userID,movieId,movieName,numberOfTicket);
-                            System.out.println(result);
+
                             break;
                         case 2:
-                            mtbsInterface = service.getPort(MTBSInterface.class);
+
                             System.out.println("Fetching all the bookings...");
                             c.writeLog(userID + " : Get Bookings | Request Parameters : Customer Id: " + userID);
-                            result = mtbsInterface.getBookingSchedule(userID);
                             System.out.println("================================\nBookings of customer " + userID
                                     + "\n================================\n");
-                            String[] showsList = result.split(",");
-                            for (int i = 0; i < showsList.length; i++) {
-                                System.out.println(showsList[i]);
-                            }
+
                             break;
                         case 3:
                             do {
@@ -152,10 +129,8 @@ public class Customer {
                             sc.nextLine();
                             System.out.print("\nPlease Enter the Movie ID {ATW/VER/OUT}{M/A/E}{DDMMYY}: ");
                             movieId = sc.next();
-                            mtbsInterface = service.getPort(MTBSInterface.class);
                             c.writeLog(userID + " : Cancel Booking | Request Parameters : Customer Id: "+userID+" Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Slots: " + numberOfTicket);
-                            String cancelResult = mtbsInterface.cancelMovieTickets(userID,movieId,movieName,numberOfTicket);
-                            System.out.println(cancelResult);
+
                             break;
                         case 4:
                             System.out.print("\nPlease enter number of ticket you want to exchange: ");
@@ -207,12 +182,14 @@ public class Customer {
                             sc.nextLine();
                             System.out.print("\nPlease Enter the new Movie ID {ATW/VER/OUT}{M/A/E}{DDMMYY}: ");
                             movieId_new = sc.next();
-                            mtbsInterface = service.getPort(MTBSInterface.class);
+
                             c.writeLog(userID + " : Exchange Tickets | Request Parameters : Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Tickets: " + numberOfTicket);
 
-                            result = mtbsInterface.exchangeTickets(userID, old_movie, movieId_old, movieId_new, new_movie, numberOfTicket);
-                            System.out.println(result);
-                            break;
+                            String requestParametersET = "exchangeTickets," + userID + "," + movieId_old + "," + old_movie + "," + movieId_new + "," + new_movie + "," + numberOfTicket;
+
+                            sendRequest(requestParametersET);
+
+                           break;
 
                         case 5:
                             exited = true;
@@ -235,10 +212,38 @@ public class Customer {
 
     }
 
+    public static void sendRequest(String requestData1) throws IOException {
+// Create a socket to send the request
+        DatagramSocket socket = new DatagramSocket();
+
+        // Define the front end's IP address and port number
+        InetAddress frontEndAddress = InetAddress.getByName("localhost");
+        int frontEndPort = 9000;
+
+        requestData1 = "Customer:"+requestData1;
+        // Create the request data
+        String requestData = requestData1;
+        byte[] requestBuffer = requestData.getBytes();
+
+        // Create the UDP packet with the request data
+        DatagramPacket requestPacket = new DatagramPacket(requestBuffer, requestBuffer.length, frontEndAddress, frontEndPort);
+
+        // Send the request packet to the front end
+        socket.send(requestPacket);
+
+        // Receive the response
+        byte[] buffer = new byte[1000];
+        DatagramPacket response = new DatagramPacket(buffer, buffer.length);
+
+        aSocket.receive(response);
+        String sentence = new String(response.getData(), 0, response.getLength());
+        System.out.println(sentence);
+    }
+
     public void writeLog(String message){
         try {
 
-            fh = new FileHandler("src/logs/"+userID+"Log.log", 0,1,true);
+            fh = new FileHandler("src/main/java/Replicas/Replica1/logs/"+userID+"Log.log", 0,1,true);
 
             fh.setFormatter(formatter);
 
@@ -249,6 +254,8 @@ public class Customer {
             logger.info("Log from "+ userID +"(Customer) : "+ message);
 
             fh.close();
+            LogManager.getLogManager().reset();
+
 
         } catch (SecurityException | IOException e) {
             e.printStackTrace();

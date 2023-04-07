@@ -12,6 +12,7 @@ import java.net.*;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.FileHandler;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -25,7 +26,7 @@ public class Admin {
     static String userID = null;
     public static void main(String[] args) throws UnknownHostException, SocketException {
 
-        aSocket = new DatagramSocket(CONFIGURATION.CLIENT_PORT, InetAddress.getByName(CONFIGURATION.HOSTNAME));
+        aSocket = new DatagramSocket(CONFIGURATION.CLIENT_PORT_ADMIN, InetAddress.getByName(CONFIGURATION.HOSTNAME));
         Scanner sc = new Scanner(System.in);
         Admin c = new Admin();
         java.net.URL url = null;
@@ -297,7 +298,7 @@ public class Admin {
     public static void writeLog(String message){
         try {
 
-            fh = new FileHandler("src/logs/"+userID+"Log.log", 0,1,true);
+            fh = new FileHandler("src/main/java/Replicas/Replica1/logs/"+userID+"Log.log", 0,1,true);
 
             fh.setFormatter(formatter);
 
@@ -308,6 +309,7 @@ public class Admin {
             logger.info("Log from "+ userID +"(Customer) : "+ message);
 
             fh.close();
+            LogManager.getLogManager().reset();
 
         } catch (SecurityException | IOException e) {
             e.printStackTrace();
@@ -324,6 +326,7 @@ public class Admin {
         InetAddress frontEndAddress = InetAddress.getByName("localhost");
         int frontEndPort = 9000;
 
+        requestData1 = "Admin:" + requestData1;
         // Create the request data
         String requestData = requestData1;
         byte[] requestBuffer = requestData.getBytes();

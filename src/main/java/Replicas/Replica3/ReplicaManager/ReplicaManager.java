@@ -78,6 +78,8 @@ public class ReplicaManager {
             ans = MasterServerRef.listMovieShowsAvailability(parts[1]);
         } else if (parts[0].equals("listbook")) {
             ans = MasterServerRef.getBookingSchedule(parts[1]);
+        } else if (parts[0].equals("exchangeTickets")) {
+            ans = MasterServerRef.exchangeTickets(parts[1],parts[2],parts[3],parts[4],parts[5],Integer.parseInt(parts[6]));
         }
 
         return ans;
