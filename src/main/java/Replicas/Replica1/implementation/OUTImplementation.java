@@ -616,7 +616,7 @@ public class OUTImplementation implements MTBSInterface {
             for (Map.Entry<String, BookingDetails> data : OUTdata.get(movieName.trim()).entrySet()) {
                 if ((data.getValue().getCapacity() - data.getValue().getCustomerID().size() > 0)) {
                     result += data.getKey() + " : "
-                            + (data.getValue().getCapacity() - data.getValue().getCustomerID().size() + ",");
+                            + (data.getValue().getCapacity() - data.getValue().getCustomerID().size() + "\n");
                 }
             }
         }
