@@ -342,7 +342,7 @@ public class ATWImplementation implements MTBSInterface {
     public String getBookingSchedule(String customerID)  {
         String key = null;
         String log = "";
-        String result = "----------Atwater----------,";
+        String result = "----------Atwater----------\n";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : ATWdata.entrySet()) {
             key = set.getKey();
@@ -355,12 +355,7 @@ public class ATWImplementation implements MTBSInterface {
                         count++;
                 }
                 if ((data.getValue().getCustomerID()).contains(customerID)) {
-                    if (!isAppended) {
-                        result += key + " , " + data.getKey() + " : "+ count;
-                        isAppended = true;
-                        count = 0;
-                    } else
-                        result += ", " + data.getKey()+ " : "+ count + " ";
+                    result += "Movie Name: " + key + " | Show ID: " + data.getKey() + " | Tickets Booked: "+ count + "\n";
                     count = 0;
                 }
 
@@ -375,12 +370,6 @@ public class ATWImplementation implements MTBSInterface {
         else
             result += "No bookings available,";
 
-        new Thread(){
-            @Override
-            public void run() {
-                out_result = udpThread("showsSchedule:" + customerID,CONFIGURATION.OUT_LISTENER);
-            }
-        }.start();
 
         new Thread(){
             @Override
@@ -388,6 +377,14 @@ public class ATWImplementation implements MTBSInterface {
                 ver_result = udpThread("showsSchedule:" + customerID,CONFIGURATION.VER_LISTENER);
             }
         }.start();
+
+        new Thread(){
+            @Override
+            public void run() {
+                out_result = "\n"+udpThread("showsSchedule:" + customerID,CONFIGURATION.OUT_LISTENER);
+            }
+        }.start();
+
 
 
         try {
