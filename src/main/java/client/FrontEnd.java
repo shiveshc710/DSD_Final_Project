@@ -46,7 +46,7 @@ public class FrontEnd {
             DatagramPacket request = new DatagramPacket(buf, buf.length);
             try {
                 clientSocket.receive(request);
-                System.out.println("ayoooooooooooooooooooooo"+clientSocket.getInetAddress());
+                System.out.println("ayoooooooooooooooooooooo" + clientSocket.getInetAddress());
                 byte[] data = request.getData();
                 String requestString = new String(data, 0, request.getLength());
                 System.out.println("Received request: " + requestString);
@@ -79,7 +79,7 @@ public class FrontEnd {
                             System.err.println("Received response from unknown port: " + port);
                             continue;
                         }
-                        responses[replicaId-1] = response; // Store the response in the correct position of the responses array
+                        responses[replicaId - 1] = response; // Store the response in the correct position of the responses array
                         numResponses++;
                     } catch (SocketTimeoutException e) {
                         ///////////////////////////handle everything in this catch. current impl is almost all wrong
@@ -88,7 +88,7 @@ public class FrontEnd {
                         // Identify which replica has timed out and increment its failure count
                         int replicaId = i + 1;
                         System.err.println("Replica " + replicaId + " timed out.");
-                        replicaFailures[replicaId-1]++;
+                        replicaFailures[replicaId - 1]++;
 //                        if (replicaFailures[replicaId-1] > maxFailures) {
 //                            System.err.println("Replica " + replicaId + " has failed.");
 //                            replicaFailures[replicaId-1] = 0;
@@ -110,12 +110,12 @@ public class FrontEnd {
                     if (responses[i] != null) {
                         int count = 0;
                         for (int j = 0; j < numReplicas; j++) {
-                            if (responses[j] != null && responses[i].equals(responses[j])) {
+                            if (responses[j] != null && responses[i].trim().equals(responses[j].trim())) {
                                 count++;
                             }
                         }
                         if (count >= 2) {
-                            correctResponse = responses[i];
+                            correctResponse = responses[i].trim();
                             break;
                         }
 //                        else {
@@ -138,8 +138,7 @@ public class FrontEnd {
 
                 if (correctResponse == null) {
                     System.err.println("All replicas timed out.");
-                }
-                else {
+                } else {
                     // Send correct response back to client
 
                     System.out.println(correctResponse);
