@@ -320,7 +320,7 @@ public class VERImplementation implements MTBSInterface {
     public String getBookingSchedule(String customerID) {
         String key = null;
         String log = "";
-        String result = "----------Verdun----------,";
+        String result = "----------Verdun----------\n";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : VERdata.entrySet()) {
             key = set.getKey();
@@ -333,12 +333,7 @@ public class VERImplementation implements MTBSInterface {
                         count++;
                 }
                 if ((data.getValue().getCustomerID()).contains(customerID)) {
-                    if (!isAppended) {
-                        result += key + " , " + data.getKey() + " : "+ count;
-                        isAppended = true;
-                        count = 0;
-                    } else
-                        result += ", " + data.getKey()+ " : "+ count + " ";
+                    result += "Movie Name: " + key + " | Show ID: " + data.getKey() + " | Tickets Booked: "+ count + "\n";
                     count = 0;
                 }
 
@@ -363,7 +358,7 @@ public class VERImplementation implements MTBSInterface {
         new Thread(){
             @Override
             public void run() {
-                out_result = udpThread("showsSchedule:" + customerID,CONFIGURATION.OUT_LISTENER);
+                out_result = "\n"+udpThread("showsSchedule:" + customerID,CONFIGURATION.OUT_LISTENER);
             }
         }.start();
 

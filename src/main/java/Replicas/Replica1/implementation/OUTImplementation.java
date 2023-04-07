@@ -359,7 +359,7 @@ public class OUTImplementation implements MTBSInterface {
     public String getBookingSchedule(String customerID){
         String key = null;
         String log = "";
-        String result = "----------Outremont----------,";
+        String result = "----------Outremont----------\n";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : OUTdata.entrySet()) {
             key = set.getKey();
@@ -372,12 +372,7 @@ public class OUTImplementation implements MTBSInterface {
                         count++;
                 }
                 if ((data.getValue().getCustomerID()).contains(customerID)) {
-                    if (!isAppended) {
-                        result += key + " , " + data.getKey() + " : "+ count;
-                        isAppended = true;
-                        count = 0;
-                    } else
-                        result += ", " + data.getKey()+ " : "+ count + " ";
+                    result += "Movie Name: " + key + " | Show ID: " + data.getKey() + " | Tickets Booked: "+ count + "\n";
                     count = 0;
                 }
 
@@ -402,7 +397,7 @@ public class OUTImplementation implements MTBSInterface {
         new Thread(){
             @Override
             public void run() {
-                ver_result = udpThread("showsSchedule:" + customerID,CONFIGURATION.VER_LISTENER);
+                ver_result = "\n"+udpThread("showsSchedule:" + customerID,CONFIGURATION.VER_LISTENER);
             }
         }.start();
 
