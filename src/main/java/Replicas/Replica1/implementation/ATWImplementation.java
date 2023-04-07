@@ -239,7 +239,7 @@ public class ATWImplementation implements MTBSInterface {
 
         new Thread() {
             public void run() {
-                out_result = udpThread("showsList:" + movieName, CONFIGURATION.OUT_LISTENER);
+                out_result = "\n"+udpThread("showsList:" + movieName, CONFIGURATION.OUT_LISTENER);
             }
         }.start();
 

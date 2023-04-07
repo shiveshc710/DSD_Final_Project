@@ -179,7 +179,7 @@ public class Admin {
 
                             movieName = movies.get(movie);
 
-                            mtbsInterface = service.getPort(MTBSInterface.class);
+//                            mtbsInterface = service.getPort(MTBSInterface.class);
                             System.out.println("\nFetching show details for "+ movieName+"\n");
                             writeLog(userID + " : Display available slots | Request Parameters : Movie Name: " + movieName);
 //                            result = mtbsInterface.listMovieShowsAvailability(movieName);
@@ -189,6 +189,8 @@ public class Admin {
 //                            for (int i = 0; i < showsList.length; i++) {
 //                                System.out.println(showsList[i]);
 //                            }
+                            String req100 = "listSlot,"+movieName;
+                            sendRequest(req100);
                             break;
                         case 4:
                             do {

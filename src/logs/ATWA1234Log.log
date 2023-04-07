@@ -14,3 +14,15 @@ Apr 06, 2023 7:37:29 PM client.Admin writeLog
 INFO: Log from ATWA1234(Customer) : ATWA1234 : Add slot | Request Parameters : Movie Id: ATWA080423 Movie Name: Avatar Number of Slots: 100
 Apr 06, 2023 7:40:14 PM client.Admin writeLog
 INFO: Log from ATWA1234(Customer) : ATWA1234 : Add slot | Request Parameters : Movie Id: ATWA080423 Movie Name: Avatar Number of Slots: 100
+Apr 07, 2023 9:59:29 AM client.Admin writeLog
+INFO: Log from ATWA1234(Customer) : ATWA1234 : Add slot | Request Parameters : Movie Id: ATWA080423 Movie Name: Avatar Number of Slots: 100
+Apr 07, 2023 10:00:25 AM client.Admin writeLog
+INFO: Log from ATWA1234(Customer) : ATWA1234 : Add slot | Request Parameters : Movie Id: ATWA080423 Movie Name: Avatar Number of Slots: 100
+Apr 07, 2023 10:01:15 AM client.Admin writeLog
+INFO: Log from ATWA1234(Customer) : ATWC1234 : Book Tickets | Request Parameters : Movie Id: ATWA080423 Movie Name: Avatar Number of Tickets: 5
+Apr 07, 2023 10:17:17 AM client.Admin writeLog
+INFO: Log from ATWA1234(Customer) : ATWA1234 : Add slot | Request Parameters : Movie Id: ATWA080423 Movie Name: Avatar Number of Slots: 100
+Apr 07, 2023 10:18:30 AM client.Admin writeLog
+INFO: Log from ATWA1234(Customer) : ATWA1234 : Add slot | Request Parameters : Movie Id: ATWA090423 Movie Name: Avengers Number of Slots: 90
+Apr 07, 2023 10:19:04 AM client.Admin writeLog
+INFO: Log from ATWA1234(Customer) : ATWA1234 : Display available slots | Request Parameters : Movie Name: Avatar

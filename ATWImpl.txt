@@ -52,3 +52,11 @@
 7:16:51 PM | Request type:Cancel Movie Tickets | Request Parameter: ATWA1234,ATWA080423,AVATAR,5 | Status: Success | Server Response: Movie Tickets Cancelled
 7:37:29 PM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA080423,Avatar,100 | Status: Success | Server Response: Movie Slots Added
 7:40:15 PM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA080423,Avatar,100 | Status: Success | Server Response: Movie Slots Added
+9:59:29 AM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA080423,Avatar,100 | Status: Success | Server Response: Movie Slots Added
+10:00:25 AM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA080423,Avatar,100 | Status: Success | Server Response: Movie Slots Added
+10:01:15 AM | Request type:Book Movie Tickets | Request Parameter: ATWC1234,ATWA080423,Avatar,5 | Status: Success | Server Response: Movie Tickets Booked
+10:02:28 AM | Request type:List movie shows | Request Parameter: AVATAR | Status: Success | Server Response: Movie shows listed, if any.
+10:03:18 AM | Request type:List movie shows | Request Parameter: Avatar | Status: Success | Server Response: Movie shows listed, if any.
+10:17:17 AM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA080423,Avatar,100 | Status: Success | Server Response: Movie Slots Added
+10:18:30 AM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA090423,Avengers,90 | Status: Success | Server Response: Movie Slots Added
+10:19:04 AM | Request type:List movie shows | Request Parameter: Avatar | Status: Success | Server Response: Movie shows listed, if any.

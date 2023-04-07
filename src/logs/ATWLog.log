@@ -20,3 +20,27 @@ Apr 06, 2023 7:16:51 PM Replicas.Replica1.implementation.ATWImplementation write
 INFO: Log from Atwater : Ticket(s) canceled successfully.
 Apr 06, 2023 7:40:15 PM Replicas.Replica1.implementation.ATWImplementation writeLog
 INFO: Log from Atwater : Movie slot ATWA080423 added for : Avatar
+Apr 07, 2023 10:00:26 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA080423 added for : Avatar
+Apr 07, 2023 10:01:15 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Tickets for Avatar for 08/04
+Apr 07, 2023 10:17:18 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA080423 added for : Avatar
+Apr 07, 2023 10:18:30 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA090423 added for : Avengers
+Apr 07, 2023 10:19:04 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7001
+Apr 07, 2023 10:19:04 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7002
+Apr 07, 2023 10:19:04 AM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Received response
+Apr 07, 2023 10:19:04 AM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Outremont : List availabilities | Request Parameters : movieName: Avatar
+Apr 07, 2023 10:19:04 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7001
+Apr 07, 2023 10:19:04 AM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Sending response to the request server.
+Apr 07, 2023 10:19:04 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7002
+Apr 07, 2023 10:19:06 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Data found from all servers
