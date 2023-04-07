@@ -47,7 +47,7 @@ public class FrontEnd {
             DatagramPacket request = new DatagramPacket(buf, buf.length);
             try {
                 clientSocket.receive(request);
-                System.out.println("ayoooooooooooooooooooooo" + clientSocket.getInetAddress());
+                System.out.println("----------------------------------------------------------------");
                 byte[] data = request.getData();
                 String requestString = new String(data, 0, request.getLength());
                 System.out.println("Received request: " + requestString);
