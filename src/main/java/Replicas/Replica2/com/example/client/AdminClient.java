@@ -17,7 +17,7 @@ public class AdminClient {
     static DatagramSocket aSocket = null;
 
     public static void main(String[] args) throws UnknownHostException, SocketException {
-        aSocket = new DatagramSocket(CONFIGURATION.CLIENT_PORT, InetAddress.getByName(CONFIGURATION.HOSTNAME));
+        aSocket = new DatagramSocket(CONFIGURATION.CLIENT_PORT_ADMIN, InetAddress.getByName(CONFIGURATION.HOSTNAME));
         try {
             URL url = new URL("http://localhost:" + CONFIGURATION.Main_PORT_2 + "/masterservice?wsdl");
             QName qname = new QName("http://example.com/master", "MasterServerImplService");

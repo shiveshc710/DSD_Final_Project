@@ -17,6 +17,7 @@ public class FrontEnd {
     private int maxFailures;
     private int timeout;
     private int frontEndPort;
+    private int clientPort;
 
     public FrontEnd(String sequencerAddr, int sequencerPrt, String[] replicaAddrs, int[] replicaPrt, int timeoutMs, int frontEndPrt) throws UnknownHostException, SocketException {
         this.clientSocket = new DatagramSocket(frontEndPrt);
@@ -50,6 +51,14 @@ public class FrontEnd {
                 byte[] data = request.getData();
                 String requestString = new String(data, 0, request.getLength());
                 System.out.println("Received request: " + requestString);
+
+                String userType = requestString.split(":")[0];
+                if (userType.equals("Admin"))
+                    clientPort = CONFIGURATION.CLIENT_PORT_ADMIN;
+                else
+                    clientPort = CONFIGURATION.CLIENT_PORT_CUSTOMER;
+
+                requestString = requestString.split(":")[1];
 
                 byte[] requestBuffer = requestString.getBytes();
                 // Send request to sequencer
@@ -152,7 +161,7 @@ public class FrontEnd {
                     byte[] responseBuffer = responseData.getBytes();
 
                     // Create the UDP packet with the response data
-                    DatagramPacket responsePacket = new DatagramPacket(responseBuffer, responseBuffer.length, clientAddress, CONFIGURATION.CLIENT_PORT);
+                    DatagramPacket responsePacket = new DatagramPacket(responseBuffer, responseBuffer.length, clientAddress, clientPort);
 
                     // Send the response packet to the client end
                     socket.send(responsePacket);

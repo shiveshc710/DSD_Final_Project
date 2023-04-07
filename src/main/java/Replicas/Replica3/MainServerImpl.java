@@ -280,9 +280,9 @@ public class MainServerImpl {
     public String exchangeTickets(String customerID, String movieID, String movieName, String new_movieID, String new_movieName, int numberOfTickets) {
         String result;
         result = cancelMovieTickets(customerID, movieID, movieName, numberOfTickets);
-        if (result.equals("Movie Tickets Cancelled")) {
+        if (result.equals("Success")) {
             result = bookMovieTickets(customerID, new_movieID, new_movieName, numberOfTickets);
-            if (result.equals("Success" + "\n" + "Movie Tickets Booked")) {
+            if (result.equals("Success")) {
                 return "Success";
             } else {
                 bookMovieTickets(customerID, movieID, movieName, numberOfTickets);
