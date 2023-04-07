@@ -227,19 +227,17 @@ public class Admin {
                             sendRequest(req2);
                             break;
                         case 5:
-                            mtbsInterface = service.getPort(MTBSInterface.class);
+//                            mtbsInterface = service.getPort(MTBSInterface.class);
                             System.out.print("Please enter customer ID: ");
                             customerID = sc.next();
                             writeLog(userID + " : Get Bookings | Request Parameters : Customer Id: " + customerID);
 
                             System.out.println("Fetching all the bookings...");
-//                            result = mtbsInterface.getBookingSchedule(customerID);
                             System.out.println("================================\nBookings of customer " + customerID
                                     + "\n================================\n");
-//                            showsList = result.split(",");
-//                            for (int i = 0; i < showsList.length; i++) {
-//                                System.out.println(showsList[i]);
-//                            }
+                            String requestParameterslB = customerID;
+                            String req200 = "listbook," + requestParameterslB;
+                            sendRequest(req200);
                             break;
                         case 6:
                             do {

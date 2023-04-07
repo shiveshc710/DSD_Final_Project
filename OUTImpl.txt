@@ -4,3 +4,5 @@
 10:03:18 AM | Request type:List movie shows | Request Parameter: Avatar | Status: Success | Server Response: Movie shows listed, if any.
 10:19:04 AM | Request type:List movie shows | Request Parameter: Avatar | Status: Success | Server Response: Movie shows listed, if any.
 10:32:12 AM | Request type:List movie shows | Request Parameter: Avengers | Status: Success | Server Response: Movie shows listed, if any.
+10:51:22 AM | Request type:List movie shows | Request Parameter: Avatar | Status: Success | Server Response: Movie shows listed, if any.
+10:59:47 AM | Request type:List movie shows | Request Parameter: Avatar | Status: Success | Server Response: Movie shows listed, if any.

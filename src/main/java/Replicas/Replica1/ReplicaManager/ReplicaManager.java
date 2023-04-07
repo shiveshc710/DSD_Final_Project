@@ -30,8 +30,6 @@ public class ReplicaManager {
             System.out.println("ReplicaManager started on port " + port);
 
 
-
-
             while (running) {
                 byte[] buffer = new byte[1024];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
@@ -42,11 +40,10 @@ public class ReplicaManager {
                 System.out.println("Received request: " + request);
 
                 String server = request.split(",")[1];
-                setWebServiceParams(server.substring(0,3));
+                setWebServiceParams(server.substring(0, 3));
 
                 // call method on replica server and get response
                 String response = callReplicaServerMethod(request);
-
 
 
                 // send response back to frontend
@@ -66,8 +63,7 @@ public class ReplicaManager {
 
     public void setWebServiceParams(String server) throws MalformedURLException {
         int port = 0;
-        switch (server)
-        {
+        switch (server) {
             case "ATW":
                 port = CONFIGURATION.ATW_PORT;
                 break;
@@ -80,8 +76,8 @@ public class ReplicaManager {
             default:
                 return;
         }
-        URL url = new URL("http://localhost:"+port+"/DMTBS"+server+"/?wsdl");
-        QName qname = new QName( "http://implementation.Replica1.Replicas/", server+"ImplementationService");
+        URL url = new URL("http://localhost:" + port + "/DMTBS" + server + "/?wsdl");
+        QName qname = new QName("http://implementation.Replica1.Replicas/", server + "ImplementationService");
         Service service = Service.create(url, qname);
         MasterServerRef = service.getPort(MTBSInterface.class);
         System.out.println("Params setting done");
@@ -99,15 +95,17 @@ public class ReplicaManager {
         // call method on replica server and return response
         String[] parts = request.split(",");
         if (parts[0].equals("addSlot")) {
-             ans=  MasterServerRef.addMovieSlots(parts[2], parts[3], Integer.parseInt(parts[4]));
+            ans = MasterServerRef.addMovieSlots(parts[2], parts[3], Integer.parseInt(parts[4]));
         } else if (parts[0].equals("remSlot")) {
             ans = MasterServerRef.removeMovieSlots(parts[2], parts[3]);
         } else if (parts[0].equals("book")) {
-            ans = MasterServerRef.bookMovieTickets(parts[1], parts[2], parts[3], Integer.parseInt(parts[4]) );
+            ans = MasterServerRef.bookMovieTickets(parts[1], parts[2], parts[3], Integer.parseInt(parts[4]));
         } else if (parts[0].equals("cancel")) {
             ans = MasterServerRef.cancelMovieTickets(parts[1], parts[2], parts[3], Integer.parseInt(parts[4]));
         } else if (parts[0].equals("listSlot")) {
             ans = MasterServerRef.listMovieShowsAvailability(parts[1]);
+        } else if (parts[0].equals("listbook")) {
+            ans = MasterServerRef.getBookingSchedule(parts[1]);
         }
 
         System.out.println("Answer received : " + ans);
@@ -118,7 +116,6 @@ public class ReplicaManager {
         try {
             ReplicaManager replicaManager = new ReplicaManager(5000);
             replicaManager.start();
-
 
 
         } catch (Exception e) {

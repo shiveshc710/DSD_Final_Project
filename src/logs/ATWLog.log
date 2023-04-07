@@ -48,3 +48,57 @@ Apr 07, 2023 10:28:16 AM Replicas.Replica1.implementation.ATWImplementation writ
 INFO: Log from Atwater : Unable to add slot : Invalid movieID
 Apr 07, 2023 10:31:12 AM Replicas.Replica1.implementation.ATWImplementation writeLog
 INFO: Log from Atwater : Movie slot ATWA080423 added for : Avengers
+Apr 07, 2023 10:50:36 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA080423 added for : Avatar
+Apr 07, 2023 10:51:11 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA090423 added for : Avatar
+Apr 07, 2023 10:51:22 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7001
+Apr 07, 2023 10:51:22 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7002
+Apr 07, 2023 10:51:22 AM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Received response
+Apr 07, 2023 10:51:22 AM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Outremont : List availabilities | Request Parameters : movieName: Avatar
+Apr 07, 2023 10:51:22 AM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Sending response to the request server.
+Apr 07, 2023 10:51:22 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7001
+Apr 07, 2023 10:51:22 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7002
+Apr 07, 2023 10:51:24 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Data found from all servers
+Apr 07, 2023 10:52:44 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Tickets for Avatar for 08/04
+Apr 07, 2023 10:53:26 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Tickets for Avatar for 09/04
+Apr 07, 2023 10:58:54 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : No shows are available for Avatar!!!
+Apr 07, 2023 10:59:15 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA080423 added for : Avatar
+Apr 07, 2023 10:59:38 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA090423 added for : Avatar
+Apr 07, 2023 10:59:47 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7002
+Apr 07, 2023 10:59:47 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7001
+Apr 07, 2023 10:59:47 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7001
+Apr 07, 2023 10:59:47 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7002
+Apr 07, 2023 10:59:49 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Data found from all servers
+Apr 07, 2023 11:01:05 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Tickets for Avatar for 08/04
+Apr 07, 2023 11:01:31 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Tickets for Avatar for 09/04
+Apr 07, 2023 11:01:55 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7001
+Apr 07, 2023 11:01:55 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7002
+Apr 07, 2023 11:01:55 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7001
+Apr 07, 2023 11:01:55 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7002
+Apr 07, 2023 11:01:57 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Bookings found from all servers for user : ATWA1234

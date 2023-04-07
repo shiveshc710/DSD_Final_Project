@@ -68,3 +68,15 @@
 10:33:40 AM | Request type:Book Movie Tickets | Request Parameter: ATWA1234,ATWA080423,Avengers,7 | Status: Success | Server Response: Movie Tickets Booked
 10:34:06 AM | Request type:Book Movie Tickets | Request Parameter: ATWA1234,ATWA090423,Avengers,10 | Status: Success | Server Response: Movie Tickets Booked
 10:34:15 AM | Request type:Get movie booking schedule | Request Parameter: ATWA1234 | Status: Success | Server Response: Movie bookings listed, if any.
+10:50:35 AM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA080423,Avatar,100 | Status: Success | Server Response: Movie Slots Added
+10:51:11 AM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA090423,Avatar,900 | Status: Success | Server Response: Movie Slots Added
+10:51:22 AM | Request type:List movie shows | Request Parameter: Avatar | Status: Success | Server Response: Movie shows listed, if any.
+10:52:44 AM | Request type:Book Movie Tickets | Request Parameter: ATWA1234,ATWA080423,Avatar,7 | Status: Success | Server Response: Movie Tickets Booked
+10:53:26 AM | Request type:Book Movie Tickets | Request Parameter: ATWA1234,ATWA090423,Avatar,10 | Status: Success | Server Response: Movie Tickets Booked
+10:58:54 AM | Request type:Remove Movie Slots | Request Parameter: ATWA1234,ATWA080423,Avatar | Status: Failed | Server Response: Movie does not exist in the system
+10:59:15 AM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA080423,Avatar,100 | Status: Success | Server Response: Movie Slots Added
+10:59:38 AM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA090423,Avatar,160 | Status: Success | Server Response: Movie Slots Added
+10:59:47 AM | Request type:List movie shows | Request Parameter: Avatar | Status: Success | Server Response: Movie shows listed, if any.
+11:01:05 AM | Request type:Book Movie Tickets | Request Parameter: ATWA1234,ATWA080423,Avatar,7 | Status: Success | Server Response: Movie Tickets Booked
+11:01:31 AM | Request type:Book Movie Tickets | Request Parameter: ATWA1234,ATWA090423,Avatar,10 | Status: Success | Server Response: Movie Tickets Booked
+11:01:55 AM | Request type:Get movie booking schedule | Request Parameter: ATWA1234 | Status: Success | Server Response: Movie bookings listed, if any.
