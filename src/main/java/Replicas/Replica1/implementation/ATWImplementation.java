@@ -582,7 +582,7 @@ public class ATWImplementation implements MTBSInterface {
             System.out.println("Exchange is possible");
             String s1= cancelMovieTickets(customerID,movieID,old_movieName,numberOfTickets);
             String s2=  bookMovieTickets(customerID,new_movieID,new_movieName,numberOfTickets);
-            return s2;
+            return "Success";
 
         }
         else {
