@@ -42,3 +42,13 @@
 5:27:40 PM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080423,AVATAR,50 | Status: Success | Server Response: Movie Slots Added
 5:46:41 PM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080423,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
 5:52:22 PM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080423,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
+6:49:11 PM | Request type:Add Movie Slots | Request Parameter: ATWA123,ATWA080808,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
+7:08:03 PM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA080423,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
+7:09:14 PM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA080423,AVATAR,100 | Status: Success | Server Response: Movie Slots Added
+7:10:22 PM | Request type:Book Movie Tickets | Request Parameter: ATWA1234,ATWA080423,AVATAR,9 | Status: Success | Server Response: Movie Tickets Booked
+7:14:17 PM | Request type:Cancel Movie Tickets | Request Parameter: ATWA1234,ATWA080423,AVATAR,9 | Status: Success | Server Response: Movie Tickets Cancelled
+7:15:24 PM | Request type:Book Movie Tickets | Request Parameter: ATWA1234,ATWA080423,AVATAR,160 | Status: Failed | Server Response: Not enough tickets available
+7:16:16 PM | Request type:Book Movie Tickets | Request Parameter: ATWA1234,ATWA080423,AVATAR,15 | Status: Success | Server Response: Movie Tickets Booked
+7:16:51 PM | Request type:Cancel Movie Tickets | Request Parameter: ATWA1234,ATWA080423,AVATAR,5 | Status: Success | Server Response: Movie Tickets Cancelled
+7:37:29 PM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA080423,Avatar,100 | Status: Success | Server Response: Movie Slots Added
+7:40:15 PM | Request type:Add Movie Slots | Request Parameter: ATWA1234,ATWA080423,Avatar,100 | Status: Success | Server Response: Movie Slots Added

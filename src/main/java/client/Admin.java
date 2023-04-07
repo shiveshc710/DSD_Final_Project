@@ -8,10 +8,7 @@ import config.CONFIGURATION;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.URL;
+import java.net.*;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.FileHandler;
@@ -19,13 +16,16 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class Admin {
+
+    static DatagramSocket aSocket = null;
     private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     static FileHandler fh;
     static SimpleFormatter formatter = new SimpleFormatter();
     static String URL = null;
     static String userID = null;
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnknownHostException, SocketException {
 
+        aSocket = new DatagramSocket(CONFIGURATION.CLIENT_PORT, InetAddress.getByName(CONFIGURATION.HOSTNAME));
         Scanner sc = new Scanner(System.in);
         Admin c = new Admin();
         java.net.URL url = null;
@@ -155,6 +155,8 @@ public class Admin {
 //                            result = mtbsInterface.removeMovieSlots(movieId, movieName);
 //                            System.out.println(result);
 
+                            String req1 = "remSlot,"+userID+","+movieId+","+movieName;
+                            sendRequest(req1);
                             break;
                         case 3:
                             do {
@@ -218,6 +220,9 @@ public class Admin {
                             writeLog(customerID + " : Book Tickets | Request Parameters : Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Tickets: " + numberOfTicket);
 //                            result = mtbsInterface.bookMovieTickets(customerID,movieId,movieName,numberOfTicket);
 //                            System.out.println(result);
+                            String requestParameters = customerID + "," + movieId + "," + movieName + "," + numberOfTicket;
+                            String req2 = "book," + requestParameters;
+                            sendRequest(req2);
                             break;
                         case 5:
                             mtbsInterface = service.getPort(MTBSInterface.class);
@@ -264,6 +269,9 @@ public class Admin {
                             writeLog(userID + " : Cancel Tickets | Request Parameters : Customer Id: "+customerID+" Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Slots: " + numberOfTicket);
 //                            result = mtbsInterface.cancelMovieTickets(customerID,movieId,movieName,numberOfTicket);
 //                            System.out.println(result);
+                            String requestParameters3 = customerID + "," + movieId + "," + movieName + "," + numberOfTicket;
+                            String req3 = "cancel," + requestParameters3;
+                            sendRequest(req3);
                             break;
                         case 7:
                             exited = true;
@@ -326,5 +334,12 @@ public class Admin {
         // Send the request packet to the front end
         socket.send(requestPacket);
 
+        // Receive the response
+        byte[] buffer = new byte[1000];
+        DatagramPacket response = new DatagramPacket(buffer, buffer.length);
+
+        aSocket.receive(response);
+        String sentence = new String(response.getData(), 0, response.getLength());
+        System.out.println(sentence);
     }
 }

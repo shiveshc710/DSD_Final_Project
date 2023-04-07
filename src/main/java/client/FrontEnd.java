@@ -36,13 +36,17 @@ public class FrontEnd {
         this.frontEndPort = frontEndPrt;
     }
 
-    public void start() {
+    public void start() throws UnknownHostException {
+        InetAddress SERVER_ADDRESS = InetAddress.getLocalHost();
+        System.out.println(SERVER_ADDRESS.getHostAddress());
         System.out.println("client.FrontEnd listening on port " + frontEndPort);
+//        System.out.println(clientSocket.getInetAddress().getHostAddress());
         while (true) {
             byte[] buf = new byte[1024];
             DatagramPacket request = new DatagramPacket(buf, buf.length);
             try {
                 clientSocket.receive(request);
+                System.out.println("ayoooooooooooooooooooooo"+clientSocket.getInetAddress());
                 byte[] data = request.getData();
                 String requestString = new String(data, 0, request.getLength());
                 System.out.println("Received request: " + requestString);
@@ -141,17 +145,17 @@ public class FrontEnd {
                     System.out.println(correctResponse);
                     DatagramSocket socket = new DatagramSocket();
 
-                    // Define the front end's IP address and port number
+                    // Define the client's IP address and port number
                     InetAddress clientAddress = InetAddress.getByName("localhost");
 
-                    // Create the request data
+                    // Create the response data
                     String responseData = correctResponse;
                     byte[] responseBuffer = responseData.getBytes();
 
-                    // Create the UDP packet with the request data
+                    // Create the UDP packet with the response data
                     DatagramPacket responsePacket = new DatagramPacket(responseBuffer, responseBuffer.length, clientAddress, CONFIGURATION.CLIENT_PORT);
 
-                    // Send the request packet to the front end
+                    // Send the response packet to the client end
                     socket.send(responsePacket);
                 }
             } catch (IOException e) {

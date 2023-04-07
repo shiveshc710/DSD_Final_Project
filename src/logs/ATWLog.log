@@ -6,3 +6,17 @@ Apr 06, 2023 5:46:42 PM Replicas.Replica1.implementation.ATWImplementation write
 INFO: Log from Atwater : Movie slot ATWA080423 added for : AVATAR
 Apr 06, 2023 5:52:23 PM Replicas.Replica1.implementation.ATWImplementation writeLog
 INFO: Log from Atwater : Movie slot ATWA080423 added for : AVATAR
+Apr 06, 2023 6:49:11 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Tickets cannot be booked for Date more than a week or for previous date.
+Apr 06, 2023 7:08:04 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA080423 added for : AVATAR
+Apr 06, 2023 7:09:14 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie Slot already exist for ATWA080423
+Apr 06, 2023 7:15:24 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : 
+Apr 06, 2023 7:16:16 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Tickets for AVATAR for 08/04
+Apr 06, 2023 7:16:51 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Ticket(s) canceled successfully.
+Apr 06, 2023 7:40:15 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA080423 added for : Avatar
