@@ -159,7 +159,7 @@ public class ATWImpl {
                 HashMap<String, Integer> movieShows = movieInfo.get(movieName);
                 Set<String> shows = movieShows.keySet();
                 for (String show : shows) {
-                    result += show + " " + movieShows.get(show) + "\n";
+                    result += show + " : " + movieShows.get(show) + "\n";
                 }
             } else {
                 result = "";
