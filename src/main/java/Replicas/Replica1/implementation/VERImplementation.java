@@ -338,15 +338,12 @@ public class VERImplementation implements MTBSInterface {
                 }
 
             }
-            count = 0;
-            result += ",";
-
         }
 
         if (result.contains("VERA") | result.contains("VERM")| result.contains("VERE"))
             result += "\n";
         else
-            result += "No bookings available,";
+            result += "";
 
         new Thread(){
             @Override
@@ -381,11 +378,10 @@ public class VERImplementation implements MTBSInterface {
     public String getBookingScheduleForServer(String customerID) {
         String key = null;
         String log = "";
-        String result = "----------Verdun----------,";
+        String result = "----------Verdun----------\n";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : VERdata.entrySet()) {
             key = set.getKey();
-            boolean isAppended = false;
             int count = 0;
             for (Map.Entry<String, BookingDetails> data : set.getValue().entrySet()) {
 
@@ -394,25 +390,17 @@ public class VERImplementation implements MTBSInterface {
                         count++;
                 }
                 if ((data.getValue().getCustomerID()).contains(customerID)) {
-                    if (!isAppended) {
-                        result += key + " , " + data.getKey() + " : "+ count;
-                        isAppended = true;
-                        count = 0;
-                    } else
-                        result += ", " + data.getKey()+ " : "+ count + " ";
+                    result += "Movie Name: " + key + " | Show ID: " + data.getKey() + " | Tickets Booked: "+ count + "\n";
                     count = 0;
                 }
 
             }
-            count = 0;
-            result += ",";
-
         }
 
         if (result.contains("VERA") | result.contains("VERM")| result.contains("VERE"))
             result += "\n";
         else
-            result += "No bookings available,";
+            result += "";
 
         log = result.trim().isEmpty() ? "No result Found!!" : "Bookings found for Verdun server for user "+ customerID;
         writeLog(log);
