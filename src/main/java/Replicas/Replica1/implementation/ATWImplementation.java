@@ -47,33 +47,7 @@ public class ATWImplementation implements MTBSInterface {
         userSlotData = new ConcurrentHashMap<>();
         customerList = new ArrayList<>();
 
-        customerList.add("ATWC1234");
-        customerList.add("ATWC0733");
-        customerList.add("ATWC2345");
-        userSlotData.put("ATWA"+date, new BookingDetails(customerList, 3));
 
-        customerList = new ArrayList<>();
-        customerList.add("ATWC1234");
-        customerList.add("ATWC1234");
-        customerList.add("ATWC1234");
-        customerList.add("ATWC0733");
-        customerList.add("ATWC2345");
-        userSlotData.put("ATWM"+date, new BookingDetails(customerList, 6));
-
-        customerList = new ArrayList<>();
-        customerList.add("ATWC4567");
-        userSlotData.put("ATWA"+date, new BookingDetails(customerList, 10));
-
-        userSlotData.put("ATWE"+date, new BookingDetails(new ArrayList<>(), 10));
-        ATWdata.put(CONFIGURATION.AVATAR, userSlotData);
-
-        userSlotData = new HashMap<>();
-        customerList = new ArrayList<>();
-        customerList.add("ATWC1234");
-        customerList.add("ATWC0733");
-        customerList.add("ATWC2345");
-        userSlotData.put("ATWE"+date, new BookingDetails(customerList, 4));
-        ATWdata.put(CONFIGURATION.TITANIC, userSlotData);
     }
 
     @Override
@@ -363,7 +337,7 @@ public class ATWImplementation implements MTBSInterface {
         }
 
         if (result.contains("ATWA") | result.contains("ATWM")| result.contains("ATWE"))
-            result += "\n";
+            result += "";
         else
             result += "";
 

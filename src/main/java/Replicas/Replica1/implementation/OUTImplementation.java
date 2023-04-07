@@ -43,31 +43,7 @@ public class OUTImplementation implements MTBSInterface {
         userSlotData = new ConcurrentHashMap<>();
         customerList = new ArrayList<>();
 
-        customerList.add("ATWC1234");
-        customerList.add("OUTC0733");
-        customerList.add("OUTC2345");
-        userSlotData.put("OUTA140223", new BookingDetails(customerList, 3));
 
-        customerList = new ArrayList<>();
-        customerList.add("ATWC1234");
-        customerList.add("OUTC0733");
-        customerList.add("OUTC2345");
-        userSlotData.put("OUTM150223", new BookingDetails(customerList, 6));
-
-        customerList = new ArrayList<>();
-        customerList.add("OUTC4567");
-        userSlotData.put("OUTA180223", new BookingDetails(customerList, 10));
-
-        userSlotData.put("OUTE210223", new BookingDetails(new ArrayList<>(), 10));
-        OUTdata.put(CONFIGURATION.AVATAR, userSlotData);
-
-        userSlotData = new ConcurrentHashMap<>();
-        customerList = new ArrayList<>();
-        customerList.add("OUTC1234");
-        customerList.add("OUTC0733");
-        customerList.add("OUTC2345");
-        userSlotData.put("OUTE200223", new BookingDetails(customerList, 4));
-        OUTdata.put(CONFIGURATION.TITANIC, userSlotData);
     }
 
     @Override
@@ -381,7 +357,7 @@ public class OUTImplementation implements MTBSInterface {
         }
 
         if (result.contains("OUTA") | result.contains("OUTM")| result.contains("OUTE"))
-            result += "\n";
+            result += "";
         else
             result += "";
 

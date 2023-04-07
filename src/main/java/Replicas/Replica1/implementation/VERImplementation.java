@@ -41,21 +41,6 @@ public class VERImplementation implements MTBSInterface {
         userSlotData = new ConcurrentHashMap<>();
         customerList = new ArrayList<>();
 
-
-        customerList = new ArrayList<>();
-        customerList.add("VERC4567");
-        userSlotData.put("VERA210223", new BookingDetails(customerList, 10));
-
-        userSlotData.put("VERE150223", new BookingDetails(new ArrayList<>(), 10));
-        VERdata.put(CONFIGURATION.AVATAR, userSlotData);
-
-        userSlotData = new ConcurrentHashMap<>();
-        customerList = new ArrayList<>();
-        customerList.add("VERC1234");
-        customerList.add("VERC0733");
-        customerList.add("VERC2345");
-        userSlotData.put("VERE160223", new BookingDetails(customerList, 4));
-        VERdata.put(CONFIGURATION.TITANIC, userSlotData);
     }
 
     @Override
@@ -341,7 +326,7 @@ public class VERImplementation implements MTBSInterface {
         }
 
         if (result.contains("VERA") | result.contains("VERM")| result.contains("VERE"))
-            result += "\n";
+            result += "";
         else
             result += "";
 
