@@ -252,6 +252,7 @@ public class MainServerImpl {
             e.printStackTrace(System.err);
         }
         try {
+            result+= "----------Verdun----------\n";
             URL url = new URL("http://localhost:8082/ver?wsdl");
             QName qname = new QName("http://example.com/ver", "VERImplService");
             Service service = Service.create(url, qname);
@@ -262,6 +263,7 @@ public class MainServerImpl {
             e.printStackTrace(System.err);
         }
         try {
+            result+= "----------Outremont----------\n";
             URL url = new URL("http://localhost:8083/out?wsdl");
             QName qname = new QName("http://example.com/out", "OUTImplService");
             Service service = Service.create(url, qname);
