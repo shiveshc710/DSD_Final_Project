@@ -283,10 +283,10 @@ public class MainServerImpl {
         if (result.equals("Movie Tickets Cancelled")) {
             result = bookMovieTickets(customerID, new_movieID, new_movieName, numberOfTickets);
             if (result.equals("Success" + "\n" + "Movie Tickets Booked")) {
-                return "Success. Tickets Exchanged";
+                return "Success";
             } else {
                 bookMovieTickets(customerID, movieID, movieName, numberOfTickets);
-                return "Could not exchange at this time.";
+                return "Failed";
             }
         }
         return result;
