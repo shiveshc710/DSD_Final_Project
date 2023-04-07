@@ -26,3 +26,7 @@ Apr 07, 2023 10:18:30 AM client.Admin writeLog
 INFO: Log from ATWA1234(Customer) : ATWA1234 : Add slot | Request Parameters : Movie Id: ATWA090423 Movie Name: Avengers Number of Slots: 90
 Apr 07, 2023 10:19:04 AM client.Admin writeLog
 INFO: Log from ATWA1234(Customer) : ATWA1234 : Display available slots | Request Parameters : Movie Name: Avatar
+Apr 07, 2023 10:28:16 AM client.Admin writeLog
+INFO: Log from ATWA1234(Customer) : ATWA1234 : Add slot | Request Parameters : Movie Id: 090423 Movie Name: Avatar Number of Slots: 100
+Apr 07, 2023 10:31:12 AM client.Admin writeLog
+INFO: Log from ATWA1234(Customer) : ATWA1234 : Add slot | Request Parameters : Movie Id: ATWA080423 Movie Name: Avengers Number of Slots: 160

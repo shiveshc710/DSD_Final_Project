@@ -44,3 +44,7 @@ Apr 07, 2023 10:19:04 AM Replicas.Replica1.implementation.ATWImplementation writ
 INFO: Log from Atwater : UDP response received from port 7002
 Apr 07, 2023 10:19:06 AM Replicas.Replica1.implementation.ATWImplementation writeLog
 INFO: Log from Atwater : Data found from all servers
+Apr 07, 2023 10:28:16 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Unable to add slot : Invalid movieID
+Apr 07, 2023 10:31:12 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA080423 added for : Avengers

@@ -371,7 +371,7 @@ public class OUTImpl {
                     HashMap<String, Integer> showDetails = movie.getValue();
                     for (Map.Entry<String, Integer> show : showDetails.entrySet()) {
                         if (show.getValue() != 0) {
-                            resultReturned = resultReturned + "Movie Name: " + movieNames + " | Show ID: " + show.getKey() + " | Tickets Booked: " + show.getValue();
+                            resultReturned = resultReturned + "Movie Name: " + movieNames + " | Show ID: " + show.getKey() + " | Tickets Booked: " + show.getValue() + "\n";
                             System.out.println("Movie Name: " + movieNames + " | Show ID: " + show.getKey() + " | Tickets Booked: " + show.getValue());
                         }
                     }

@@ -241,11 +241,12 @@ public class MainServerImpl {
     public String getBookingSchedule(String customerID) {
         String result = "";
         try {
+            result+= "----------Atwater----------\n";
             URL url = new URL("http://localhost:8081/atw?wsdl");
             QName qname = new QName("http://example.com/atw", "ATWImplService");
             Service service = Service.create(url, qname);
             com.example.client.ATWImpl atwImpl = service.getPort(com.example.client.ATWImpl.class);
-            result += atwImpl.getBookingScheduleATW(customerID) + "\n";
+            result += atwImpl.getBookingScheduleATW(customerID);
         } catch (Exception e) {
             System.err.println("ERROR: " + e);
             e.printStackTrace(System.err);
@@ -255,7 +256,7 @@ public class MainServerImpl {
             QName qname = new QName("http://example.com/ver", "VERImplService");
             Service service = Service.create(url, qname);
             com.example.client.VERImpl verImpl = service.getPort(com.example.client.VERImpl.class);
-            result += verImpl.getBookingScheduleVER(customerID) + "\n";
+            result += verImpl.getBookingScheduleVER(customerID);
         } catch (Exception e) {
             System.err.println("ERROR: " + e);
             e.printStackTrace(System.err);
@@ -265,7 +266,7 @@ public class MainServerImpl {
             QName qname = new QName("http://example.com/out", "OUTImplService");
             Service service = Service.create(url, qname);
             com.example.client.OUTImpl outImpl = service.getPort(com.example.client.OUTImpl.class);
-            result += outImpl.getBookingScheduleOUT(customerID) + "\n";
+            result += outImpl.getBookingScheduleOUT(customerID);
         } catch (Exception e) {
             System.err.println("ERROR: " + e);
             e.printStackTrace(System.err);
