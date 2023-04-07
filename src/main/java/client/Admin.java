@@ -216,7 +216,7 @@ public class Admin {
                             movieId = sc.next();
                             System.out.print("Please enter customer ID: ");
                             String customerID = sc.next();
-                            mtbsInterface = service.getPort(MTBSInterface.class);
+//                            mtbsInterface = service.getPort(MTBSInterface.class);
                             writeLog(customerID + " : Book Tickets | Request Parameters : Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Tickets: " + numberOfTicket);
 //                            result = mtbsInterface.bookMovieTickets(customerID,movieId,movieName,numberOfTicket);
 //                            System.out.println(result);
@@ -265,7 +265,7 @@ public class Admin {
                             movieId = sc.next();
                             System.out.print("Please enter customer ID: ");
                             customerID = sc.next();
-                            mtbsInterface = service.getPort(MTBSInterface.class);mtbsInterface = service.getPort(MTBSInterface.class);
+//                            mtbsInterface = service.getPort(MTBSInterface.class);mtbsInterface = service.getPort(MTBSInterface.class);
                             writeLog(userID + " : Cancel Tickets | Request Parameters : Customer Id: "+customerID+" Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Slots: " + numberOfTicket);
 //                            result = mtbsInterface.cancelMovieTickets(customerID,movieId,movieName,numberOfTicket);
 //                            System.out.println(result);
