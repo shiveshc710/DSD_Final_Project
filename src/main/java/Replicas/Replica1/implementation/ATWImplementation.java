@@ -215,13 +215,13 @@ public class ATWImplementation implements MTBSInterface {
 
     @Override
     public String listMovieShowsAvailability(String movieName)  {
-        String result = "Atwater,";
+        String result = "";
         String log = "";
         if (ATWdata.containsKey(movieName)) {
             for (Map.Entry<String, BookingDetails> data : ATWdata.get(movieName).entrySet()) {
                 if ((data.getValue().getCapacity() - data.getValue().getCustomerID().size() >= 0))
                     result += data.getKey() + " : "
-                            + (data.getValue().getCapacity() - data.getValue().getCustomerID().size() + ",");
+                            + (data.getValue().getCapacity() - data.getValue().getCustomerID().size() + "\n");
 
             }
         }
@@ -233,13 +233,13 @@ public class ATWImplementation implements MTBSInterface {
 
         new Thread() {
             public void run() {
-                ver_result = "\nVerdun," + udpThread("showsList:" + movieName, CONFIGURATION.VER_LISTENER);
+                ver_result = udpThread("showsList:" + movieName, CONFIGURATION.VER_LISTENER);
             }
         }.start();
 
         new Thread() {
             public void run() {
-                out_result = "\nOutremont," + udpThread("showsList:" + movieName, CONFIGURATION.OUT_LISTENER);
+                out_result = udpThread("showsList:" + movieName, CONFIGURATION.OUT_LISTENER);
             }
         }.start();
 
