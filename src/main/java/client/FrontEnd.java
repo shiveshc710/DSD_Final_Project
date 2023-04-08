@@ -146,6 +146,8 @@ public class FrontEnd {
                     }
                 }
 
+                //force timeout
+                responses[0] = null;
                 int noResponseServer = -1;
                 //identify which server did not send the response
                 for (int i = 0; i < numReplicas; i++) {

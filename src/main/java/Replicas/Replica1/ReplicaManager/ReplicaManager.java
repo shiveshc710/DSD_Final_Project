@@ -1,6 +1,7 @@
 package Replicas.Replica1.ReplicaManager;
 
 
+import Replicas.RecompileAndRestart;
 import Replicas.Replica1.MTBInterface.MTBSInterface;
 import config.CONFIGURATION;
 
@@ -18,12 +19,13 @@ public class ReplicaManager {
     URL url = null;
     QName qname = null;
     Service service = null;
+    static String[] arr;
 
     public ReplicaManager(int port) {
         this.port = port;
     }
 
-    public void start() {
+    public void start() throws Exception {
         running = true;
         try {
             socket = new DatagramSocket(port);
@@ -38,27 +40,78 @@ public class ReplicaManager {
 
                 String request = new String(packet.getData(), 0, packet.getLength());
                 System.out.println("Received request: " + request);
+                if (request.startsWith("Timeout")) {
+                    restart();
+                    continue;
+                }
 
-                String server = request.split(",")[1];
-                setWebServiceParams(server.substring(0, 3));
+                boolean backupRequest = request.contains("restart");
+                if (backupRequest) {
+                    String server = request.split(";")[1].split(",")[1];
+                    setWebServiceParams(server.substring(0, 3));
 
-                // call method on replica server and get response
-                String response = callReplicaServerMethod(request);
+                    // call method on replica server and get response
+                    String response = callReplicaServerMethod(request);
+                    // send response back to frontend
+                    InetAddress frontEndAddress = InetAddress.getByName("localhost");
+                    int port = CONFIGURATION.SEQUENCER_PORT + 1;
+                    byte[] responseBytes = response.getBytes();
+                    DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
+                    socket.send(responsePacket);
+                    System.out.println("Sent response to " + frontEndAddress.getHostAddress() + ":" + port);
+                } else {
+                    String server = request.split(",")[1];
+                    setWebServiceParams(server.substring(0, 3));
 
+                    // call method on replica server and get response
+                    String response = callReplicaServerMethod(request);
 
-                // send response back to frontend
-                InetAddress frontEndAddress = InetAddress.getByName("localhost");
-                int port = 9001;
-                byte[] responseBytes = response.getBytes();
-                DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
-                socket.send(responsePacket);
-                System.out.println("Sent response to " + frontEndAddress.getHostAddress() + ":" + port);
+                    // send response back to frontend
+                    InetAddress frontEndAddress = InetAddress.getByName("localhost");
+                    int port = 9001;
+                    byte[] responseBytes = response.getBytes();
+                    DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
+                    socket.send(responsePacket);
+                    System.out.println("Sent response to " + frontEndAddress.getHostAddress() + ":" + port);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             stop();
         }
+    }
+
+    private void restart() throws Exception {
+//        String fileName = "ReplicaManager.java";
+//        String className = "ReplicaManager";
+//        ProcessBuilder pb = new ProcessBuilder("javac", fileName);
+//        pb.inheritIO();
+//        Process p = pb.start();
+//        p.waitFor();
+//
+//        ClassLoader classLoader = ReplicaManager.class.getClassLoader();
+//        Class<?> cls = classLoader.loadClass(className);
+//        cls.newInstance();
+//
+//        DatagramSocket socket = new DatagramSocket();
+//        InetAddress address = InetAddress.getLocalHost();
+//        int port = CONFIGURATION.SEQUENCER_PORT + 1;
+//        String message = "Replica Restarted";
+//        byte[] buf = message.getBytes();
+//        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, port);
+//        socket.send(packet);
+//        socket.close();
+        System.out.println("TESTING RESTART");
+        RecompileAndRestart jr = new RecompileAndRestart();
+        String result = jr.rerunMainClass("ATWAServer","target/classes/Replicas/Replica1/server/ATWAServer.class", arr);
+        DatagramSocket socket = new DatagramSocket();
+        InetAddress address = InetAddress.getLocalHost();
+        int port = CONFIGURATION.SEQUENCER_PORT + 1;
+        byte[] buf = result.getBytes();
+        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, port);
+        socket.send(packet);
+        socket.close();
     }
 
     public void setWebServiceParams(String server) throws MalformedURLException {
@@ -107,14 +160,15 @@ public class ReplicaManager {
         } else if (parts[0].equals("listbook")) {
             ans = MasterServerRef.getBookingSchedule(parts[1]);
         } else if (parts[0].equals("exchangeTickets")) {
-            ans = MasterServerRef.exchangeTickets(parts[1],parts[3],parts[2],parts[4],parts[5],Integer.parseInt(parts[6]));
+            ans = MasterServerRef.exchangeTickets(parts[1], parts[3], parts[2], parts[4], parts[5], Integer.parseInt(parts[6]));
         }
 
         System.out.println("Answer received : " + ans);
         return ans;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        arr = args;
         try {
             ReplicaManager replicaManager = new ReplicaManager(5000);
             replicaManager.start();
