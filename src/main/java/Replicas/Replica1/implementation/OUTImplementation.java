@@ -34,6 +34,10 @@ public class OUTImplementation implements MTBSInterface {
     public String ver_result = "", atw_result = "";
     TimeUnit time = TimeUnit.SECONDS;
 
+    boolean check = false;
+    boolean newCheck = false;
+
+
     public OUTImplementation(){
         super();
 
@@ -55,26 +59,28 @@ public class OUTImplementation implements MTBSInterface {
             if (movieID.startsWith(CONFIGURATION.OUTSERVER)) {
                 try {
                     if (!checkDate(movieID)) {
-                        result = "Slots cannot be added for Date more than a week or for previous date.";
+                        result = "Failed";
+                        writeLog("Tickets cannot be booked for Date more than a week or for previous date.");
+
                     } else {
                         if (!(movieID.startsWith(CONFIGURATION.OUTSERVER))) {
-                            result = "Invalid movieID!!!";
+                            result = "Failed";
                             writeLog("Unable to add slot : Invalid movieID");
                         } else if (!OUTdata.containsKey(movieName)) {
                             Map<String, BookingDetails> tmp = new ConcurrentHashMap<>();
                             tmp.put(movieID, new BookingDetails(new ArrayList<>(), bookingCapacity));
                             OUTdata.put(movieName, tmp);
-                            result = "Movie Slot added for " + movieName;
+                            result = "Success";
                             writeLog("Movie slot "+ movieID+" added for : "+movieName);
                         } else {
                             if (OUTdata.get(movieName).containsKey(movieID)) {
-                                result = "Movie Slot already exist for movieID!!!";
+                                result = "Failed";
                                 writeLog("Movie Slot already exist for "+movieID);
                             } else {
                                 Map<String, BookingDetails> tmp = OUTdata.get(movieName);
                                 tmp.put(movieID, new BookingDetails(new ArrayList<>(), bookingCapacity));
                                 OUTdata.put(movieName, tmp);
-                                result = "Movie Slot added for " + movieName;
+                                result = "Success";
                                 writeLog("Movie slot "+ movieID+" added for : "+movieName);
 
                             }
@@ -86,12 +92,12 @@ public class OUTImplementation implements MTBSInterface {
                     e.printStackTrace();
                 }
             } else {
-                result = "Unable to add slots for other servers.";
+                result = "Failed";
                 writeLog("Unable to add slots for other servers.");
 
             }
         }else {
-            result = "Invalid MovieID";
+            result = "Failed";
             writeLog("Unable to add slot : Invalid movieID");
 
         }
@@ -109,17 +115,18 @@ public class OUTImplementation implements MTBSInterface {
 
 
         if (!OUTdata.containsKey(movieName)) {
-            result = "No movie slots is available for this type!!!";
-            log = "No movie slots is available.";
+            result = "Failed";
+            log = "No movie slots is available for this type!!!";
         } else {
             Map<String, BookingDetails> tmp = OUTdata.get(movieName);
             if (tmp.containsKey(movieID)) {
                 if (tmp.get(movieID).getCustomerID().size() == 0) {
-                    result = "Booking found, no shows booked, cancelling it!!";
+                    result = "Failed";
                     OUTdata.get(movieName).remove(movieID);
                     log = "Movie show found, no shows booked, deleting it without transfer";
                 } else {
-                    result = "Movie slot found, customers have booked this shows, unable to find other movie shows for the customers.";
+                    result = "Failed";
+                    log = "Movie slot found, customers have booked this shows, unable to find other movie shows for the customers.";
                     for (Map.Entry<String, BookingDetails> bookingData : tmp.entrySet()) {
                         if ((Integer.parseInt(bookingData.getKey().substring(4, 8)) > month)
                                 || (Integer.parseInt(bookingData.getKey().substring(4, 6)) > day)) {
@@ -132,14 +139,17 @@ public class OUTImplementation implements MTBSInterface {
 
                                 OUTdata.get(movieName).get(bookingData.getKey()).setCustomerID(customers);
                                 OUTdata.get(movieName).remove(movieID);
-                                result = "Slot is deleted and booking is now transferred to show "+bookingData.getKey();
+                                result = "Success";
+                                log = "Slot is deleted and booking is now transferred to show "+bookingData.getKey();
                                 break;
                             }
                         }
                     }
                     if (transfer) {
+                        result = "Success";
                         log = "Slot deleted, transferred booking to new show.";
                     } else {
+                        result = "Failed";
                         log = "Booking found for this show, Unable to assign to other shows.";
 
                         String customers = "";
@@ -154,14 +164,14 @@ public class OUTImplementation implements MTBSInterface {
 
                         if (ver_result.contains("success")){
                             OUTdata.get(movieName).remove(movieID);
-                            result = "Slot is deleted and booking is now transferred to Verdun show: " + ver_result.split(" ")[1];
+                            result = "Success";
                             log = "Slot is deleted and booking is now transferred to Verdun show: " + ver_result.split(" ")[1];
 
                         }else {
                             atw_result = udpThread("removeSlots:" + finalCustomers + " " + movieName, CONFIGURATION.ATW_LISTENER);
                             if (atw_result.contains("success")){
                                 OUTdata.get(movieName).remove(movieID);
-                                result = "Slot is deleted and booking is now transferred to Atwater show: " + atw_result.split(" ")[1];
+                                result = "Success";
                                 log = "Slot is deleted and booking is now transferred to Atwater show: " + atw_result.split(" ")[1];
 
                             }
@@ -170,7 +180,7 @@ public class OUTImplementation implements MTBSInterface {
                 }
 
             } else {
-                result = "No shows are available for "+movieName+"!!!";
+                result = "Failed";
                 OUTdata.get(movieName).remove(movieID);
                 log = "No shows are available for "+movieName+"!!!";
             }
@@ -182,7 +192,7 @@ public class OUTImplementation implements MTBSInterface {
 
     @Override
     public String listMovieShowsAvailability(String movieName){
-        String result = "Outremont,";
+        String result = "";
         String log = "";
         if (OUTdata.containsKey(movieName)) {
             for (Map.Entry<String, BookingDetails> data : OUTdata.get(movieName).entrySet()) {
@@ -200,13 +210,13 @@ public class OUTImplementation implements MTBSInterface {
 
         new Thread() {
             public void run() {
-                ver_result = "\nVerdun," + udpThread("showsList:" + movieName, CONFIGURATION.VER_LISTENER);
+                ver_result = udpThread("showsList:" + movieName, CONFIGURATION.VER_LISTENER);
             }
         }.start();
 
         new Thread() {
             public void run() {
-                atw_result = "\nAtwater," + udpThread("showsList:" + movieName, CONFIGURATION.ATW_LISTENER);
+                atw_result = udpThread("showsList:" + movieName, CONFIGURATION.ATW_LISTENER);
             }
         }.start();
 
@@ -227,55 +237,28 @@ public class OUTImplementation implements MTBSInterface {
     public String bookMovieTickets(String customerID, String movieID, String movieName, int numberOfTickets){
         String result = "";
         String status = "failed";
-        boolean canBook = true;
         int emptySlots = 0;
         String ID = "";
         String log = "";
 
         List<String> slots = Arrays.asList(retriveAvailableSlots(movieName).split(","));
 
-
         if (movieID.startsWith(CONFIGURATION.OUTSERVER)) {
             if(customerID.startsWith(CONFIGURATION.VERSERVER) | customerID.startsWith(CONFIGURATION.ATWSERVER)) {
                 boolean isAvailable = true;
                 String date = movieID.substring(3, 10);
-                List<String> local_slots = Arrays.asList(retriveCustomerBookingsFromServers(customerID,"All").split(","));
-
-                for (int i = 0; i < local_slots.size(); i++) {
+                for (int i = 0; i < slots.size(); i++) {
                     if (slots.get(i).substring(3, 10).equals(date))
                         isAvailable = false;
                 }
                 if(!isAvailable)
                 {
-                    result = "You cannot book show with same timing more than once";
+                    result = "Failed";
                     log = "Unable to book show with same timing more than once";
 
-                }else {
-                    for (int i = 0; i < slots.size(); i++) {
-                        ID = slots.get(i).split(":")[0].trim();
-                        emptySlots = Integer.parseInt(slots.get(i).split(":")[1].trim());
-                        if (emptySlots >= numberOfTickets && ID.contains(movieID)) {
-                            int numberOfSeats = (OUTdata.get(movieName).get(movieID).getCapacity()
-                                    - OUTdata.get(movieName).get(movieID).getCustomerID().size());
-                            if (numberOfSeats >= numberOfTickets) {
-                                BookingDetails bookings = OUTdata.get(movieName).get(movieID);
-                                for (int j = 0; j < numberOfTickets; j++) {
-                                    bookings.getCustomerID().add(customerID);
-                                }
-                                result = "Tickets booked for " + movieName + " for " + movieID.substring(4, 6)
-                                        + "/" + movieID.substring(6, 8);
-                                log = result;
-                                break;
-                            } else {
-                                result = "Not enough seats available for this show!!!";
-                                log = "Not enough seats available for this show!!!";
-                                status = "failed";
-
-                            }
-                        }
-                    }
                 }
-            }else {
+            }
+            else {
                 if (OUTdata.containsKey(movieName) && OUTdata.get(movieName).containsKey(movieID)) {
                     for (int i = 0; i < slots.size(); i++) {
                         ID = slots.get(i).split(":")[0].trim();
@@ -287,23 +270,25 @@ public class OUTImplementation implements MTBSInterface {
                                 BookingDetails bookings = OUTdata.get(movieName).get(movieID);
                                 for (int j = 0; j < numberOfTickets; j++) {
                                     bookings.getCustomerID().add(customerID);
+
                                 }
-                                result = "Tickets booked for " + movieName + " for " + movieID.substring(4, 6)
+                                result = "Success";
+                                log = "Tickets for " + movieName + " for " + movieID.substring(4, 6)
                                         + "/" + movieID.substring(6, 8);
-                                log = result;
                                 break;
                             } else {
-                                result = "Not enough seats available for this show!!!";
+                                System.out.println("Slot not Found");
+                                result = "Failed";
                                 log = "Not enough seats available for this show!!!";
-                                status = "failed";
 
                             }
+                        }else {
+                            result = "Failed";
                         }
                     }
                 } else {
-                    result = "No show available for " + movieName + " and with this movieID!!!";
+                    result = "Failed";
                     log = "Unable to book show " + movieID + " for "+ movieName;
-                    status = "failed";
                 }
             }
         } else {
@@ -312,23 +297,21 @@ public class OUTImplementation implements MTBSInterface {
             if (totalBookings <= 2) {
                 if (movieID.contains(CONFIGURATION.ATWSERVER)) {
                     result = udpThread("bookTickets:" + customerID + " " + movieID + " " + movieName + " " + numberOfTickets, CONFIGURATION.ATW_LISTENER);
-                    status = (result.startsWith("No") ? "failed" : "success");
+
                 } else if (movieID.contains(CONFIGURATION.VERSERVER)) {
                     result = udpThread("bookTickets:" + customerID + " " + movieID + " " + movieName + " " + numberOfTickets, CONFIGURATION.VER_LISTENER);
-                    status = (result.startsWith("No") ? "failed" : "success");
                 } else {
-                    result = "Invalid movieID";
+                    result = "Failed";
                     log = "Failed : Invalid movieID";
-
                 }
 
             } else {
-                result = "You cannot book more than 3 tickets for Different Locations";
+                result = "Failed";
                 log = "Failed : Unable to book more than 3 tickets for Different Locations";
             }
         }
-        writeLog(log);
 
+        writeLog(log);
         return result;
     }
     @Override
@@ -360,6 +343,9 @@ public class OUTImplementation implements MTBSInterface {
             result += "";
         else
             result += "";
+
+        ver_result = "----------Verdun----------\n";
+        atw_result = "----------Atwater----------\n";
 
         new Thread(){
             @Override
@@ -428,7 +414,7 @@ public class OUTImplementation implements MTBSInterface {
     public String cancelMovieTickets(String customerID, String movieId, String movieName, int numberOfTickets){
         String status = "failed";
         String log = "No bookings found";
-        String result = "No bookings found!!!";
+        String result = "Failed";
 
         String server = movieId.substring(0,3);
 
@@ -446,7 +432,7 @@ public class OUTImplementation implements MTBSInterface {
                                 }
                                 log = "Ticket(s) canceled successfully.";
                                 status = "success";
-                                result = "Ticket(s) canceled!!!";
+                                result = "Success";
                                 break;
                             }
                         }
@@ -478,7 +464,134 @@ public class OUTImplementation implements MTBSInterface {
 
     @Override
     public String exchangeTickets(String customerID, String old_movieName, String movieID, String new_movieID, String new_movieName, int numberOfTickets) {
-        return null;
+        if (movieID.substring(0, 3).equals(CONFIGURATION.OUTSERVER))
+        {
+
+            if(OUTdata.containsKey(old_movieName))
+            {
+                if (OUTdata.get(old_movieName).containsKey(movieID))
+                {
+                    if (OUTdata.get(old_movieName).get(movieID).getCustomerID().contains(customerID))
+                    {
+
+                        List<String> s = OUTdata.get(old_movieName).get(movieID).getCustomerID();
+                        int count = 0;
+                        for (String id : s){
+                            if(id.equals(customerID))
+                                count++;
+                        }
+
+                        int size = OUTdata.get(old_movieName).get(movieID).getCapacity();
+
+                        if (count >= numberOfTickets &&  size >= numberOfTickets)
+                            check = true;
+
+                    }
+                }
+            }
+        } else if(movieID.substring(0, 3).equals(CONFIGURATION.VERSERVER)) {
+            new Thread() {
+                public void run() {
+                    ver_result = udpThread("checkMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.VER_LISTENER);
+                    if(ver_result.equals("done"))
+                    {
+                        check=true;
+                    }
+
+                }
+            }.start();
+            try {
+                time.sleep(2L);
+            } catch (InterruptedException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+        }else if(movieID.substring(0, 3).equals(CONFIGURATION.ATWSERVER)) {
+            new Thread() {
+                public void run() {
+                    atw_result = udpThread("checkMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.ATW_LISTENER);
+                    if(atw_result.equals("done"))
+                    {
+                        check=true;
+                    }
+
+                }
+            }.start();
+            try {
+                time.sleep(2L);
+            } catch (InterruptedException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+        }
+
+
+//        For new movie
+        if (new_movieID.substring(0, 3).equals(CONFIGURATION.OUTSERVER))
+        {
+
+            if(OUTdata.containsKey(new_movieName))
+            {
+                if (OUTdata.get(new_movieName).containsKey(new_movieID))
+                {
+                    int numberOfSeats = (OUTdata.get(new_movieName).get(movieID).getCapacity()
+                            - OUTdata.get(new_movieName).get(movieID).getCustomerID().size());
+
+                    if (numberOfSeats >= numberOfTickets)
+                        newCheck = true;
+                }
+            }
+        } else if(new_movieID.substring(0, 3).equals(CONFIGURATION.VERSERVER)) {
+            new Thread() {
+                public void run() {
+                    ver_result = udpThread("checkNewMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.VER_LISTENER);
+                    if(ver_result.equals("done"))
+                    {
+                        newCheck=true;
+                    }
+
+                }
+            }.start();
+            try {
+                time.sleep(2L);
+            } catch (InterruptedException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+        }else if(new_movieID.substring(0, 3).equals(CONFIGURATION.ATWSERVER)) {
+            new Thread() {
+                public void run() {
+                    atw_result = udpThread("checkNewMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.ATW_LISTENER);
+                    if(atw_result.equals("done"))
+                    {
+                        newCheck=true;
+                    }
+
+                }
+            }.start();
+            try {
+                time.sleep(2);
+            } catch (InterruptedException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+        }
+
+        if(check && newCheck)
+        {
+            System.out.println("Exchange is possible");
+            String s1= cancelMovieTickets(customerID,movieID,old_movieName,numberOfTickets);
+            String s2=  bookMovieTickets(customerID,new_movieID,new_movieName,numberOfTickets);
+            return "Success";
+
+        }
+        else {
+            return "Failed";
+        }
     }
 
     private int getTotalBookings(String customerID){
@@ -516,14 +629,13 @@ public class OUTImplementation implements MTBSInterface {
         return (result.isEmpty() ? "" : result);
     }
     public String retriveCustomerBookingsFromServers(String customerID, String server){
-        String key = null;
         String result = "";
 
         if (server.equals(CONFIGURATION.ATWSERVER)) {
             new Thread() {
                 @Override
                 public void run() {
-                    atw_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.ATW_LISTENER);
+                    atw_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.OUT_LISTENER);
                     atw_result = atw_result.replace("----------Atwater----------", "Atwater");
 
                 }
@@ -539,22 +651,6 @@ public class OUTImplementation implements MTBSInterface {
             }.start();
             return (ver_result.isEmpty() ? "" : ver_result);
 
-        }else {
-            new Thread() {
-                @Override
-                public void run() {
-                    atw_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.ATW_LISTENER);
-                    atw_result = atw_result.replace("----------Atwater----------", "Atwater");
-
-                }
-            }.start();
-            new Thread() {
-                @Override
-                public void run() {
-                    ver_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.VER_LISTENER);
-                    ver_result = ver_result.replace("----------Verdun----------", "Verdun");
-                }
-            }.start();
         }
 
         try {
@@ -565,8 +661,6 @@ public class OUTImplementation implements MTBSInterface {
         }
 
         String final_result = result + ver_result + atw_result;
-
-        System.out.println("Called : "+ atw_result);
 
         return (result.isEmpty() ? "" : final_result);
     }
@@ -643,7 +737,7 @@ public class OUTImplementation implements MTBSInterface {
         try {
 
             // This block configure the logger with handler and formatter
-            fh = new FileHandler("src/logs/OUTLog.log", 0,1,true);
+            fh = new FileHandler("src/main/java/Replicas/Replica1/logs/OUTLog.log", 0,1,true);
 
             fh.setFormatter(formatter);
 

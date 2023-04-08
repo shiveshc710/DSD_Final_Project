@@ -781,4 +781,22 @@ public class ATWImplementation implements MTBSInterface {
             fh.close();
         }
     }
+
+    public String ServerexchangeTicketsCheckNewMovie(String customerID,String old_movieName, String movieID, String new_movieID, String new_movieName, int numberOfTickets) {
+        if(ATWdata.containsKey(new_movieName))
+        {
+            if (ATWdata.get(new_movieName).containsKey(new_movieID))
+            {
+                int numberOfSeats = (ATWdata.get(new_movieName).get(movieID).getCapacity()
+                        - ATWdata.get(new_movieName).get(movieID).getCustomerID().size());
+
+                System.out.println("Reached inside");
+                if (numberOfSeats >= numberOfTickets)
+                    return "done";
+            }
+        }
+        System.out.println("Reached outside");
+
+        return "not done";
+    }
 }
