@@ -154,6 +154,8 @@ public class FrontEnd {
                     }
                 }
 
+
+
                 if (noResponseServer != -1) {
                     System.out.println("Replica " + (noResponseServer) + " timed out.");
                     System.out.println("Trying to restart Replica " + noResponseServer);
@@ -163,13 +165,7 @@ public class FrontEnd {
                     // Send request to sequencer
                     DatagramPacket timeoutSequencerRequest = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, sequencerAddress, sequencerPort);
                     clientSocket.send(timeoutSequencerRequest);
-                    //Send request to sequencer and then to replica managers
-                    //Handle restarting the server
-//                    String absolutePath = "/path/to/MyJavaFile.class";
-//                    ProcessBuilder pb = new ProcessBuilder("java", absolutePath);
-//                    pb.inheritIO();
-//                    Process p = pb.start();
-//                    p.waitFor();
+
                 }
 
                 if (correctResponse == null) {
