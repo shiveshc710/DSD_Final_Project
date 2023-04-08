@@ -3,24 +3,20 @@ package Sequencer;
 import config.CONFIGURATION;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
+import java.net.*;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
 
 public class Sequencer {
     private static int sequencerId = 0;
     private static final LinkedList<SequenceModel> requestQueue = new LinkedList<SequenceModel>();
+    private static final LinkedList<SequenceModel> backupRequestQueue = new LinkedList<SequenceModel>();
 
     private static boolean isFirstTime = false;
 
+    static DatagramSocket aSocket = null;
 
+    public static void main(String[] args) throws InterruptedException {
 
-    public static void main(String[] args) {
-        DatagramSocket aSocket = null;
         try {
             aSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT, InetAddress.getByName(CONFIGURATION.HOSTNAME));
             byte[] buffer = new byte[1000];
@@ -33,14 +29,30 @@ public class Sequencer {
                 aSocket.receive(request);
                 String sentence = new String(request.getData(),0, request.getLength());
                 System.out.println(sentence);
-                sequencerId++;
-                SequenceModel s = new SequenceModel(sequencerId, sentence);
-                requestQueue.addLast(s);
 
-                if (!isFirstTime) {
-                    isFirstTime = true;
-                    sendRequest();
+                if(sentence.startsWith("Timeout")){
+                    if (sentence.endsWith("1")){
+                        handleServerRestart(1);
+                    } else if (sentence.endsWith("2")) {
+                        handleServerRestart(2);
+                    } else if (sentence.endsWith("3")) {
+                        handleServerRestart(3);
+                    }
+                    //Wait for the restart/backup to complete?
+//                    Thread.sleep(1000);
                 }
+
+                else {
+                    sequencerId++;
+                    SequenceModel s = new SequenceModel(sequencerId, sentence);
+                    requestQueue.addLast(s);
+
+                    if (!isFirstTime) {
+                        isFirstTime = true;
+                        sendRequest();
+                    }
+                }
+
 
 
 //                String sentence = new String(request.getData());
@@ -72,27 +84,35 @@ public class Sequencer {
         }
     }
 
-    public static void sendMessage(String message, int sequencerId1, boolean isRequest) {
-        int port = 1234;
+    private static void sendTimeoutRequestToReplica(int port, LinkedList<SequenceModel> backupRequestQueue) throws IOException {
+        InetAddress multicastAddress = InetAddress.getByName("localhost");
+        String timeoutRequestData = "Timeout";
 
-        if (sequencerId1 == 0 && isRequest) {
-            sequencerId1 = ++sequencerId;
+        // Create the request data
+//        byte[] timeoutRequestBuffer = timeoutRequestData.getBytes();
+//        DatagramPacket requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, port);
+//        DatagramSocket socket = new DatagramSocket();
+//        socket.send(requestPacket);
+//
+//        //receive the response
+//        byte[] buffer = new byte[1000];
+//        DatagramPacket response = new DatagramPacket(buffer, buffer.length);
+//
+//        aSocket.receive(response);
+//        String sentence = new String(response.getData(), 0, response.getLength());
+//        if (!sentence.equals("Restart Success")) {
+//            sendTimeoutRequestToReplica(port,backupRequestQueue);
+//        }
+    }
+
+    private static void handleServerRestart(int i) throws IOException, InterruptedException {
+        if (i == 1) {
+            sendTimeoutRequestToReplica(5000, backupRequestQueue);
+        } else if (i == 2) {
+            sendTimeoutRequestToReplica(6000, backupRequestQueue);
+        } else if (i == 3) {
+            sendTimeoutRequestToReplica(7000, backupRequestQueue);
         }
-        String finalMessage = sequencerId1 + ";" + message;
-
-        DatagramSocket aSocket = null;
-        try {
-            aSocket = new DatagramSocket();
-            byte[] messages = finalMessage.getBytes();
-            InetAddress aHost = InetAddress.getByName(CONFIGURATION.RM_IP);
-
-            DatagramPacket request = new DatagramPacket(messages,
-                    messages.length, aHost, port);
-            aSocket.send(request);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public static void sendRequest() throws IOException {
@@ -129,6 +149,7 @@ public class Sequencer {
                         System.out.println("Sent request to replica " + i);
                     }
 
+                    backupRequestQueue.add(requestQueue.getFirst());
                     requestQueue.removeFirst();
 
                 }else {

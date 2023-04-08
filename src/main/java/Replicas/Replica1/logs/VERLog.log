@@ -1,0 +1,18 @@
+Apr 07, 2023 3:32:47 PM Replicas.Replica1.server.VERAServer writeLog
+INFO: Log from  Verdun : Received response
+Apr 07, 2023 3:32:47 PM Replicas.Replica1.server.VERAServer writeLog
+INFO: Log from  Verdun : Verdun : Get Bookings for Verdun | Request Parameters : customerID: ATWC1234
+Apr 07, 2023 3:44:05 PM Replicas.Replica1.server.VERAServer writeLog
+INFO: Log from  Verdun : Received response
+Apr 07, 2023 3:44:05 PM Replicas.Replica1.server.VERAServer writeLog
+INFO: Log from  Verdun : Verdun : Get Bookings for Verdun | Request Parameters : customerID: ATWC1234
+Apr 08, 2023 8:33:49 AM Replicas.Replica1.server.VERAServer writeLog
+INFO: Log from  Verdun : Received response
+Apr 08, 2023 8:33:49 AM Replicas.Replica1.server.VERAServer writeLog
+INFO: Log from  Verdun : Verdun : List availabilities | Request Parameters : movieName: Avatar
+Apr 08, 2023 8:33:49 AM Replicas.Replica1.server.VERAServer writeLog
+INFO: Log from  Verdun : Sending response to the request server.
+Apr 08, 2023 8:35:55 AM Replicas.Replica1.server.VERAServer writeLog
+INFO: Log from  Verdun : Received response
+Apr 08, 2023 8:35:55 AM Replicas.Replica1.server.VERAServer writeLog
+INFO: Log from  Verdun : Verdun : Get Bookings for Verdun | Request Parameters : customerID: ATWC1234

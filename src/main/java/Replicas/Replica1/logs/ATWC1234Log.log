@@ -1,0 +1,6 @@
+Apr 07, 2023 3:31:56 PM client.Customer writeLog
+INFO: Log from ATWC1234(Customer) : ATWC1234 : Exchange Tickets | Request Parameters : Movie Id:  Movie Name:  Number of Tickets: 2
+Apr 07, 2023 3:42:13 PM client.Customer writeLog
+INFO: Log from ATWC1234(Customer) : ATWC1234 : Exchange Tickets | Request Parameters : Movie Id:  Movie Name:  Number of Tickets: 1
+Apr 07, 2023 3:43:37 PM client.Customer writeLog
+INFO: Log from ATWC1234(Customer) : ATWC1234 : Exchange Tickets | Request Parameters : Movie Id:  Movie Name:  Number of Tickets: 1

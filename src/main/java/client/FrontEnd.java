@@ -37,7 +37,7 @@ public class FrontEnd {
         this.frontEndPort = frontEndPrt;
     }
 
-    public void start() throws UnknownHostException {
+    public void start() throws UnknownHostException, InterruptedException {
         InetAddress SERVER_ADDRESS = InetAddress.getLocalHost();
         System.out.println(SERVER_ADDRESS.getHostAddress());
         System.out.println("client.FrontEnd listening on port " + frontEndPort);
@@ -96,7 +96,7 @@ public class FrontEnd {
 
                         // Identify which replica has timed out and increment its failure count
                         int replicaId = i + 1;
-                        System.err.println("Replica " + replicaId + " timed out.");
+                        System.err.println("Timeout occurred.");
                         replicaFailures[replicaId - 1]++;
 //                        if (replicaFailures[replicaId-1] > maxFailures) {
 //                            System.err.println("Replica " + replicaId + " has failed.");
@@ -111,8 +111,9 @@ public class FrontEnd {
                     }
                 }
 
+
                 /////temp response from replica 1
-//                responses[0]= "garbage";
+//                responses[2] = "garbage";
                 // Identify correct response
                 String correctResponse = null;
                 for (int i = 0; i < numReplicas; i++) {
@@ -127,6 +128,7 @@ public class FrontEnd {
                             correctResponse = responses[i].trim();
                             break;
                         }
+
 //                        else {
 //                            System.err.println("Response from replica " + i + " is incorrect.");
 //                            replicaFailures[i]++;
@@ -144,6 +146,31 @@ public class FrontEnd {
                     }
                 }
 
+                int noResponseServer = -1;
+                //identify which server did not send the response
+                for (int i = 0; i < numReplicas; i++) {
+                    if (responses[i] == null) {
+                        noResponseServer = (i + 1);
+                    }
+                }
+
+                if (noResponseServer != -1) {
+                    System.out.println("Replica " + (noResponseServer) + " timed out.");
+                    System.out.println("Trying to restart Replica " + noResponseServer);
+                    String timeoutRequestString = "Timeout," + noResponseServer;
+
+                    byte[] timeoutRequestBuffer = timeoutRequestString.getBytes();
+                    // Send request to sequencer
+                    DatagramPacket timeoutSequencerRequest = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, sequencerAddress, sequencerPort);
+                    clientSocket.send(timeoutSequencerRequest);
+                    //Send request to sequencer and then to replica managers
+                    //Handle restarting the server
+//                    String absolutePath = "/path/to/MyJavaFile.class";
+//                    ProcessBuilder pb = new ProcessBuilder("java", absolutePath);
+//                    pb.inheritIO();
+//                    Process p = pb.start();
+//                    p.waitFor();
+                }
 
                 if (correctResponse == null) {
                     System.err.println("All replicas timed out.");
@@ -172,7 +199,7 @@ public class FrontEnd {
         }
     }
 
-    public static void main(String[] args) throws SocketException {
+    public static void main(String[] args) throws SocketException, InterruptedException {
         try {
             String sequencerAddr = CONFIGURATION.HOSTNAME;
             int sequencerPort = CONFIGURATION.SEQUENCER_PORT;
