@@ -65,30 +65,54 @@ public class Sequencer {
     }
 
     private static void sendTimeoutRequestToReplica(int port, LinkedList<SequenceModel> backupRequestQueue) throws IOException {
+        DatagramSocket restartSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT+1, InetAddress.getByName(CONFIGURATION.HOSTNAME));
         InetAddress multicastAddress = InetAddress.getByName("localhost");
         String timeoutRequestData = "Timeout";
         LinkedList<SequenceModel> backupTemp = backupRequestQueue;
 
-        while (true) {
-            if (backupTemp.peek() != null) {
-                String requestData = backupTemp.getFirst().request;
-                System.out.println("Used : " + backupTemp.getFirst().sequenceID + " : " + requestData);
-                // Define the multicast address and port number
-                byte[] timeoutRequestBuffer = timeoutRequestData.getBytes();
-                DatagramPacket requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, port);
-                DatagramSocket socket = new DatagramSocket();
-                socket.send(requestPacket);
+        //Sending UDP request to Replica Manager to reInstantiate the servers
+        byte[] timeoutRequestBuffer = timeoutRequestData.getBytes();
+        DatagramPacket requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, port);
+        DatagramSocket socket = new DatagramSocket();
+        socket.send(requestPacket);
 
-                byte[] buffer = new byte[1000];
-                DatagramPacket response = new DatagramPacket(buffer, buffer.length);
+        byte[] buffer = new byte[1000];
+        DatagramPacket response = new DatagramPacket(buffer, buffer.length);
+        restartSocket.receive(response);
 
-                aSocket.receive(response);
-                String sentence = new String(response.getData(), 0, response.getLength());
-                if (sentence.contains("Success") || sentence.contains("Atwater") || sentence.contains("ATW") || sentence.contains("VER") || sentence.contains("OUT")) {
-                    requestQueue.removeFirst();
+
+        String sentence = new String(response.getData(), 0, response.getLength());
+        restartSocket.close();
+        socket.close();
+
+        if (sentence.equals("Replica Restarted")) {
+
+            while (true) {
+                if (backupTemp.peek() != null) {
+                    String requestData = backupTemp.getFirst().request;
+                    // Define the multicast address and port number
+                    requestData = "restart;" + requestData;
+                    timeoutRequestBuffer = requestData.getBytes();
+                    requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, port);
+                    socket = new DatagramSocket();
+                    socket.send(requestPacket);
+
+                    buffer = new byte[1000];
+                    response = new DatagramPacket(buffer, buffer.length);
+
+                    restartSocket.receive(response);
+                    sentence = new String(response.getData(), 0, response.getLength());
+                    if (sentence.contains("Success") || sentence.contains("Atwater") || sentence.contains("ATW") || sentence.contains("VER") || sentence.contains("OUT")) {
+                        requestQueue.removeFirst();
+                    }
+
+                    restartSocket.close();
+                    socket.close();
+
                 }
-
             }
+        }else {
+            sendTimeoutRequestToReplica(port,backupRequestQueue);
         }
 
     }
