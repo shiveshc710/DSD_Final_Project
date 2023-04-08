@@ -107,7 +107,7 @@ public class ReplicaManager {
         } else if (parts[0].equals("listbook")) {
             ans = MasterServerRef.getBookingSchedule(parts[1]);
         } else if (parts[0].equals("exchangeTickets")) {
-            ans = MasterServerRef.exchangeTickets(parts[1],parts[3],parts[2],parts[5],parts[4],Integer.parseInt(parts[6]));
+            ans = MasterServerRef.exchangeTickets(parts[1],parts[3],parts[2],parts[4],parts[5],Integer.parseInt(parts[6]));
         }
 
         System.out.println("Answer received : " + ans);

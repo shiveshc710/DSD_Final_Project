@@ -343,6 +343,6 @@ public class Admin {
 
         aSocket.receive(response);
         String sentence = new String(response.getData(), 0, response.getLength());
-        System.out.println(sentence);
+        System.out.println(sentence+"\n");
     }
 }

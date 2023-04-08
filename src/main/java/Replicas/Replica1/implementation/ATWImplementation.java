@@ -342,18 +342,20 @@ public class ATWImplementation implements MTBSInterface {
         else
             result += "";
 
+        ver_result = "----------Verdun----------\n";
+        out_result = "----------Outremont----------\n";
 
         new Thread(){
             @Override
             public void run() {
-                ver_result = udpThread("showsSchedule:" + customerID,CONFIGURATION.VER_LISTENER);
+                ver_result += udpThread("showsSchedule:" + customerID,CONFIGURATION.VER_LISTENER);
             }
         }.start();
 
         new Thread(){
             @Override
             public void run() {
-                out_result = "\n"+udpThread("showsSchedule:" + customerID,CONFIGURATION.OUT_LISTENER);
+                out_result += udpThread("showsSchedule:" + customerID,CONFIGURATION.OUT_LISTENER);
             }
         }.start();
 
@@ -365,9 +367,6 @@ public class ATWImplementation implements MTBSInterface {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-//
-//        ver_result = retriveCustomerBookingsFromServers(customerID,CONFIGURATION.VERSERVER);
-//        out_result = retriveCustomerBookingsFromServers(customerID,CONFIGURATION.OUTSERVER);
 
         String final_result = result + ver_result + out_result;
 
