@@ -56,6 +56,15 @@ public class VERAServer {
                         writeLog("Verdun : Cancel remote Tickets | Request Parameters : Data: " + data);
                         result = ver_implementation.cancelMovieTickets(data.split(" ")[0], data.split(" ")[1], data.split(" ")[2], Integer.parseInt(data.split(" ")[3]));
                         break;
+                    case "checkMovieTicket":
+                        writeLog("Verdun : Check remote Tickets | Request Parameters : Data: " + data);
+                        result = ver_implementation.ServerexchangeTicketsCheck(data.split(" ")[0], data.split(" ")[1], data.split(" ")[2], data.split(" ")[3], data.split(" ")[4], Integer.parseInt(data.split(" ")[5]));
+                        break;
+                    case "checkNewMovieTicket":
+                        System.out.println("Check New");
+                        writeLog("Verdun : Check remote Tickets | Request Parameters : Data: " + data);
+                        result = ver_implementation.ServerexchangeTicketsCheckNewMovie(data.split(" ")[0], data.split(" ")[1], data.split(" ")[2], data.split(" ")[3], data.split(" ")[4], Integer.parseInt(data.split(" ")[5]));
+                        break;
                 }
 
                 writeLog("Sending response to the request server.");
