@@ -41,7 +41,6 @@ public class Sequencer {
                     //Wait for the restart/backup to complete?
 //                    Thread.sleep(1000);
                 }
-
                 else {
                     sequencerId++;
                     SequenceModel s = new SequenceModel(sequencerId, sentence);
@@ -53,25 +52,6 @@ public class Sequencer {
                     }
                 }
 
-
-
-//                String sentence = new String(request.getData());
-//
-//                String[] parts = sentence.split(";");
-//
-//                if(parts[1].equals("Add")){
-//                    parts[1] = "1";
-//                }
-//
-//                byte[] SeqId = (CONFIGURATION.SEQUENCER_IP).getBytes();
-//                InetAddress aHost1 = request.getAddress();
-//                int port1 = request.getPort();
-//
-//                System.out.println(aHost1 + ":" + port1);
-//                DatagramPacket request1 = new DatagramPacket(SeqId,
-//                        SeqId.length, aHost1, port1);
-//                aSocket.send(request1);
-//                sequencerId++;
             }
 
         } catch (SocketException e) {
@@ -87,22 +67,30 @@ public class Sequencer {
     private static void sendTimeoutRequestToReplica(int port, LinkedList<SequenceModel> backupRequestQueue) throws IOException {
         InetAddress multicastAddress = InetAddress.getByName("localhost");
         String timeoutRequestData = "Timeout";
+        LinkedList<SequenceModel> backupTemp = backupRequestQueue;
 
-        // Create the request data
-//        byte[] timeoutRequestBuffer = timeoutRequestData.getBytes();
-//        DatagramPacket requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, port);
-//        DatagramSocket socket = new DatagramSocket();
-//        socket.send(requestPacket);
-//
-//        //receive the response
-//        byte[] buffer = new byte[1000];
-//        DatagramPacket response = new DatagramPacket(buffer, buffer.length);
-//
-//        aSocket.receive(response);
-//        String sentence = new String(response.getData(), 0, response.getLength());
-//        if (!sentence.equals("Restart Success")) {
-//            sendTimeoutRequestToReplica(port,backupRequestQueue);
-//        }
+        while (true) {
+            if (backupTemp.peek() != null) {
+                String requestData = backupTemp.getFirst().request;
+                System.out.println("Used : " + backupTemp.getFirst().sequenceID + " : " + requestData);
+                // Define the multicast address and port number
+                byte[] timeoutRequestBuffer = timeoutRequestData.getBytes();
+                DatagramPacket requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, port);
+                DatagramSocket socket = new DatagramSocket();
+                socket.send(requestPacket);
+
+                byte[] buffer = new byte[1000];
+                DatagramPacket response = new DatagramPacket(buffer, buffer.length);
+
+                aSocket.receive(response);
+                String sentence = new String(response.getData(), 0, response.getLength());
+                if (sentence.contains("Success") || sentence.contains("Atwater") || sentence.contains("ATW") || sentence.contains("VER") || sentence.contains("OUT")) {
+                    requestQueue.removeFirst();
+                }
+
+            }
+        }
+
     }
 
     private static void handleServerRestart(int i) throws IOException, InterruptedException {
