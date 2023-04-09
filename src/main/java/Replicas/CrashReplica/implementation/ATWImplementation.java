@@ -379,7 +379,7 @@ public class ATWImplementation implements MTBSInterface {
     public String getBookingScheduleForServer(String customerID)  {
         String key = null;
         String log = "";
-        String result = "----------Atwater----------\n";
+        String result = "";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : ATWdata.entrySet()) {
             key = set.getKey();

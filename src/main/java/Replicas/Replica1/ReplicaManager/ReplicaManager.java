@@ -42,6 +42,12 @@ public class ReplicaManager {
                 System.out.println("Received request: " + request);
                 if (request.startsWith("Timeout")) {
                     System.out.println("Stopping replica 1 and replacing with Backup Server");
+                    InetAddress frontEndAddress = InetAddress.getByName("localhost");
+                    int port = CONFIGURATION.SEQUENCER_PORT + 1;
+                    String response = "Replica Restarted";
+                    byte[] responseBytes = response.getBytes();
+                    DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
+                    socket.send(responsePacket);
                     System.exit(0);
                     continue;
                 }
