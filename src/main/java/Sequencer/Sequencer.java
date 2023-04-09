@@ -14,11 +14,11 @@ public class Sequencer {
     private static boolean isFirstTime = false;
 
     static DatagramSocket aSocket = null;
-    static int[] ports = new int[]{5000, 6000, 7000};;
+    static int[] ports = new int[]{CONFIGURATION.RM1_PORT, CONFIGURATION.RM2_PORT, CONFIGURATION.RM3_PORT};
     static String[] rmIp = new String[]{
-        CONFIGURATION.RM_IP,
-        CONFIGURATION.RM_IP,
-        CONFIGURATION.RM_IP
+        CONFIGURATION.RM1_IP,
+        CONFIGURATION.RM2_IP,
+        CONFIGURATION.RM3_IP
     };
 
     static boolean isRecovering = false;
@@ -42,12 +42,16 @@ public class Sequencer {
                     if (sentence.endsWith("1")) {
                         handleServerRestart(0);
                         ports[0] = CONFIGURATION.CRASH_MAIN_RM;
+                        rmIp[0] = CONFIGURATION.CRASH_RM_IP;
                     } else if (sentence.endsWith("2")) {
                         handleServerRestart(1);
                         ports[1] = CONFIGURATION.CRASH_MAIN_RM;
+                        rmIp[1] = CONFIGURATION.CRASH_RM_IP;
                     } else if (sentence.endsWith("3")) {
                         handleServerRestart(2);
                         ports[2] = CONFIGURATION.CRASH_MAIN_RM;
+                        rmIp[2] = CONFIGURATION.CRASH_RM_IP;
+
                     }
 
                     // Send UDP to Crash Server to reinitiate all requests
@@ -74,8 +78,8 @@ public class Sequencer {
         }
     }
 
-    private static void sendTimeoutRequestToReplica(int port, LinkedList<SequenceModel> backupRequestQueue) throws IOException {
-        InetAddress multicastAddress = InetAddress.getByName("localhost");
+    private static void sendTimeoutRequestToReplica(int port, String address, LinkedList<SequenceModel> backupRequestQueue) throws IOException {
+        InetAddress multicastAddress = InetAddress.getByName(address);
         String timeoutRequestData = "Timeout";
         LinkedList<SequenceModel> backupTemp = backupRequestQueue;
 
@@ -112,7 +116,7 @@ public class Sequencer {
             sendRequest();
 
         } else {
-            sendTimeoutRequestToReplica(port, backupRequestQueue);
+            sendTimeoutRequestToReplica(port,address, backupRequestQueue);
         }
 
     }
@@ -121,11 +125,11 @@ public class Sequencer {
         isRecovering = true;
         sendRequest();
         if (i == 0) {
-            sendTimeoutRequestToReplica(5000, backupRequestQueue);
+            sendTimeoutRequestToReplica(CONFIGURATION.RM1_PORT,CONFIGURATION.RM1_IP, backupRequestQueue);
         } else if (i == 1) {
-            sendTimeoutRequestToReplica(6000, backupRequestQueue);
+            sendTimeoutRequestToReplica(CONFIGURATION.RM2_PORT,CONFIGURATION.RM2_IP, backupRequestQueue);
         } else if (i == 2) {
-            sendTimeoutRequestToReplica(7000, backupRequestQueue);
+            sendTimeoutRequestToReplica(CONFIGURATION.RM3_PORT,CONFIGURATION.RM3_IP, backupRequestQueue);
         }
     }
 
@@ -139,7 +143,7 @@ public class Sequencer {
                     String requestData = requestQueue.getFirst().request;
                     System.out.println("Used : " + requestQueue.getFirst().sequenceID + " : " + requestData);
                     // Define the multicast address and port number
-                    InetAddress multicastAddress = InetAddress.getByName("localhost");
+                    InetAddress multicastAddress = InetAddress.getByName(CONFIGURATION.HOSTNAME);
                     int multicastPort = 5000;
 
 

@@ -23,7 +23,7 @@ public class FrontEnd {
 
     public FrontEnd(String sequencerAddr, int sequencerPrt, String[] replicaAddrs, int[] replicaPrt, int timeoutMs, int frontEndPrt) throws UnknownHostException, SocketException {
         this.clientSocket = new DatagramSocket(frontEndPrt);
-        this.replicaSocket = new DatagramSocket(frontEndPrt + 1);
+        this.replicaSocket = new DatagramSocket(CONFIGURATION.FE_RECEIVE_PORT);
         this.sequencerAddress = InetAddress.getByName(sequencerAddr);
         this.sequencerPort = sequencerPrt;
         this.replicaAddresses = new InetAddress[replicaAddrs.length];
@@ -81,18 +81,18 @@ public class FrontEnd {
                         System.out.println("Received response from replica on port" + port + ": " + response);
                         // Identify which replica the response belongs to based on the port number
                         int replicaId;
-                        if (port == 5000) {
+                        if (port == CONFIGURATION.RM1_PORT) {
                             replicaId = 1;
                             responses[replicaId - 1] = response;
-                        } else if (port == 6000) {
+                        } else if (port == CONFIGURATION.RM2_PORT) {
                             replicaId = 2;
                             responses[replicaId - 1] = response;
 
-                        } else if (port == 7000) {
+                        } else if (port == CONFIGURATION.RM3_PORT) {
                             replicaId = 3;
                             responses[replicaId - 1] = response;
 
-                        }else if (port == 8000) {
+                        }else if (port == CONFIGURATION.CRASH_MAIN_RM) {
                             isCrashReplica = true;
                         } else {
                             System.err.println("Received response from unknown port: " + port);
@@ -135,7 +135,7 @@ public class FrontEnd {
                 }
 
                 //force timeout
-//                responses[0] = null;
+                responses[0] = null;
                 int noResponseServer = -1;
                 //identify which server did not send the response
                 for (int i = 0; i < numReplicas; i++) {
@@ -167,7 +167,7 @@ public class FrontEnd {
                     DatagramSocket socket = new DatagramSocket();
 
                     // Define the client's IP address and port number
-                    InetAddress clientAddress = InetAddress.getByName("localhost");
+                    InetAddress clientAddress = InetAddress.getByName(CONFIGURATION.HOSTNAME);
 
                     // Create the response data
                     String responseData = correctResponse;
@@ -189,10 +189,10 @@ public class FrontEnd {
         try {
             String sequencerAddr = CONFIGURATION.HOSTNAME;
             int sequencerPort = CONFIGURATION.SEQUENCER_PORT;
-            String[] replicaAddrs = {"localhost", "localhost", "localhost"};
-            int[] replicaPorts = {5000, 6000, 7000};
-            int timeoutMs = 5000;
-            int frontEndPort = 9000;
+            String[] replicaAddrs = {CONFIGURATION.RM1_IP, CONFIGURATION.RM2_IP, CONFIGURATION.RM3_IP};
+            int[] replicaPorts = {CONFIGURATION.RM1_PORT, CONFIGURATION.RM2_PORT, CONFIGURATION.RM3_PORT};
+            int timeoutMs = CONFIGURATION.TIMEOUT;
+            int frontEndPort = CONFIGURATION.FE_PORT;
             FrontEnd frontEnd = new FrontEnd(sequencerAddr, sequencerPort, replicaAddrs, replicaPorts, timeoutMs, frontEndPort);
             frontEnd.start();
         } catch (UnknownHostException e) {
