@@ -375,7 +375,7 @@ public class VERImplementation implements MTBSInterface {
     public String getBookingScheduleForServer(String customerID) {
         String key = null;
         String log = "";
-        String result = "----------Verdun----------\n";
+        String result = "";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : VERdata.entrySet()) {
             key = set.getKey();

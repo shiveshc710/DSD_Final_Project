@@ -380,7 +380,7 @@ public class OUTImplementation implements MTBSInterface {
     public String getBookingScheduleForServer(String customerID){
         String key = null;
         String log = "";
-        String result = "----------Outremont----------\n";
+        String result = "";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : OUTdata.entrySet()) {
             key = set.getKey();

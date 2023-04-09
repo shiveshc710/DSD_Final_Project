@@ -21,6 +21,8 @@ public class Sequencer {
         CONFIGURATION.RM_IP
     };
 
+    static boolean isRecovering = false;
+
     public static void main(String[] args) throws InterruptedException {
 
         try {
@@ -73,7 +75,6 @@ public class Sequencer {
     }
 
     private static void sendTimeoutRequestToReplica(int port, LinkedList<SequenceModel> backupRequestQueue) throws IOException {
-//        DatagramSocket restartSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT + 1, InetAddress.getByName(CONFIGURATION.HOSTNAME));
         InetAddress multicastAddress = InetAddress.getByName("localhost");
         String timeoutRequestData = "Timeout";
         LinkedList<SequenceModel> backupTemp = backupRequestQueue;
@@ -83,12 +84,42 @@ public class Sequencer {
         DatagramPacket requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, port);
         DatagramSocket socket = new DatagramSocket();
         socket.send(requestPacket);
+
+        byte[] buffer = new byte[1000];
+        DatagramSocket receiveSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT+1);
+        DatagramPacket response = new DatagramPacket(buffer, buffer.length);
+        receiveSocket.receive(response);
+
+        String sentence = new String(response.getData(), 0, response.getLength());
         socket.close();
+        receiveSocket.close();
+
+        if (sentence.equals("Replica Restarted")) {
+
+            while (backupTemp.peek() != null) {
+                    String requestData = backupTemp.getFirst().request;
+                    // Define the multicast address and port number
+                    requestData = "backup;" + requestData;
+                    timeoutRequestBuffer = requestData.getBytes();
+                    requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, CONFIGURATION.CRASH_MAIN_RM);
+                    socket = new DatagramSocket();
+                    socket.send(requestPacket);
+                    socket.close();
+                    backupTemp.removeFirst();
+
+            }
+            isRecovering = false;
+            sendRequest();
+
+        } else {
+            sendTimeoutRequestToReplica(port, backupRequestQueue);
+        }
 
     }
 
     private static void handleServerRestart(int i) throws IOException {
-
+        isRecovering = true;
+        sendRequest();
         if (i == 0) {
             sendTimeoutRequestToReplica(5000, backupRequestQueue);
         } else if (i == 1) {
@@ -101,46 +132,49 @@ public class Sequencer {
     public static void sendRequest() throws IOException {
 
         while (true) {
-            if (requestQueue.peek() != null) {
-                String requestData = requestQueue.getFirst().request;
-                System.out.println("Used : " + requestQueue.getFirst().sequenceID + " : " + requestData);
-                // Define the multicast address and port number
-                InetAddress multicastAddress = InetAddress.getByName("localhost");
-                int multicastPort = 5000;
+                if (isRecovering)
+                    break;
+
+                if (requestQueue.peek() != null) {
+                    String requestData = requestQueue.getFirst().request;
+                    System.out.println("Used : " + requestQueue.getFirst().sequenceID + " : " + requestData);
+                    // Define the multicast address and port number
+                    InetAddress multicastAddress = InetAddress.getByName("localhost");
+                    int multicastPort = 5000;
 
 
-                // Create the request data
-                byte[] requestBuffer = requestData.getBytes();
+                    // Create the request data
+                    byte[] requestBuffer = requestData.getBytes();
 
-                // Create the UDP packet with the request data
-                DatagramPacket requestPacket = new DatagramPacket(requestBuffer, requestBuffer.length, multicastAddress, multicastPort);
+                    // Create the UDP packet with the request data
+                    DatagramPacket requestPacket = new DatagramPacket(requestBuffer, requestBuffer.length, multicastAddress, multicastPort);
 
-                // Use a for loop to send the request packet to each replica server
-                for (int i = 0; i < ports.length; i++) {
-                    int replicaPort = ports[i]; // calculate the port number for the current replica server
-                    InetAddress replicaAddress = InetAddress.getByName(rmIp[i]); // assume all replica servers are running on the same machine
+                    // Use a for loop to send the request packet to each replica server
+                    for (int i = 0; i < ports.length; i++) {
+                        int replicaPort = ports[i]; // calculate the port number for the current replica server
+                        InetAddress replicaAddress = InetAddress.getByName(rmIp[i]); // assume all replica servers are running on the same machine
 
-                    // Set the port number of the current replica server in the request packet
-                    requestPacket.setPort(replicaPort);
+                        // Set the port number of the current replica server in the request packet
+                        requestPacket.setPort(replicaPort);
 
-                    // Set the address of the current replica server in the request packet
-                    requestPacket.setAddress(replicaAddress);
+                        // Set the address of the current replica server in the request packet
+                        requestPacket.setAddress(replicaAddress);
 
-                    // Send the request packet to the current replica server
-                    DatagramSocket socket = new DatagramSocket();
-                    socket.send(requestPacket);
-                    socket.close();
-                    System.out.println("Sent request to replica " + i);
+                        // Send the request packet to the current replica server
+                        DatagramSocket socket = new DatagramSocket();
+                        socket.send(requestPacket);
+                        socket.close();
+                        System.out.println("Sent request to replica " + ports[i]);
+                    }
+
+                    backupRequestQueue.add(requestQueue.getFirst());
+                    requestQueue.removeFirst();
+
+                } else {
+                    isFirstTime = false;
+                    sequencerId = 0;
+                    break;
                 }
-
-                backupRequestQueue.add(requestQueue.getFirst());
-                requestQueue.removeFirst();
-
-            } else {
-                isFirstTime = false;
-                sequencerId = 0;
-                break;
-            }
         }
     }
 }

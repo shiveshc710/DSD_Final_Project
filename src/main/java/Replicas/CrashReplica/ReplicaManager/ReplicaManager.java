@@ -44,19 +44,15 @@ public class ReplicaManager {
                     continue;
                 }
 
-                boolean backupRequest = request.contains("restart");
-                if (backupRequest) {
-                    String server = request.split(";")[1].split(",")[1];
+                boolean backupRequest = request.contains("backup");
 
+                if (backupRequest) {
+                    request = request.split(";")[1];
+                    String server = request.split(",")[1];
+                    setWebServiceParams(server.substring(0, 3));
                     // call method on replica server and get response
-                    String response = callReplicaServerMethod(request);
-                    // send response back to frontend
-                    InetAddress frontEndAddress = InetAddress.getByName("localhost");
-                    int port = CONFIGURATION.SEQUENCER_PORT + 1;
-                    byte[] responseBytes = response.getBytes();
-                    DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
-                    socket.send(responsePacket);
-                    System.out.println("Sent response to " + frontEndAddress.getHostAddress() + ":" + port);
+                    callReplicaServerMethod(request);
+
                 } else {
                     String server = request.split(",")[1];
                     setWebServiceParams(server.substring(0, 3));
