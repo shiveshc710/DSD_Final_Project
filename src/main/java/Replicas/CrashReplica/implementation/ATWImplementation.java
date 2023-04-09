@@ -1,84 +1,89 @@
-package Replicas.Replica1.implementation;
+package Replicas.CrashReplica.implementation;
 
-import Replicas.Replica1.MTBInterface.MTBSInterface;
-import Replicas.Replica1.model.BookingDetails;
+import Replicas.CrashReplica.MTBInterface.MTBSInterface;
+import Replicas.CrashReplica.model.BookingDetails;
 import config.CONFIGURATION;
+
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-@WebService(endpointInterface = "Replicas.Replica1.MTBInterface.MTBSInterface")
+@WebService(endpointInterface = "Replicas.CrashReplica.MTBInterface.MTBSInterface")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class VERImplementation implements MTBSInterface {
+public class ATWImplementation implements MTBSInterface {
 
 
-    Map<String, Map<String, BookingDetails>> VERdata = null;
+    Map<String, Map<String, BookingDetails>> ATWdata = null;
     public Map<String, BookingDetails> userSlotData = null;
     public List<String> customerList = null;
     private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     FileHandler fh;
     SimpleFormatter formatter = new SimpleFormatter();
-    public String out_result = "", atw_result = "";
+    String server = null;
+    public String ver_result = "", out_result = "";
     TimeUnit time = TimeUnit.SECONDS;
 
     boolean check = false;
     boolean newCheck = false;
 
 
-    public VERImplementation(){
-        super();
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("ddMMyy");
+    Date d = new Date();
+    String date=dateFormatter.format(d);
 
-        VERdata = new ConcurrentHashMap<>();
+    public ATWImplementation()  {
+        super();
+        ATWdata = new ConcurrentHashMap<>();
         userSlotData = new ConcurrentHashMap<>();
         customerList = new ArrayList<>();
+
 
     }
 
     @Override
-    public String addMovieSlots(String movieID, String movieName, int bookingCapacity) {
+    public String addMovieSlots(String movieID, String movieName, int bookingCapacity)  {
 
         String result = "";
 
         if(movieID.charAt(3)== 'M' | movieID.charAt(3)== 'A' | movieID.charAt(3)== 'E' ) {
-            if (movieID.startsWith(CONFIGURATION.VERSERVER)) {
+            if (movieID.startsWith(CONFIGURATION.ATWSERVER)) {
                 try {
                     if (!checkDate(movieID)) {
                         result = "Failed";
                         writeLog("Tickets cannot be booked for Date more than a week or for previous date.");
 
                     } else {
-                        if (!(movieID.startsWith(CONFIGURATION.VERSERVER))) {
+                        if (!(movieID.startsWith(CONFIGURATION.ATWSERVER))) {
                             result = "Failed";
                             writeLog("Unable to add slot : Invalid movieID");
-                        } else if (!VERdata.containsKey(movieName)) {
+                        } else if (!ATWdata.containsKey(movieName)) {
                             Map<String, BookingDetails> tmp = new ConcurrentHashMap<>();
                             tmp.put(movieID, new BookingDetails(new ArrayList<>(), bookingCapacity));
-                            VERdata.put(movieName, tmp);
+                            ATWdata.put(movieName, tmp);
                             result = "Success";
                             writeLog("Movie slot "+ movieID+" added for : "+movieName);
                         } else {
-                            if (VERdata.get(movieName).containsKey(movieID)) {
+                            if (ATWdata.get(movieName).containsKey(movieID)) {
                                 result = "Failed";
                                 writeLog("Movie Slot already exist for "+movieID);
                             } else {
-                                Map<String, BookingDetails> tmp = VERdata.get(movieName);
+                                Map<String, BookingDetails> tmp = ATWdata.get(movieName);
                                 tmp.put(movieID, new BookingDetails(new ArrayList<>(), bookingCapacity));
-                                VERdata.put(movieName, tmp);
+                                ATWdata.put(movieName, tmp);
                                 result = "Success";
                                 writeLog("Movie slot "+ movieID+" added for : "+movieName);
-
                             }
                         }
                     }
@@ -87,36 +92,35 @@ public class VERImplementation implements MTBSInterface {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-            } else{
+            } else {
                 result = "Failed";
                 writeLog("Unable to add slots for other servers.");
             }
-        }else {
+        } else {
             result = "Failed";
             writeLog("Unable to add slot : Invalid movieID");
-
         }
 
         return result;
     }
 
     @Override
-    public String removeMovieSlots(String movieID, String movieName) {
+    public String removeMovieSlots(String movieID, String movieName)  {
         String result = "";
         boolean transfer = false;
         String log = "";
         int day = Integer.parseInt(movieID.substring(4, 6));
         int month = Integer.parseInt(movieID.substring(6, 8));
 
-        if (!VERdata.containsKey(movieName)) {
+        if (!ATWdata.containsKey(movieName)) {
             result = "Failed";
             log = "No movie slots is available for this type!!!";
         } else {
-            Map<String, BookingDetails> tmp = VERdata.get(movieName);
+            Map<String, BookingDetails> tmp = ATWdata.get(movieName);
             if (tmp.containsKey(movieID)) {
                 if (tmp.get(movieID).getCustomerID().size() == 0) {
                     result = "Failed";
-                    VERdata.get(movieName).remove(movieID);
+                    ATWdata.get(movieName).remove(movieID);
                     log = "Movie show found, no shows booked, deleting it without transfer";
                 } else {
                     result = "Failed";
@@ -131,8 +135,8 @@ public class VERImplementation implements MTBSInterface {
                                 customers.addAll(bookingData.getValue().getCustomerID());
                                 customers.addAll(tmp.get(movieID).getCustomerID());
 
-                                VERdata.get(movieName).get(bookingData.getKey()).setCustomerID(customers);
-                                VERdata.get(movieName).remove(movieID);
+                                ATWdata.get(movieName).get(bookingData.getKey()).setCustomerID(customers);
+                                ATWdata.get(movieName).remove(movieID);
                                 result = "Success";
                                 log = "Slot is deleted and booking is now transferred to show "+bookingData.getKey();
 
@@ -148,24 +152,24 @@ public class VERImplementation implements MTBSInterface {
                         log = "Booking found for this show, Unable to assign to other shows.";
 
                         String customers = "";
-                        for (String temp : VERdata.get(movieName).get(movieID).getCustomerID()) {
+                        for (String temp : ATWdata.get(movieName).get(movieID).getCustomerID()) {
                             customers += temp + ",";
                         }
 
 
                         String finalCustomers = customers;
 
-                         atw_result = udpThread("removeSlots:" + finalCustomers + " " + movieName, CONFIGURATION.ATW_LISTENER);
+                        ver_result = udpThread("removeSlots:" + finalCustomers + " " + movieName, CONFIGURATION.VER_LISTENER);
 
-                        if (atw_result.contains("success")){
-                            VERdata.get(movieName).remove(movieID);
+                        if (ver_result.contains("success")){
+                            ATWdata.get(movieName).remove(movieID);
                             result = "Success";
-                            log = "Slot is deleted and booking is now transferred to Verdun show: " + atw_result.split(" ")[1];
+                            log = "Slot is deleted and booking is now transferred to Verdun show: " + ver_result.split(" ")[1];
 
                         }else {
                             out_result = udpThread("removeSlots:" + finalCustomers + " " + movieName, CONFIGURATION.OUT_LISTENER);
                             if (out_result.contains("success")){
-                                VERdata.get(movieName).remove(movieID);
+                                ATWdata.get(movieName).remove(movieID);
                                 result = "Success";
                                 log = "Slot is deleted and booking is now transferred to Outremont show: " + out_result.split(" ")[1];
                             }
@@ -175,7 +179,7 @@ public class VERImplementation implements MTBSInterface {
 
             } else {
                 result = "Failed";
-                VERdata.get(movieName).remove(movieID);
+                ATWdata.get(movieName).remove(movieID);
                 log = "No shows are available for "+movieName+"!!!";
             }
         }
@@ -186,32 +190,32 @@ public class VERImplementation implements MTBSInterface {
     }
 
     @Override
-    public String listMovieShowsAvailability(String movieName) {
+    public String listMovieShowsAvailability(String movieName)  {
         String result = "";
         String log = "";
-        if (VERdata.containsKey(movieName)) {
-            for (Map.Entry<String, BookingDetails> data : VERdata.get(movieName).entrySet()) {
+        if (ATWdata.containsKey(movieName)) {
+            for (Map.Entry<String, BookingDetails> data : ATWdata.get(movieName).entrySet()) {
                 if ((data.getValue().getCapacity() - data.getValue().getCustomerID().size() >= 0))
                     result += data.getKey() + " : "
-                            + (data.getValue().getCapacity() - data.getValue().getCustomerID().size() + ",");
+                            + (data.getValue().getCapacity() - data.getValue().getCustomerID().size() + "\n");
 
             }
         }
 
-        if (result.contains("VERA") | result.contains("VERM")| result.contains("VERE"))
+        if (result.contains("ATWA") | result.contains("ATWM")| result.contains("ATWE"))
             result += "\n";
         else
             result += "No bookings available,";
 
         new Thread() {
             public void run() {
-                out_result = udpThread("showsList:" + movieName, CONFIGURATION.OUT_LISTENER);
+                ver_result = udpThread("showsList:" + movieName, CONFIGURATION.VER_LISTENER);
             }
         }.start();
 
         new Thread() {
             public void run() {
-                atw_result = udpThread("showsList:" + movieName, CONFIGURATION.ATW_LISTENER);
+                out_result = "\n"+udpThread("showsList:" + movieName, CONFIGURATION.OUT_LISTENER);
             }
         }.start();
 
@@ -222,14 +226,14 @@ public class VERImplementation implements MTBSInterface {
             e1.printStackTrace();
         }
 
-        String final_result = result + out_result + atw_result;
+        String final_result = result + ver_result + out_result;
         log = final_result.trim().isEmpty() ? "No result Found!!" : "Data found from all servers";
         writeLog(log);
         return (final_result.trim().isEmpty() ? "No result Found!!" : final_result);
     }
 
     @Override
-    public String bookMovieTickets(String customerID, String movieID, String movieName, int numberOfTickets) {
+    public String bookMovieTickets(String customerID, String movieID, String movieName, int numberOfTickets)  {
         String result = "";
         String status = "failed";
         int emptySlots = 0;
@@ -238,84 +242,85 @@ public class VERImplementation implements MTBSInterface {
 
         List<String> slots = Arrays.asList(retriveAvailableSlots(movieName).split(","));
 
-        if (movieID.startsWith(CONFIGURATION.VERSERVER)) {
-            if(customerID.startsWith(CONFIGURATION.ATWSERVER) | customerID.startsWith(CONFIGURATION.OUTSERVER)) {
-                boolean isAvailable = true;
-                String date = movieID.substring(3, 10);
-                for (int i = 0; i < slots.size(); i++) {
-                    if (slots.get(i).substring(3, 10).equals(date))
-                        isAvailable = false;
-                }
-                if(!isAvailable)
-                {
-                    result = "Failed";
-                    log = "Unable to book show with same timing more than once";
-
-                }
-            }
-            else {
-                if (VERdata.containsKey(movieName) && VERdata.get(movieName).containsKey(movieID)) {
+            if (movieID.startsWith(CONFIGURATION.ATWSERVER)) {
+                if(customerID.startsWith(CONFIGURATION.VERSERVER) | customerID.startsWith(CONFIGURATION.OUTSERVER)) {
+                    boolean isAvailable = true;
+                    String date = movieID.substring(3, 10);
                     for (int i = 0; i < slots.size(); i++) {
-                        ID = slots.get(i).split(":")[0].trim();
-                        emptySlots = Integer.parseInt(slots.get(i).split(":")[1].trim());
-                        if (emptySlots >= numberOfTickets && ID.contains(movieID)) {
-                            int numberOfSeats = (VERdata.get(movieName).get(movieID).getCapacity()
-                                    - VERdata.get(movieName).get(movieID).getCustomerID().size());
-                            if (numberOfSeats >= numberOfTickets) {
-                                BookingDetails bookings = VERdata.get(movieName).get(movieID);
-                                for (int j = 0; j < numberOfTickets; j++) {
-                                    bookings.getCustomerID().add(customerID);
+                        if (slots.get(i).substring(3, 10).equals(date))
+                            isAvailable = false;
+                    }
+                    if(!isAvailable)
+                    {
+                        result = "Failed";
+                        log = "Unable to book show with same timing more than once";
+
+                    }
+                }
+                else {
+                    if (ATWdata.containsKey(movieName) && ATWdata.get(movieName).containsKey(movieID)) {
+                        for (int i = 0; i < slots.size(); i++) {
+                            ID = slots.get(i).split(":")[0].trim();
+                            emptySlots = Integer.parseInt(slots.get(i).split(":")[1].trim());
+                            if (emptySlots >= numberOfTickets && ID.contains(movieID)) {
+                                int numberOfSeats = (ATWdata.get(movieName).get(movieID).getCapacity()
+                                        - ATWdata.get(movieName).get(movieID).getCustomerID().size());
+                                if (numberOfSeats >= numberOfTickets) {
+                                    BookingDetails bookings = ATWdata.get(movieName).get(movieID);
+                                    for (int j = 0; j < numberOfTickets; j++) {
+                                        bookings.getCustomerID().add(customerID);
+
+                                    }
+                                    result = "Success";
+                                    log = "Tickets for " + movieName + " for " + movieID.substring(4, 6)
+                                            + "/" + movieID.substring(6, 8);
+                                    break;
+                                } else {
+                                    System.out.println("Slot not Found");
+                                    result = "Failed";
+                                    log = "Not enough seats available for this show!!!";
 
                                 }
-                                result = "Success";
-                                log = "Tickets for " + movieName + " for " + movieID.substring(4, 6)
-                                        + "/" + movieID.substring(6, 8);
-                                break;
-                            } else {
-                                System.out.println("Slot not Found");
-                                result = "Failed";
-                                log = "Not enough seats available for this show!!!";
-
+                            }else {
+                                    result = "Failed";
                             }
-                        }else {
-                            result = "Failed";
                         }
+                    } else {
+                        result = "Failed";
+                        log = "Unable to book show " + movieID + " for "+ movieName;
                     }
-                } else {
-                    result = "Failed";
-                    log = "Unable to book show " + movieID + " for "+ movieName;
                 }
-            }
-        } else {
-            int totalBookings = getTotalBookings(customerID);
-
-            if (totalBookings <= 2) {
-                if (movieID.contains(CONFIGURATION.OUTSERVER)) {
-                    result = udpThread("bookTickets:" + customerID + " " + movieID + " " + movieName + " " + numberOfTickets, CONFIGURATION.OUT_LISTENER);
-
-                } else if (movieID.contains(CONFIGURATION.ATWSERVER)) {
-                    result = udpThread("bookTickets:" + customerID + " " + movieID + " " + movieName + " " + numberOfTickets, CONFIGURATION.ATW_LISTENER);
-                } else {
-                    result = "Failed";
-                    log = "Failed : Invalid movieID";
-                }
-
             } else {
-                result = "Failed";
-                log = "Failed : Unable to book more than 3 tickets for Different Locations";
-            }
-        }
+                int totalBookings = getTotalBookings(customerID);
 
-        writeLog(log);
+                if (totalBookings <= 2) {
+                    if (movieID.contains(CONFIGURATION.OUTSERVER)) {
+                        result = udpThread("bookTickets:" + customerID + " " + movieID + " " + movieName + " " + numberOfTickets, CONFIGURATION.OUT_LISTENER);
+
+                    } else if (movieID.contains(CONFIGURATION.VERSERVER)) {
+                        result = udpThread("bookTickets:" + customerID + " " + movieID + " " + movieName + " " + numberOfTickets, CONFIGURATION.VER_LISTENER);
+                    } else {
+                        result = "Failed";
+                        log = "Failed : Invalid movieID";
+                    }
+
+                } else {
+                    result = "Failed";
+                    log = "Failed : Unable to book more than 3 tickets for Different Locations";
+                }
+            }
+
+            writeLog(log);
         return result;
     }
+
     @Override
-    public String getBookingSchedule(String customerID) {
+    public String getBookingSchedule(String customerID)  {
         String key = null;
         String log = "";
-        String result = "----------Verdun----------\n";
+        String result = "----------Atwater----------\n";
 
-        for (Map.Entry<String, Map<String, BookingDetails>> set : VERdata.entrySet()) {
+        for (Map.Entry<String, Map<String, BookingDetails>> set : ATWdata.entrySet()) {
             key = set.getKey();
             boolean isAppended = false;
             int count = 0;
@@ -333,27 +338,29 @@ public class VERImplementation implements MTBSInterface {
             }
         }
 
-        if (result.contains("VERA") | result.contains("VERM")| result.contains("VERE"))
+        if (result.contains("ATWA") | result.contains("ATWM")| result.contains("ATWE"))
             result += "";
         else
             result += "";
 
-        atw_result = "----------Atwater----------\n";
+        ver_result = "----------Verdun----------\n";
         out_result = "----------Outremont----------\n";
 
         new Thread(){
             @Override
             public void run() {
-                atw_result = udpThread("showsSchedule:" + customerID,CONFIGURATION.ATW_LISTENER);
+                ver_result += udpThread("showsSchedule:" + customerID,CONFIGURATION.VER_LISTENER);
             }
         }.start();
 
         new Thread(){
             @Override
             public void run() {
-                out_result = "\n"+udpThread("showsSchedule:" + customerID,CONFIGURATION.OUT_LISTENER);
+                out_result += udpThread("showsSchedule:" + customerID,CONFIGURATION.OUT_LISTENER);
             }
         }.start();
+
+
 
         try {
             time.sleep(2L);
@@ -362,22 +369,21 @@ public class VERImplementation implements MTBSInterface {
             e1.printStackTrace();
         }
 
-        String final_result = result + out_result + atw_result;
+        String final_result = result + ver_result + out_result;
 
         log = final_result.trim().isEmpty() ? "No result Found!!" : "Bookings found from all servers for user : " + customerID;
         writeLog(log);
 
-
         return (result.isEmpty() ? "" : final_result);
     }
-
-    public String getBookingScheduleForServer(String customerID) {
+    public String getBookingScheduleForServer(String customerID)  {
         String key = null;
         String log = "";
-        String result = "----------Verdun----------\n";
+        String result = "----------Atwater----------\n";
 
-        for (Map.Entry<String, Map<String, BookingDetails>> set : VERdata.entrySet()) {
+        for (Map.Entry<String, Map<String, BookingDetails>> set : ATWdata.entrySet()) {
             key = set.getKey();
+            boolean isAppended = false;
             int count = 0;
             for (Map.Entry<String, BookingDetails> data : set.getValue().entrySet()) {
 
@@ -391,32 +397,31 @@ public class VERImplementation implements MTBSInterface {
                 }
 
             }
+
         }
 
-        if (result.contains("VERA") | result.contains("VERM")| result.contains("VERE"))
+        if (result.contains("ATWA") | result.contains("ATWM")| result.contains("ATWE"))
             result += "\n";
         else
             result += "";
 
-        log = result.trim().isEmpty() ? "No result Found!!" : "Bookings found for Verdun server for user "+ customerID;
+        log = result.trim().isEmpty() ? "No result Found!!" : "Bookings found for Atwater server for user "+ customerID;
         writeLog(log);
-
         return result;
     }
     @Override
-    public String cancelMovieTickets(String customerID, String movieId, String movieName, int numberOfTickets) {
+    public String cancelMovieTickets(String customerID, String movieId, String movieName, int numberOfTickets)  {
         String status = "failed";
         String log = "No bookings found";
         String result = "Failed";
-
 
         String server = movieId.substring(0,3);
 
         String serverData = customerID+" "+movieId+" "+movieName+" "+numberOfTickets;
 
         switch (server) {
-            case "VER":
-                for (Map.Entry<String, Map<String, BookingDetails>> set : VERdata.entrySet()) {
+            case "ATW":
+                for (Map.Entry<String, Map<String, BookingDetails>> set : ATWdata.entrySet()) {
                     for (Map.Entry<String, BookingDetails> data : set.getValue().entrySet()) {
                         if (data.getValue().getCustomerID().stream().filter(customerID::equals).count() >= numberOfTickets) {
                             if (data.getValue().getCustomerID().contains(customerID) && data.getKey().equals(movieId)) {
@@ -426,23 +431,13 @@ public class VERImplementation implements MTBSInterface {
                                 }
                                 log = "Ticket(s) canceled successfully.";
                                 status = "success";
-                                result = "Ticket(s) canceled!!!";
-                                break;
+                                result = "Success";
                             }
                         }
                     }
                 }
                 break;
-            case "ATW":
-                new Thread() {
-                    public void run() {
-                        atw_result = udpThread("cancelTickets:" + serverData, CONFIGURATION.ATW_LISTENER);
-                    }
-                }.start();
-                result = atw_result;
-                break;
             case "OUT":
-                result = "";
                 new Thread() {
                     public void run() {
                         out_result = udpThread("cancelTickets:" + serverData, CONFIGURATION.OUT_LISTENER);
@@ -450,32 +445,40 @@ public class VERImplementation implements MTBSInterface {
                 }.start();
                 result = out_result;
                 break;
+            case "VER":
+                new Thread() {
+                    public void run() {
+                        ver_result = udpThread("cancelTickets:" + serverData, CONFIGURATION.VER_LISTENER);
+                    }
+                }.start();
+                result = ver_result;
+                break;
         }
-        writeLog(log);
 
+        writeLog(log);
         return result;
     }
 
     @Override
     public String exchangeTickets(String customerID, String old_movieName, String movieID, String new_movieID, String new_movieName, int numberOfTickets) {
-        if (movieID.substring(0, 3).equals(CONFIGURATION.VERSERVER))
+        if (movieID.substring(0, 3).equals(CONFIGURATION.ATWSERVER))
         {
 
-            if(VERdata.containsKey(old_movieName))
+            if(ATWdata.containsKey(old_movieName))
             {
-                if (VERdata.get(old_movieName).containsKey(movieID))
+                if (ATWdata.get(old_movieName).containsKey(movieID))
                 {
-                    if (VERdata.get(old_movieName).get(movieID).getCustomerID().contains(customerID))
+                    if (ATWdata.get(old_movieName).get(movieID).getCustomerID().contains(customerID))
                     {
 
-                        List<String> s = VERdata.get(old_movieName).get(movieID).getCustomerID();
+                        List<String> s = ATWdata.get(old_movieName).get(movieID).getCustomerID();
                         int count = 0;
                         for (String id : s){
                             if(id.equals(customerID))
                                 count++;
                         }
 
-                        int size = VERdata.get(old_movieName).get(movieID).getCapacity();
+                        int size = ATWdata.get(old_movieName).get(movieID).getCapacity();
 
                         if (count >= numberOfTickets &&  size >= numberOfTickets)
                             check = true;
@@ -483,7 +486,25 @@ public class VERImplementation implements MTBSInterface {
                     }
                 }
             }
-        } else if(movieID.substring(0, 3).equals(CONFIGURATION.OUTSERVER)) {
+        } else if(movieID.substring(0, 3).equals(CONFIGURATION.VERSERVER)) {
+            new Thread() {
+                public void run() {
+                    ver_result = udpThread("checkMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.VER_LISTENER);
+                    if(ver_result.equals("done"))
+                    {
+                        check=true;
+                    }
+
+                }
+            }.start();
+            try {
+                time.sleep(2L);
+            } catch (InterruptedException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+        }else if(movieID.substring(0, 3).equals(CONFIGURATION.OUTSERVER)) {
             new Thread() {
                 public void run() {
                     out_result = udpThread("checkMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.OUT_LISTENER);
@@ -501,47 +522,29 @@ public class VERImplementation implements MTBSInterface {
                 e1.printStackTrace();
             }
 
-        }else if(movieID.substring(0, 3).equals(CONFIGURATION.ATWSERVER)) {
-            new Thread() {
-                public void run() {
-                    atw_result = udpThread("checkMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.ATW_LISTENER);
-                    if(atw_result.equals("done"))
-                    {
-                        check=true;
-                    }
-
-                }
-            }.start();
-            try {
-                time.sleep(2L);
-            } catch (InterruptedException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-
         }
 
 
 //        For new movie
-        if (new_movieID.substring(0, 3).equals(CONFIGURATION.VERSERVER))
+        if (new_movieID.substring(0, 3).equals(CONFIGURATION.ATWSERVER))
         {
 
-            if(VERdata.containsKey(new_movieName))
+            if(ATWdata.containsKey(new_movieName))
             {
-                if (VERdata.get(new_movieName).containsKey(new_movieID))
+                if (ATWdata.get(new_movieName).containsKey(new_movieID))
                 {
-                    int numberOfSeats = (VERdata.get(new_movieName).get(movieID).getCapacity()
-                            - VERdata.get(new_movieName).get(movieID).getCustomerID().size());
+                        int numberOfSeats = (ATWdata.get(new_movieName).get(movieID).getCapacity()
+                                - ATWdata.get(new_movieName).get(movieID).getCustomerID().size());
 
-                    if (numberOfSeats >= numberOfTickets)
-                        newCheck = true;
+                        if (numberOfSeats >= numberOfTickets)
+                            newCheck = true;
                 }
             }
-        } else if(new_movieID.substring(0, 3).equals(CONFIGURATION.OUTSERVER)) {
+        } else if(new_movieID.substring(0, 3).equals(CONFIGURATION.VERSERVER)) {
             new Thread() {
                 public void run() {
-                    out_result = udpThread("checkNewMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.OUT_LISTENER);
-                    if(out_result.equals("done"))
+                    ver_result = udpThread("checkNewMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.VER_LISTENER);
+                    if(ver_result.equals("done"))
                     {
                         newCheck=true;
                     }
@@ -555,11 +558,11 @@ public class VERImplementation implements MTBSInterface {
                 e1.printStackTrace();
             }
 
-        }else if(new_movieID.substring(0, 3).equals(CONFIGURATION.ATWSERVER)) {
+        }else if(new_movieID.substring(0, 3).equals(CONFIGURATION.OUTSERVER)) {
             new Thread() {
                 public void run() {
-                    atw_result = udpThread("checkNewMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.ATW_LISTENER);
-                    if(atw_result.equals("done"))
+                    out_result = udpThread("checkNewMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.OUT_LISTENER);
+                    if(out_result.equals("done"))
                     {
                         newCheck=true;
                     }
@@ -588,126 +591,16 @@ public class VERImplementation implements MTBSInterface {
         }
     }
 
-
-    private int getTotalBookings(String customerID) {
-        List<String> slots;
-        slots = Arrays.asList(retriveCustomerBookingsFromServers(customerID, CONFIGURATION.ATWSERVER).split(","));
-        int totalBookings = 0;
-        for (int i = 0; i < slots.size(); i++) {
-            if (slots.get(i).contains(CONFIGURATION.ATWSERVER)) {
-                totalBookings += Integer.parseInt(slots.get(i).split(":")[1].trim());
-            }
-        }
-
-        slots = Arrays.asList(retriveCustomerBookingsFromServers(customerID, CONFIGURATION.OUTSERVER).split(","));
-        for (int i = 0; i < slots.size(); i++) {
-            if (slots.get(i).contains(CONFIGURATION.OUTSERVER)) {
-                totalBookings += Integer.parseInt(slots.get(i).split(":")[1].trim());
-            }
-        }
-        return totalBookings;
-    }
-
-    public String retriveAvailableSlots(String movieName) {
-        String key = null;
-        String result = "";
-
-        if (VERdata.containsKey(movieName)) {
-            for (Map.Entry<String, BookingDetails> data : VERdata.get(movieName).entrySet()) {
-                if ((data.getValue().getCapacity() - data.getValue().getCustomerID().size() >= 0))
-                    result += data.getKey() + " : "
-                            + (data.getValue().getCapacity() - data.getValue().getCustomerID().size() + ",");
-
-            }
-        }
-
-
-        return (result.isEmpty() ? "" : result);
-    }
-
-    public String retriveCustomerBookingsFromServers(String customerID, String server) {
-        String key = null;
-        String result = "";
-
-        if (server.equals(CONFIGURATION.ATWSERVER)) {
-            new Thread() {
-                @Override
-                public void run() {
-                    atw_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.ATW_LISTENER);
-                    atw_result = atw_result.replace("----------Atwater----------", "Atwater");
-
-                }
-            }.start();
-            return (atw_result.isEmpty() ? "" : atw_result);
-        }else if (server.equals(CONFIGURATION.OUTSERVER)) {
-            new Thread() {
-                @Override
-                public void run() {
-                    out_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.OUT_LISTENER);
-                    out_result = out_result.replace("----------Outremont----------", "Outremont");
-                }
-            }.start();
-            return (out_result.isEmpty() ? "" : out_result);
-
-        }
-
-        try {
-            time.sleep(2L);
-        } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-
-        String final_result = result + out_result + atw_result;
-
-        return (result.isEmpty() ? "" : final_result);
-    }
-
-    public String listAvailableForServer(String movieName) {
-        String result = "";
-        if (VERdata.containsKey(movieName)) {
-            for (Map.Entry<String, BookingDetails> data : VERdata.get(movieName.trim()).entrySet()) {
-                if ((data.getValue().getCapacity() - data.getValue().getCustomerID().size() > 0)) {
-                    result += data.getKey() + " : "
-                            + (data.getValue().getCapacity() - data.getValue().getCustomerID().size() + "\n");
-                }
-            }
-        }
-        return result;
-    }
-
-    public String udpThread(String data, int port) {
-        String result = "";
-        try (DatagramSocket aSocket = new DatagramSocket()) {
-            DatagramPacket request = new DatagramPacket(data.getBytes(), data.getBytes().length,
-                    InetAddress.getByName("localhost"), port);
-            aSocket.send(request);
-            writeLog("UDP request sent from Verdun to port "+port);
-
-
-            byte[] buffer = new byte[1000];
-            DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-            aSocket.receive(reply);
-            aSocket.close();
-            result = new String(reply.getData()).trim();
-            writeLog("UDP response received from port "+port);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
     public String ServerexchangeTicketsCheck(String customerID,String old_movieName, String movieID, String new_movieID, String new_movieName, int numberOfTickets) {
 
-        if(VERdata.containsKey(old_movieName))
+        if(ATWdata.containsKey(old_movieName))
         {
-            if (VERdata.get(old_movieName).containsKey(movieID))
+            if (ATWdata.get(old_movieName).containsKey(movieID))
             {
-                if (VERdata.get(old_movieName).get(movieID).getCustomerID().contains(customerID))
+                if (ATWdata.get(old_movieName).get(movieID).getCustomerID().contains(customerID))
                 {
 
-                    List<String> s = VERdata.get(old_movieName).get(movieID).getCustomerID();
+                    List<String> s = ATWdata.get(old_movieName).get(movieID).getCustomerID();
                     int count = 0;
                     for (String id : s){
                         if(id.equals(customerID))
@@ -724,22 +617,112 @@ public class VERImplementation implements MTBSInterface {
         return "not done";
     }
 
-    public String ServerexchangeTicketsCheckNewMovie(String customerID,String old_movieName, String movieID, String new_movieID, String new_movieName, int numberOfTickets) {
-        if(VERdata.containsKey(new_movieName))
-        {
-            if (VERdata.get(new_movieName).containsKey(new_movieID))
-            {
-                int numberOfSeats = (VERdata.get(new_movieName).get(movieID).getCapacity()
-                        - VERdata.get(new_movieName).get(movieID).getCustomerID().size());
-
-                System.out.println("Reached inside");
-                if (numberOfSeats >= numberOfTickets)
-                    return "done";
+    private int getTotalBookings(String customerID)  {
+        List<String> slots;
+        slots = Arrays.asList(retriveCustomerBookingsFromServers(customerID, CONFIGURATION.OUTSERVER).split(","));
+        int totalBookings = 0;
+        for (int i = 0; i < slots.size(); i++) {
+            if (slots.get(i).contains(CONFIGURATION.OUTSERVER)) {
+                totalBookings += Integer.parseInt(slots.get(i).split(":")[1].trim());
             }
         }
-        System.out.println("Reached outside");
 
-        return "not done";
+        slots = Arrays.asList(retriveCustomerBookingsFromServers(customerID, CONFIGURATION.VERSERVER).split(","));
+        for (int i = 0; i < slots.size(); i++) {
+            if (slots.get(i).contains(CONFIGURATION.VERSERVER)) {
+                totalBookings += Integer.parseInt(slots.get(i).split(":")[1].trim());
+            }
+        }
+        return totalBookings;
+    }
+
+    public String retriveAvailableSlots(String movieName)  {
+        String result = "";
+
+        if (ATWdata.containsKey(movieName)) {
+            for (Map.Entry<String, BookingDetails> data : ATWdata.get(movieName).entrySet()) {
+                if ((data.getValue().getCapacity() - data.getValue().getCustomerID().size() >= 0))
+                    result += data.getKey() + " : "
+                            + (data.getValue().getCapacity() - data.getValue().getCustomerID().size() + ",");
+
+            }
+        }
+
+        return (result.isEmpty() ? "" : result);
+    }
+    public String retriveCustomerBookingsFromServers(String customerID, String server)  {
+        String result = "";
+
+        if (server.equals(CONFIGURATION.OUTSERVER)) {
+            new Thread() {
+                @Override
+                public void run() {
+                    out_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.OUT_LISTENER);
+                    out_result = out_result.replace("----------Outremont----------", "Outremont");
+
+                }
+            }.start();
+            return (out_result.isEmpty() ? "" : out_result);
+        }else if (server.equals(CONFIGURATION.VERSERVER)) {
+            new Thread() {
+                @Override
+                public void run() {
+                    ver_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.VER_LISTENER);
+                    ver_result = ver_result.replace("----------Verdun----------", "Verdun");
+                }
+            }.start();
+            return (ver_result.isEmpty() ? "" : ver_result);
+
+        }
+
+        try {
+            time.sleep(2L);
+        } catch (InterruptedException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        String final_result = result + ver_result + out_result;
+
+        return (result.isEmpty() ? "" : final_result);
+        }
+
+    public String listAvailableForServer(String movieName)  {
+        String result = "";
+        if (ATWdata.containsKey(movieName)) {
+            for (Map.Entry<String, BookingDetails> data : ATWdata.get(movieName.trim()).entrySet()) {
+                if ((data.getValue().getCapacity() - data.getValue().getCustomerID().size() > 0)) {
+                    result += data.getKey() + " : "
+                            + (data.getValue().getCapacity() - data.getValue().getCustomerID().size() + ",");
+                }
+            }
+        }
+
+        writeLog("Fetched available slots with space for Atwater server");
+        return result;
+    }
+
+    public String udpThread(String data, int port) {
+        String result = "";
+        try (DatagramSocket aSocket = new DatagramSocket()) {
+            DatagramPacket request = new DatagramPacket(data.getBytes(), data.getBytes().length,
+                    InetAddress.getByName(CONFIGURATION.HOSTNAME), port);
+            aSocket.send(request);
+            writeLog("UDP request sent from Atwater to port "+port);
+
+            byte[] buffer = new byte[1000];
+            DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+            aSocket.receive(reply);
+            aSocket.close();
+            result = new String(reply.getData()).trim();
+            System.out.println("Received response from : "+ port);
+            writeLog("UDP response received from port "+port);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public boolean checkDate(String movieID) throws ParseException {
@@ -778,7 +761,7 @@ public class VERImplementation implements MTBSInterface {
         try {
 
             // This block configure the logger with handler and formatter
-            fh = new FileHandler("src/logs/VERLog.log", 0,1,true);
+            fh = new FileHandler("src/main/java/Replicas/CrashReplica/logs/ATWLog.log", 0,1,true);
 
             fh.setFormatter(formatter);
 
@@ -787,9 +770,11 @@ public class VERImplementation implements MTBSInterface {
             logger.setUseParentHandlers(false);
 
             // the following statement is used to log any messages
-            logger.info("Log from Verdun : "+ message);
+            logger.info("Log from Atwater : "+ message);
 
             fh.close();
+            LogManager.getLogManager().reset();
+
 
         } catch (SecurityException | IOException e) {
             e.printStackTrace();
@@ -798,6 +783,21 @@ public class VERImplementation implements MTBSInterface {
         }
     }
 
+    public String ServerexchangeTicketsCheckNewMovie(String customerID,String old_movieName, String movieID, String new_movieID, String new_movieName, int numberOfTickets) {
+        if(ATWdata.containsKey(new_movieName))
+        {
+            if (ATWdata.get(new_movieName).containsKey(new_movieID))
+            {
+                int numberOfSeats = (ATWdata.get(new_movieName).get(movieID).getCapacity()
+                        - ATWdata.get(new_movieName).get(movieID).getCustomerID().size());
 
+                System.out.println("Reached inside");
+                if (numberOfSeats >= numberOfTickets)
+                    return "done";
+            }
+        }
+        System.out.println("Reached outside");
 
+        return "not done";
+    }
 }

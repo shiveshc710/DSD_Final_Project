@@ -1,7 +1,6 @@
-package Replicas.Replica1.ReplicaManager;
+package Replicas.CrashReplica.ReplicaManager;
 
-
-import Replicas.Replica1.MTBInterface.MTBSInterface;
+import Replicas.CrashReplica.MTBInterface.MTBSInterface;
 import config.CONFIGURATION;
 
 import javax.xml.namespace.QName;
@@ -12,7 +11,6 @@ import java.net.*;
 public class ReplicaManager {
     private int port;
     private static MTBSInterface MasterServerRef;
-    private static com.example.client.MainServerImpl crashMasterServerRef;
     private DatagramSocket socket;
     private boolean running;
 
@@ -88,19 +86,19 @@ public class ReplicaManager {
         int port = 0;
         switch (server) {
             case "ATW":
-                port = CONFIGURATION.ATW_PORT;
+                port = CONFIGURATION.CRASH_MAIN_PORT_ATW;
                 break;
             case "VER":
-                port = CONFIGURATION.VER_PORT;
+                port = CONFIGURATION.CRASH_MAIN_PORT_VER;
                 break;
             case "OUT":
-                port = CONFIGURATION.OUT_PORT;
+                port = CONFIGURATION.CRASH_MAIN_PORT_OUT;
                 break;
             default:
                 return;
         }
         URL url = new URL("http://localhost:" + port + "/DMTBS" + server + "/?wsdl");
-        QName qname = new QName("http://implementation.Replica1.Replicas/", server + "ImplementationService");
+        QName qname = new QName("http://implementation.CrashReplica.Replicas/", server + "ImplementationService");
         Service service = Service.create(url, qname);
         MasterServerRef = service.getPort(MTBSInterface.class);
         System.out.println("Params setting done");
@@ -141,14 +139,12 @@ public class ReplicaManager {
     public static void main(String[] args) throws Exception {
         arr = args;
         try {
-            ReplicaManager replicaManager = new ReplicaManager(5000);
+            ReplicaManager replicaManager = new ReplicaManager(CONFIGURATION.CRASH_MAIN_RM);
             replicaManager.start();
 
 
         } catch (Exception e) {
-            System.out.println("Error in adminClient: " + e);
+            System.out.println("Error in Crash Replica: " + e);
         }
-        ReplicaManager replicaManager = new ReplicaManager(5000);
-        replicaManager.start();
     }
 }
