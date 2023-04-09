@@ -24,6 +24,11 @@ public class OUTImpl {
         System.out.println("OUT is running and available at " + url + "?wsdl");
     }
 
+    public void test() {
+        System.out.println("AOOOOOOOOOOOOOOOOOOO");
+        System.exit(0);
+    }
+
     @WebMethod
     public String addMovieSlotsOUT(String adminID, String movieID, String movieName, int bookingCapacity) {
         Date date = new Date();

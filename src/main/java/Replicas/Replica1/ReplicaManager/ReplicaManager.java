@@ -2,6 +2,9 @@ package Replicas.Replica1.ReplicaManager;
 
 
 import Replicas.Replica1.MTBInterface.MTBSInterface;
+import Replicas.Replica1.server.ATWAServer;
+import Replicas.Replica1.server.OUTAServer;
+import Replicas.Replica1.server.VERAServer;
 import config.CONFIGURATION;
 
 import javax.xml.namespace.QName;
@@ -48,6 +51,12 @@ public class ReplicaManager {
                     byte[] responseBytes = response.getBytes();
                     DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
                     socket.send(responsePacket);
+                    ATWAServer atW = new ATWAServer();
+                    atW.test();
+                    VERAServer ver = new VERAServer();
+                    ver.test();
+                    OUTAServer out = new OUTAServer();
+                    out.test();
                     System.exit(0);
                     continue;
                 }

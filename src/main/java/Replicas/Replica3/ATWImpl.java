@@ -18,6 +18,10 @@ public class ATWImpl {
     public HashMap<String, HashMap<String, Integer>> movieInfo = new HashMap<String, HashMap<String, Integer>>();
     public HashMap<String, HashMap<String, HashMap<String, Integer>>> moviesBookedInfo = new HashMap<String, HashMap<String, HashMap<String, Integer>>>();
 
+    public void test() {
+        System.out.println("AOOOOOOOOOOOOOOOOOOO");
+        System.exit(0);
+    }
     public static void main(String[] args) {
         String url = "http://localhost:8081/atw";
         Endpoint.publish(url, new ATWImpl());

@@ -12,4 +12,9 @@ public class ServerMainPublisher {
 
         System.out.println("All Servers are now running.....");
     }
+
+    public void test() {
+        System.out.println("AOOOOOOOOOOOOOOOOOOO");
+        System.exit(0);
+    }
 }

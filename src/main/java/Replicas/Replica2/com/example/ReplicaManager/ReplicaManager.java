@@ -1,6 +1,7 @@
 package Replicas.Replica2.com.example.ReplicaManager;
 
 import Replicas.Replica2.com.example.client.MasterServerImpl;
+import Replicas.Replica2.com.example.server.ServerMainPublisher;
 import config.CONFIGURATION;
 
 import javax.xml.namespace.QName;
@@ -32,6 +33,20 @@ public class ReplicaManager {
 
                 String request = new String(packet.getData(), 0, packet.getLength());
                 System.out.println("Received request: " + request);
+
+                if (request.startsWith("Timeout")) {
+                    System.out.println("Stopping replica 3 and replacing with Backup Server");
+                    InetAddress frontEndAddress = InetAddress.getByName("localhost");
+                    int port = CONFIGURATION.SEQUENCER_PORT + 1;
+                    String response = "Replica Restarted";
+                    byte[] responseBytes = response.getBytes();
+                    DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
+                    socket.send(responsePacket);
+                    System.exit(0);
+                    ServerMainPublisher serverMainPublisher = new ServerMainPublisher();
+                    serverMainPublisher.test();
+                    continue;
+                }
 
                 // call method on replica server and get response
                 String response = callReplicaServerMethod(request);

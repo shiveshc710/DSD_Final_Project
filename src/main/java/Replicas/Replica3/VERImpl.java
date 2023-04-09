@@ -23,6 +23,12 @@ public class VERImpl {
         Endpoint.publish(url, new VERImpl());
         System.out.println("VER is running and available at " + url + "?wsdl");
     }
+
+    public void test() {
+        System.out.println("AOOOOOOOOOOOOOOOOOOO");
+        System.exit(0);
+    }
+
     @WebMethod
     public String addMovieSlotsVER(String adminID, String movieID, String movieName, int bookingCapacity) {
         Date date = new Date();
