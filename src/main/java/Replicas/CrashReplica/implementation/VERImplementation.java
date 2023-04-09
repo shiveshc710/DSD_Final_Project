@@ -1,8 +1,9 @@
-package Replicas.Replica1.implementation;
+package Replicas.CrashReplica.implementation;
 
-import Replicas.Replica1.MTBInterface.MTBSInterface;
-import Replicas.Replica1.model.BookingDetails;
+import Replicas.CrashReplica.MTBInterface.MTBSInterface;
 import config.CONFIGURATION;
+import Replicas.CrashReplica.model.BookingDetails;
+
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import java.io.IOException;
@@ -19,7 +20,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-@WebService(endpointInterface = "Replicas.Replica1.MTBInterface.MTBSInterface")
+@WebService(endpointInterface = "Replicas.CrashReplica.MTBInterface.MTBSInterface")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
 public class VERImplementation implements MTBSInterface {
 

@@ -19,6 +19,8 @@ public class FrontEnd {
     private int frontEndPort;
     private int clientPort;
 
+    private boolean isCrashReplica = false;
+
     public FrontEnd(String sequencerAddr, int sequencerPrt, String[] replicaAddrs, int[] replicaPrt, int timeoutMs, int frontEndPrt) throws UnknownHostException, SocketException {
         this.clientSocket = new DatagramSocket(frontEndPrt);
         this.replicaSocket = new DatagramSocket(frontEndPrt + 1);
@@ -68,52 +70,52 @@ public class FrontEnd {
                 // Receive responses from replicas
                 String[] responses = new String[numReplicas];
                 int numResponses = 0;
+                String response = null;
                 for (int i = 0; i < numReplicas; i++) {
                     try {
                         replicaSocket.setSoTimeout(timeout);
                         DatagramPacket replicaResponse = new DatagramPacket(new byte[1024], 1024);
                         replicaSocket.receive(replicaResponse);
                         int port = replicaResponse.getPort();
-                        String response = new String(replicaResponse.getData(), 0, replicaResponse.getLength());
+                        response = new String(replicaResponse.getData(), 0, replicaResponse.getLength());
                         System.out.println("Received response from replica on port" + port + ": " + response);
                         // Identify which replica the response belongs to based on the port number
                         int replicaId;
                         if (port == 5000) {
                             replicaId = 1;
+                            responses[replicaId - 1] = response;
                         } else if (port == 6000) {
                             replicaId = 2;
+                            responses[replicaId - 1] = response;
+
                         } else if (port == 7000) {
                             replicaId = 3;
+                            responses[replicaId - 1] = response;
+
+                        }else if (port == 8000) {
+                            isCrashReplica = true;
                         } else {
                             System.err.println("Received response from unknown port: " + port);
                             continue;
                         }
-                        responses[replicaId - 1] = response; // Store the response in the correct position of the responses array
+                         // Store the response in the correct position of the responses array
                         numResponses++;
                     } catch (SocketTimeoutException e) {
-                        ///////////////////////////handle everything in this catch. current impl is almost all wrong
-
-
-                        // Identify which replica has timed out and increment its failure count
                         int replicaId = i + 1;
                         System.err.println("Timeout occurred.");
                         replicaFailures[replicaId - 1]++;
-//                        if (replicaFailures[replicaId-1] > maxFailures) {
-//                            System.err.println("Replica " + replicaId + " has failed.");
-//                            replicaFailures[replicaId-1] = 0;
-//                            for (int j = 0; j < numReplicas; j++) {
-//                                if (j != replicaId-1) {
-////                                    DatagramPacket replicaFailure = new DatagramPacket(new byte[1024], 1024, replicaAddresses[j], replicaPorts[j]);
-////                                    replicaSocket.send(replicaFailure);
-//                                }
-//                            }
-//                        }
                     }
                 }
 
+                if (isCrashReplica) {
+                    for (int i = 0; i < numReplicas; i++) {
+                        if (responses[i] == null) {
+                            responses[i] = response;
+                            response = null;
+                        }
+                    }
+                }
 
-                /////temp response from replica 1
-//                responses[2] = "garbage";
                 // Identify correct response
                 String correctResponse = null;
                 for (int i = 0; i < numReplicas; i++) {
@@ -129,25 +131,11 @@ public class FrontEnd {
                             break;
                         }
 
-//                        else {
-//                            System.err.println("Response from replica " + i + " is incorrect.");
-//                            replicaFailures[i]++;
-//                            if (replicaFailures[i] > maxFailures) {
-//                                System.err.println("Replica " + i + " has failed.");
-//                                replicaFailures[i] = 0;
-//                                for (int j = 0; j < numReplicas; j++) {
-//                                    if (i != j) {
-//                                        DatagramPacket replicaFailure = new DatagramPacket(new byte[1024], 1024, replicaAddresses[j], replicaPorts[j]);
-//                                        replicaSocket.send(replicaFailure);
-//                                    }
-//                                }
-//                            }
-//                        }
                     }
                 }
 
                 //force timeout
-//                responses[0] = null;
+                responses[0] = null;
                 int noResponseServer = -1;
                 //identify which server did not send the response
                 for (int i = 0; i < numReplicas; i++) {

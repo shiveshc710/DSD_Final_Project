@@ -34,7 +34,15 @@ public class CONFIGURATION {
 
 //    Replica Manager Configuration
 
-    public static final String RM_IP = "230.1.1.10";
+    public static final String RM_IP = "localhost";
     public static final int CLIENT_PORT_ADMIN = 4000;
     public static final int CLIENT_PORT_CUSTOMER = 4001;
+
+
+//    Crash Replica Configuration
+
+    public static final int CRASH_MAIN_RM = 8000;
+    public static final int CRASH_MAIN_PORT_ATW = 8001;
+    public static final int CRASH_MAIN_PORT_VER = 8002;
+    public static final int CRASH_MAIN_PORT_OUT = 8003;
 }
