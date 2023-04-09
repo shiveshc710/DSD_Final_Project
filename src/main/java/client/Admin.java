@@ -323,8 +323,7 @@ public class Admin {
         DatagramSocket socket = new DatagramSocket();
 
         // Define the front end's IP address and port number
-        InetAddress frontEndAddress = InetAddress.getByName("localhost");
-        int frontEndPort = 9000;
+        InetAddress frontEndAddress = InetAddress.getByName(CONFIGURATION.FE_IP);
 
         requestData1 = "Admin:" + requestData1;
         // Create the request data
@@ -332,7 +331,7 @@ public class Admin {
         byte[] requestBuffer = requestData.getBytes();
 
         // Create the UDP packet with the request data
-        DatagramPacket requestPacket = new DatagramPacket(requestBuffer, requestBuffer.length, frontEndAddress, frontEndPort);
+        DatagramPacket requestPacket = new DatagramPacket(requestBuffer, requestBuffer.length, frontEndAddress, CONFIGURATION.FE_PORT);
 
         // Send the request packet to the front end
         socket.send(requestPacket);

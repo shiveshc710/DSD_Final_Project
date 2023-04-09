@@ -12,13 +12,8 @@ import java.net.*;
 public class ReplicaManager {
     private int port;
     private static MTBSInterface MasterServerRef;
-    private static com.example.client.MainServerImpl crashMasterServerRef;
     private DatagramSocket socket;
     private boolean running;
-
-    URL url = null;
-    QName qname = null;
-    Service service = null;
     static String[] arr;
 
     public ReplicaManager(int port) {
@@ -28,7 +23,7 @@ public class ReplicaManager {
     public void start() throws Exception {
         running = true;
         try {
-            socket = new DatagramSocket(port);
+            socket = new DatagramSocket(port,InetAddress.getByName(CONFIGURATION.RM1_IP));
             System.out.println("ReplicaManager started on port " + port);
 
 
@@ -42,7 +37,7 @@ public class ReplicaManager {
                 System.out.println("Received request: " + request);
                 if (request.startsWith("Timeout")) {
                     System.out.println("Stopping replica 1 and replacing with Backup Server");
-                    InetAddress frontEndAddress = InetAddress.getByName("localhost");
+                    InetAddress frontEndAddress = InetAddress.getByName(CONFIGURATION.FE_IP);
                     int port = CONFIGURATION.SEQUENCER_PORT + 1;
                     String response = "Replica Restarted";
                     byte[] responseBytes = response.getBytes();
@@ -59,7 +54,7 @@ public class ReplicaManager {
                     // call method on replica server and get response
                     String response = callReplicaServerMethod(request);
                     // send response back to frontend
-                    InetAddress frontEndAddress = InetAddress.getByName("localhost");
+                    InetAddress frontEndAddress = InetAddress.getByName(CONFIGURATION.FE_IP);
                     int port = CONFIGURATION.SEQUENCER_PORT + 1;
                     byte[] responseBytes = response.getBytes();
                     DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
@@ -74,8 +69,8 @@ public class ReplicaManager {
                     response = callReplicaServerMethod(request);
 
                     // send response back to frontend
-                    InetAddress frontEndAddress = InetAddress.getByName("localhost");
-                    int port = 9001;
+                    InetAddress frontEndAddress = InetAddress.getByName(CONFIGURATION.FE_IP);
+                    int port = CONFIGURATION.FE_RECEIVE_PORT;
                     byte[] responseBytes = response.getBytes();
                     DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
                     socket.send(responsePacket);
@@ -147,14 +142,12 @@ public class ReplicaManager {
     public static void main(String[] args) throws Exception {
         arr = args;
         try {
-            ReplicaManager replicaManager = new ReplicaManager(5000);
+            ReplicaManager replicaManager = new ReplicaManager(CONFIGURATION.RM1_PORT);
             replicaManager.start();
 
 
         } catch (Exception e) {
             System.out.println("Error in adminClient: " + e);
         }
-        ReplicaManager replicaManager = new ReplicaManager(5000);
-        replicaManager.start();
     }
 }

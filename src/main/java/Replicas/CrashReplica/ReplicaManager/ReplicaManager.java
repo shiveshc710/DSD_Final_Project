@@ -26,7 +26,7 @@ public class ReplicaManager {
     public void start() throws Exception {
         running = true;
         try {
-            socket = new DatagramSocket(port);
+            socket = new DatagramSocket(port,InetAddress.getByName(CONFIGURATION.CRASH_RM_IP));
             System.out.println("ReplicaManager started on port " + port);
 
 
@@ -38,11 +38,6 @@ public class ReplicaManager {
 
                 String request = new String(packet.getData(), 0, packet.getLength());
                 System.out.println("Received request: " + request);
-                if (request.startsWith("Timeout")) {
-                    System.out.println("Stopping replica 1 and replacing with Backup Server");
-                    System.exit(0);
-                    continue;
-                }
 
                 boolean backupRequest = request.contains("backup");
 
@@ -62,8 +57,8 @@ public class ReplicaManager {
                     response = callReplicaServerMethod(request);
 
                     // send response back to frontend
-                    InetAddress frontEndAddress = InetAddress.getByName("localhost");
-                    int port = 9001;
+                    InetAddress frontEndAddress = InetAddress.getByName(CONFIGURATION.FE_IP);
+                    int port = CONFIGURATION.FE_RECEIVE_PORT;
                     byte[] responseBytes = response.getBytes();
                     DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
                     socket.send(responsePacket);

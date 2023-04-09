@@ -156,7 +156,7 @@ public class VERImplementation implements MTBSInterface {
 
                         String finalCustomers = customers;
 
-                         atw_result = udpThread("removeSlots:" + finalCustomers + " " + movieName, CONFIGURATION.ATW_LISTENER);
+                         atw_result = udpThread("removeSlots:" + finalCustomers + " " + movieName, CONFIGURATION.CRASH_ATW_LISTENER);
 
                         if (atw_result.contains("success")){
                             VERdata.get(movieName).remove(movieID);
@@ -164,7 +164,7 @@ public class VERImplementation implements MTBSInterface {
                             log = "Slot is deleted and booking is now transferred to Verdun show: " + atw_result.split(" ")[1];
 
                         }else {
-                            out_result = udpThread("removeSlots:" + finalCustomers + " " + movieName, CONFIGURATION.OUT_LISTENER);
+                            out_result = udpThread("removeSlots:" + finalCustomers + " " + movieName, CONFIGURATION.CRASH_OUT_LISTENER);
                             if (out_result.contains("success")){
                                 VERdata.get(movieName).remove(movieID);
                                 result = "Success";
@@ -206,13 +206,13 @@ public class VERImplementation implements MTBSInterface {
 
         new Thread() {
             public void run() {
-                out_result = udpThread("showsList:" + movieName, CONFIGURATION.OUT_LISTENER);
+                out_result = udpThread("showsList:" + movieName, CONFIGURATION.CRASH_OUT_LISTENER);
             }
         }.start();
 
         new Thread() {
             public void run() {
-                atw_result = udpThread("showsList:" + movieName, CONFIGURATION.ATW_LISTENER);
+                atw_result = udpThread("showsList:" + movieName, CONFIGURATION.CRASH_ATW_LISTENER);
             }
         }.start();
 
@@ -292,10 +292,10 @@ public class VERImplementation implements MTBSInterface {
 
             if (totalBookings <= 2) {
                 if (movieID.contains(CONFIGURATION.OUTSERVER)) {
-                    result = udpThread("bookTickets:" + customerID + " " + movieID + " " + movieName + " " + numberOfTickets, CONFIGURATION.OUT_LISTENER);
+                    result = udpThread("bookTickets:" + customerID + " " + movieID + " " + movieName + " " + numberOfTickets, CONFIGURATION.CRASH_OUT_LISTENER);
 
                 } else if (movieID.contains(CONFIGURATION.ATWSERVER)) {
-                    result = udpThread("bookTickets:" + customerID + " " + movieID + " " + movieName + " " + numberOfTickets, CONFIGURATION.ATW_LISTENER);
+                    result = udpThread("bookTickets:" + customerID + " " + movieID + " " + movieName + " " + numberOfTickets, CONFIGURATION.CRASH_ATW_LISTENER);
                 } else {
                     result = "Failed";
                     log = "Failed : Invalid movieID";
@@ -345,14 +345,14 @@ public class VERImplementation implements MTBSInterface {
         new Thread(){
             @Override
             public void run() {
-                atw_result = udpThread("showsSchedule:" + customerID,CONFIGURATION.ATW_LISTENER);
+                atw_result = udpThread("showsSchedule:" + customerID,CONFIGURATION.CRASH_ATW_LISTENER);
             }
         }.start();
 
         new Thread(){
             @Override
             public void run() {
-                out_result = "\n"+udpThread("showsSchedule:" + customerID,CONFIGURATION.OUT_LISTENER);
+                out_result = "\n"+udpThread("showsSchedule:" + customerID,CONFIGURATION.CRASH_OUT_LISTENER);
             }
         }.start();
 
@@ -437,7 +437,7 @@ public class VERImplementation implements MTBSInterface {
             case "ATW":
                 new Thread() {
                     public void run() {
-                        atw_result = udpThread("cancelTickets:" + serverData, CONFIGURATION.ATW_LISTENER);
+                        atw_result = udpThread("cancelTickets:" + serverData, CONFIGURATION.CRASH_ATW_LISTENER);
                     }
                 }.start();
                 result = atw_result;
@@ -446,7 +446,7 @@ public class VERImplementation implements MTBSInterface {
                 result = "";
                 new Thread() {
                     public void run() {
-                        out_result = udpThread("cancelTickets:" + serverData, CONFIGURATION.OUT_LISTENER);
+                        out_result = udpThread("cancelTickets:" + serverData, CONFIGURATION.CRASH_OUT_LISTENER);
                     }
                 }.start();
                 result = out_result;
@@ -487,7 +487,7 @@ public class VERImplementation implements MTBSInterface {
         } else if(movieID.substring(0, 3).equals(CONFIGURATION.OUTSERVER)) {
             new Thread() {
                 public void run() {
-                    out_result = udpThread("checkMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.OUT_LISTENER);
+                    out_result = udpThread("checkMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.CRASH_OUT_LISTENER);
                     if(out_result.equals("done"))
                     {
                         check=true;
@@ -505,7 +505,7 @@ public class VERImplementation implements MTBSInterface {
         }else if(movieID.substring(0, 3).equals(CONFIGURATION.ATWSERVER)) {
             new Thread() {
                 public void run() {
-                    atw_result = udpThread("checkMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.ATW_LISTENER);
+                    atw_result = udpThread("checkMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.CRASH_ATW_LISTENER);
                     if(atw_result.equals("done"))
                     {
                         check=true;
@@ -541,7 +541,7 @@ public class VERImplementation implements MTBSInterface {
         } else if(new_movieID.substring(0, 3).equals(CONFIGURATION.OUTSERVER)) {
             new Thread() {
                 public void run() {
-                    out_result = udpThread("checkNewMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.OUT_LISTENER);
+                    out_result = udpThread("checkNewMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.CRASH_OUT_LISTENER);
                     if(out_result.equals("done"))
                     {
                         newCheck=true;
@@ -559,7 +559,7 @@ public class VERImplementation implements MTBSInterface {
         }else if(new_movieID.substring(0, 3).equals(CONFIGURATION.ATWSERVER)) {
             new Thread() {
                 public void run() {
-                    atw_result = udpThread("checkNewMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.ATW_LISTENER);
+                    atw_result = udpThread("checkNewMovieTicket:" + customerID + " " + old_movieName + " " + movieID + " " + new_movieID +" "+new_movieName+" "+ numberOfTickets, CONFIGURATION.CRASH_ATW_LISTENER);
                     if(atw_result.equals("done"))
                     {
                         newCheck=true;
@@ -634,7 +634,7 @@ public class VERImplementation implements MTBSInterface {
             new Thread() {
                 @Override
                 public void run() {
-                    atw_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.ATW_LISTENER);
+                    atw_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.CRASH_ATW_LISTENER);
                     atw_result = atw_result.replace("----------Atwater----------", "Atwater");
 
                 }
@@ -644,7 +644,7 @@ public class VERImplementation implements MTBSInterface {
             new Thread() {
                 @Override
                 public void run() {
-                    out_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.OUT_LISTENER);
+                    out_result = udpThread("showsSchedule:" + customerID, CONFIGURATION.CRASH_OUT_LISTENER);
                     out_result = out_result.replace("----------Outremont----------", "Outremont");
                 }
             }.start();

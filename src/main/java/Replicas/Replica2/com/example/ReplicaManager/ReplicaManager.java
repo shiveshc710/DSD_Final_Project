@@ -21,7 +21,7 @@ public class ReplicaManager {
     public void start() {
         running = true;
         try {
-            socket = new DatagramSocket(port);
+            socket = new DatagramSocket(port,InetAddress.getByName(CONFIGURATION.RM2_IP));
             System.out.println("ReplicaManager started on port " + port);
 
             while (running) {
@@ -34,7 +34,7 @@ public class ReplicaManager {
                 System.out.println("Received request: " + request);
                 if (request.startsWith("Timeout")) {
                     System.out.println("Stopping replica 1 and replacing with Backup Server");
-                    InetAddress frontEndAddress = InetAddress.getByName("localhost");
+                    InetAddress frontEndAddress = InetAddress.getByName(CONFIGURATION.FE_IP);
                     int port = CONFIGURATION.SEQUENCER_PORT + 1;
                     String response = "Replica Restarted";
                     byte[] responseBytes = response.getBytes();
@@ -47,8 +47,8 @@ public class ReplicaManager {
                 String response = callReplicaServerMethod(request);
 
                 // send response back to frontend
-                InetAddress frontEndAddress = InetAddress.getByName("localhost");
-                int port = 9001;
+                InetAddress frontEndAddress = InetAddress.getByName(CONFIGURATION.FE_IP);
+                int port = CONFIGURATION.FE_RECEIVE_PORT;
                 byte[] responseBytes = response.getBytes();
                 DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, frontEndAddress, port);
                 socket.send(responsePacket);
@@ -95,7 +95,7 @@ public class ReplicaManager {
         } catch (Exception e) {
             System.out.println("Error in adminClient: " + e);
         }
-        ReplicaManager replicaManager = new ReplicaManager(6000);
+        ReplicaManager replicaManager = new ReplicaManager(CONFIGURATION.RM2_PORT);
         replicaManager.start();
     }
 }
