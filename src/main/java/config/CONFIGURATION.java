@@ -36,7 +36,7 @@ public class CONFIGURATION {
 
 //    Sequencer Configuration
 
-    public static final String SEQUENCER_IP = "192.168.2.18";
+    public static final String SEQUENCER_IP = "10.0.0.9";
     public static final int SEQUENCER_PORT = 1333;
 
 //    Replica Manager Configuration
@@ -45,10 +45,10 @@ public class CONFIGURATION {
     public static final int RM2_PORT = 6000;
     public static final int RM3_PORT = 7000;
 
-    public static final String RM1_IP = "localhost";
-    public static final String RM2_IP = "localhost";
-    public static final String RM3_IP = "localhost";
-    public static final String CRASH_RM_IP = "localhost";
+    public static final String RM1_IP = "10.0.0.179";
+    public static final String RM2_IP = "10.0.0.179";
+    public static final String RM3_IP = "10.0.0.179";
+    public static final String CRASH_RM_IP = "10.0.0.179";
     public static final int CLIENT_PORT_ADMIN = 4000;
     public static final int CLIENT_PORT_CUSTOMER = 4001;
 
@@ -65,6 +65,6 @@ public class CONFIGURATION {
     public static final int FE_PORT = 9000;
     public static final int TIMEOUT = 5000;
 
-    public static final String FE_IP = "localhost";
+    public static final String FE_IP = "10.0.0.9";
     public static final int FE_RECEIVE_PORT = 9001;
 }
