@@ -87,15 +87,24 @@ public class MasterServerImpl implements BookingSystemInterface {
                 if (atwServerREF == null) {
                     this.createATWObject();
                 }
+                if (!movieID.startsWith("ATW")) {
+                    return "Failed";
+                }
                 return atwServerREF.addMovieSlots(adminID, movieID, movieName, bookingCapacity);
             } else if (adminID.startsWith("OUTA")) {
                 if (outServerREF == null) {
                     this.createOUTObject();
                 }
+                if (!movieID.startsWith("OUT")) {
+                    return "Failed";
+                }
                 return outServerREF.addMovieSlots(adminID, movieID, movieName, bookingCapacity);
             } else if (adminID.startsWith("VERA")) {
                 if (verServerREF == null) {
                     this.createVERObject();
+                }
+                if (!movieID.startsWith("VER")) {
+                    return "Failed";
                 }
                 return verServerREF.addMovieSlots(adminID, movieID, movieName, bookingCapacity);
             }
@@ -103,7 +112,7 @@ public class MasterServerImpl implements BookingSystemInterface {
             System.out.println("Error Occured while adding movie: " + e);
         }
 
-        return "Unsuccessful";
+        return "Failed";
     }
 
 
@@ -137,7 +146,7 @@ public class MasterServerImpl implements BookingSystemInterface {
         }catch (Exception e) {
             System.out.println("Error Occurred: " + e);
         }
-        return "Unsuccessful";
+        return "Failed";
     }
 
     /**
@@ -163,8 +172,7 @@ public class MasterServerImpl implements BookingSystemInterface {
 
             String completeAns = atwServerREF.listMovieShowsAvailability(movieName) + outServerREF.listMovieShowsAvailability(movieName) + verServerREF.listMovieShowsAvailability(movieName);
 
-
-            return completeAns;
+            return completeAns.equals("") ? "No result Found!!" : completeAns;
         } catch (Exception e) {
             System.out.println("Error Occurred in main server: " + e);
             return null;
@@ -233,9 +241,21 @@ public class MasterServerImpl implements BookingSystemInterface {
 
             String completeAns = "";
 
-            completeAns = "----------Atwater----------\n" + atwServerREF.getBookingSchedule(customerID) +
-                    "----------Verdun----------\n" + verServerREF.getBookingSchedule(customerID) +
-                    "----------Outremont----------\n" + outServerREF.getBookingSchedule(customerID);
+            String atwresult = atwServerREF.getBookingSchedule(customerID);
+            String verresult = verServerREF.getBookingSchedule(customerID);
+            String outresult = outServerREF.getBookingSchedule(customerID);
+
+            if (atwresult.equals(""))
+                atwresult = "No Bookings found\n";
+            if (verresult.equals(""))
+                verresult = "No Bookings found\n";
+            if (outresult.equals(""))
+                outresult = "No Bookings found\n";
+
+
+            completeAns = "----------Atwater----------\n" + atwresult +
+                    "----------Verdun----------\n" + verresult +
+                    "----------Outremont----------\n" + outresult;
 
 
             return completeAns;
@@ -284,20 +304,20 @@ public class MasterServerImpl implements BookingSystemInterface {
             String requestParameters = customerID + "," + movieID + "," + movieName + "," + new_movieID + "," + new_movieName + "," + numberOfTickets;
             try {
                 String ans = cancelMovieTickets(customerID, movieID, movieName, numberOfTickets);
-                if (ans.equals("Successfully cancelled booking!")) {
+                if (ans.equals("Success")) {
                     ans = bookMovieTickets(customerID, new_movieID, new_movieName, numberOfTickets);
-                    if (ans.equals("Successfully Booked!")) {
-                        return "Success. Tickets Exchanged";
+                    if (ans.equals("Success")) {
+                        return "Success";
                     } else {
                         bookMovieTickets(customerID, movieID, movieName, numberOfTickets);
-                        return "Exchange failed!";
+                        return "Failed";
                     }
                 }
                 return ans;
             } catch (Exception e) {
                 System.out.println("Exception in server: " + e);
                 LoggingHelper.log(this.getClass().getName(), "Exchange Tickets", requestParameters, "Failed!", "Failed!");
-                return "Unsuccessful in exchanging the tickets!";
+                return "Failed";
            }
 
     }

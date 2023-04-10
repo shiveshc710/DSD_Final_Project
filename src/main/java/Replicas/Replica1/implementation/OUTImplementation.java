@@ -365,6 +365,16 @@ public class OUTImplementation implements MTBSInterface {
             e1.printStackTrace();
         }
 
+        if (result.equals(""))
+            result = "No Bookings found\n";
+
+        if (ver_result.equals(""))
+            ver_result = "No Bookings found\n";
+
+        if (atw_result.equals(""))
+            atw_result = "No Bookings found\n";
+
+
         String final_result = "----------Atwater----------\n" + atw_result + "----------Verdun----------\n" + ver_result + "----------Outremont----------\n" + result;
 
         log = final_result.trim().isEmpty() ? "No result Found!!" : "Bookings found from all servers for user : " + customerID;
@@ -410,7 +420,7 @@ public class OUTImplementation implements MTBSInterface {
     @Override
     public String cancelMovieTickets(String customerID, String movieId, String movieName, int numberOfTickets){
         String status = "failed";
-        String log = "No bookings found";
+        String log = "No Bookings found\n";
         String result = "Failed";
 
         String server = movieId.substring(0,3);

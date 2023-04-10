@@ -25,6 +25,10 @@ public class MainServerImpl {
 
         if (adminID.startsWith("ATW")) {
             try {
+                if (!movieID.startsWith("ATW")) {
+                    result = "Failed";
+                    return result;
+                }
                 URL url = new URL("http://localhost:8081/atw?wsdl");
                 QName qname = new QName("http://example.com/atw", "ATWImplService");
                 Service service = Service.create(url, qname);
@@ -35,6 +39,10 @@ public class MainServerImpl {
                 e.printStackTrace(System.err);
             }
         } else if (adminID.startsWith("VER")) {
+            if (!movieID.startsWith("VER")) {
+                result = "Failed";
+                return result;
+            }
             try {
                 URL url = new URL("http://localhost:8082/ver?wsdl");
                 QName qname = new QName("http://example.com/ver", "VERImplService");
@@ -46,6 +54,10 @@ public class MainServerImpl {
                 e.printStackTrace(System.err);
             }
         } else if (adminID.startsWith("OUT")) {
+            if (!movieID.startsWith("OUT")) {
+                result = "Failed";
+                return result;
+            }
             try {
                 URL url = new URL("http://localhost:8083/out?wsdl");
                 QName qname = new QName("http://example.com/out", "OUTImplService");
@@ -128,7 +140,7 @@ public class MainServerImpl {
             e.printStackTrace(System.err);
         }
         System.out.println(result);
-        return result;
+        return result.equals("") ? "No result Found!!" : result;
     }
 
     @WebMethod
@@ -246,7 +258,12 @@ public class MainServerImpl {
             QName qname = new QName("http://example.com/atw", "ATWImplService");
             Service service = Service.create(url, qname);
             com.example.client.ATWImpl atwImpl = service.getPort(com.example.client.ATWImpl.class);
-            result += atwImpl.getBookingScheduleATW(customerID);
+            String atwresult = atwImpl.getBookingScheduleATW(customerID);
+            if (atwresult.equals(""))
+                atwresult = "No Bookings found\n";
+
+            result += atwresult;
+
         } catch (Exception e) {
             System.err.println("ERROR: " + e);
             e.printStackTrace(System.err);
@@ -257,7 +274,12 @@ public class MainServerImpl {
             QName qname = new QName("http://example.com/ver", "VERImplService");
             Service service = Service.create(url, qname);
             com.example.client.VERImpl verImpl = service.getPort(com.example.client.VERImpl.class);
-            result += verImpl.getBookingScheduleVER(customerID);
+            String verresult = verImpl.getBookingScheduleVER(customerID);
+
+            if (verresult.equals(""))
+                verresult = "No Bookings found\n";
+
+            result += verresult;
         } catch (Exception e) {
             System.err.println("ERROR: " + e);
             e.printStackTrace(System.err);
@@ -268,7 +290,12 @@ public class MainServerImpl {
             QName qname = new QName("http://example.com/out", "OUTImplService");
             Service service = Service.create(url, qname);
             com.example.client.OUTImpl outImpl = service.getPort(com.example.client.OUTImpl.class);
-            result += outImpl.getBookingScheduleOUT(customerID);
+            String outresult = outImpl.getBookingScheduleOUT(customerID);
+
+            if (outresult.equals(""))
+                outresult = "No Bookings found\n";
+
+            result += outresult;
         } catch (Exception e) {
             System.err.println("ERROR: " + e);
             e.printStackTrace(System.err);

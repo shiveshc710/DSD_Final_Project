@@ -81,7 +81,7 @@ public class OUTServerImpl implements BookingSystemInterface {
     public String removeMovieSlots(String adminID, String movieID, String movieName) {
         String requestParameters = adminID + "," + movieID + "," + movieName;
         try {
-            if (movies.containsKey(movieName)) {
+            if (movies.get(movieName).containsKey(movieID)) {
                 HashMap<String, Integer> possibleMovie = movies.get(movieName);
                 movies.get(movieName).remove(movieID);
                 LoggingHelper.log(this.getClass().getName(), "Remove Movie Slots", requestParameters, "Success!", "Success!");

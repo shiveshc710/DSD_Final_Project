@@ -411,7 +411,7 @@ public class OUTImplementation implements MTBSInterface {
     @Override
     public String cancelMovieTickets(String customerID, String movieId, String movieName, int numberOfTickets){
         String status = "failed";
-        String log = "No bookings found";
+        String log = "No Bookings found\n";
         String result = "Failed";
 
         String server = movieId.substring(0,3);

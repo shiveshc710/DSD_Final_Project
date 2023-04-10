@@ -359,6 +359,16 @@ public class VERImplementation implements MTBSInterface {
             e1.printStackTrace();
         }
 
+        if (result.equals(""))
+            result = "No Bookings found\n";
+
+        if (atw_result.equals(""))
+            atw_result = "No Bookings found\n";
+
+        if (out_result.equals(""))
+            out_result = "No Bookings found\n";
+
+
         String final_result = "----------Atwater----------\n" + atw_result + "----------Verdun----------\n" + result + "----------Outremont----------\n" + out_result;
 
 
@@ -404,7 +414,7 @@ public class VERImplementation implements MTBSInterface {
     @Override
     public String cancelMovieTickets(String customerID, String movieId, String movieName, int numberOfTickets) {
         String status = "failed";
-        String log = "No bookings found";
+        String log = "No Bookings found\n";
         String result = "Failed";
 
 
