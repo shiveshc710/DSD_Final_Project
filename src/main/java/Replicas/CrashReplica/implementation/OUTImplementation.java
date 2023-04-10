@@ -206,7 +206,7 @@ public class OUTImplementation implements MTBSInterface {
         if (result.contains("OUTA") | result.contains("OUTM")| result.contains("OUTE"))
             result += "\n";
         else
-            result += "No bookings available,";
+            result += "";
 
         new Thread() {
             public void run() {
@@ -318,7 +318,7 @@ public class OUTImplementation implements MTBSInterface {
     public String getBookingSchedule(String customerID){
         String key = null;
         String log = "";
-        String result = "----------Outremont----------\n";
+        String result = "";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : OUTdata.entrySet()) {
             key = set.getKey();
@@ -342,10 +342,7 @@ public class OUTImplementation implements MTBSInterface {
         if (result.contains("OUTA") | result.contains("OUTM")| result.contains("OUTE"))
             result += "";
         else
-            result += "";
-
-        ver_result = "----------Verdun----------\n";
-        atw_result = "----------Atwater----------\n";
+            result = "";
 
         new Thread(){
             @Override
@@ -368,7 +365,8 @@ public class OUTImplementation implements MTBSInterface {
             e1.printStackTrace();
         }
 
-        String final_result = result + ver_result + atw_result;
+        String final_result = "----------Atwater----------\n" + atw_result + "----------Verdun----------\n" + ver_result + "----------Outremont----------\n" + result;
+
 
         log = final_result.trim().isEmpty() ? "No result Found!!" : "Bookings found from all servers for user : " + customerID;
         writeLog(log);
@@ -403,7 +401,7 @@ public class OUTImplementation implements MTBSInterface {
         if (result.contains("OUTA") | result.contains("OUTM")| result.contains("OUTE"))
             result += "\n";
         else
-            result += "";
+            result = "";
 
         log = result.trim().isEmpty() ? "No result Found!!" : "Bookings found for Outremont server for user "+ customerID;
         writeLog(log);

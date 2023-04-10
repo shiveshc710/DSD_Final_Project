@@ -214,7 +214,7 @@ public class ATWServerImpl implements BookingSystemInterface {
 
                 for (int i = 0; i < allCustomerBookings.size(); i++) {
                     String[] details = allCustomerBookings.get(i);
-                    ans += i + 1 + "." + " Your Booking is confirmed for Movie: " + details[1] + " with Movie ID: " + details[0] + " of these many Tickets: " + details[2];
+                    ans += "Movie Name: " + details[1] + " | Show ID: " + details[0] + " | Tickets Booked: " + details[2];
                     ans += "\n";
                 }
                 return ans;

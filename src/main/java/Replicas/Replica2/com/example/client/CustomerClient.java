@@ -20,7 +20,7 @@ public class CustomerClient {
     public static void main(String[] args) {
 
         try {
-            URL url = new URL("http://localhost:"+CONFIGURATION.Main_PORT_2+"/masterservice?wsdl");
+            URL url = new URL("http://localhost:"+CONFIGURATION.SERVER_MAIN_PUBLISHER_PORT +"/masterservice?wsdl");
             QName qname = new QName("http://example.com/master", "MasterServerImplService");
             Service service = Service.create(url, qname);
             MasterServerRef = service.getPort(MasterServerImpl.class);

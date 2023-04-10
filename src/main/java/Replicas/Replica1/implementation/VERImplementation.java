@@ -201,7 +201,7 @@ public class VERImplementation implements MTBSInterface {
         if (result.contains("VERA") | result.contains("VERM")| result.contains("VERE"))
             result += "\n";
         else
-            result += "No bookings available,";
+            result += "";
 
         new Thread() {
             public void run() {
@@ -313,7 +313,7 @@ public class VERImplementation implements MTBSInterface {
     public String getBookingSchedule(String customerID) {
         String key = null;
         String log = "";
-        String result = "----------Verdun----------\n";
+        String result = "";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : VERdata.entrySet()) {
             key = set.getKey();
@@ -336,10 +336,7 @@ public class VERImplementation implements MTBSInterface {
         if (result.contains("VERA") | result.contains("VERM")| result.contains("VERE"))
             result += "";
         else
-            result += "";
-
-        atw_result = "----------Atwater----------\n";
-        out_result = "----------Outremont----------\n";
+            result = "";
 
         new Thread(){
             @Override
@@ -362,7 +359,8 @@ public class VERImplementation implements MTBSInterface {
             e1.printStackTrace();
         }
 
-        String final_result = result + out_result + atw_result;
+        String final_result = "----------Atwater----------\n" + atw_result + "----------Verdun----------\n" + result + "----------Outremont----------\n" + out_result;
+
 
         log = final_result.trim().isEmpty() ? "No result Found!!" : "Bookings found from all servers for user : " + customerID;
         writeLog(log);
@@ -374,7 +372,7 @@ public class VERImplementation implements MTBSInterface {
     public String getBookingScheduleForServer(String customerID) {
         String key = null;
         String log = "";
-        String result = "----------Verdun----------\n";
+        String result = "";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : VERdata.entrySet()) {
             key = set.getKey();
@@ -396,7 +394,7 @@ public class VERImplementation implements MTBSInterface {
         if (result.contains("VERA") | result.contains("VERM")| result.contains("VERE"))
             result += "\n";
         else
-            result += "";
+            result = "";
 
         log = result.trim().isEmpty() ? "No result Found!!" : "Bookings found for Verdun server for user "+ customerID;
         writeLog(log);

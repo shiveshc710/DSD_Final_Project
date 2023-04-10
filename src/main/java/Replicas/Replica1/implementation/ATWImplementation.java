@@ -204,7 +204,7 @@ public class ATWImplementation implements MTBSInterface {
         if (result.contains("ATWA") | result.contains("ATWM")| result.contains("ATWE"))
             result += "\n";
         else
-            result += "No bookings available,";
+            result += "";
 
         new Thread() {
             public void run() {
@@ -317,7 +317,7 @@ public class ATWImplementation implements MTBSInterface {
     public String getBookingSchedule(String customerID)  {
         String key = null;
         String log = "";
-        String result = "----------Atwater----------\n";
+        String result = "";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : ATWdata.entrySet()) {
             key = set.getKey();
@@ -340,10 +340,7 @@ public class ATWImplementation implements MTBSInterface {
         if (result.contains("ATWA") | result.contains("ATWM")| result.contains("ATWE"))
             result += "";
         else
-            result += "";
-
-        ver_result = "----------Verdun----------\n";
-        out_result = "----------Outremont----------\n";
+            result = "";
 
         new Thread(){
             @Override
@@ -368,7 +365,7 @@ public class ATWImplementation implements MTBSInterface {
             e1.printStackTrace();
         }
 
-        String final_result = result + ver_result + out_result;
+        String final_result = "----------Atwater----------\n" + result + "----------Verdun----------\n" + ver_result + "----------Outremont----------\n" + out_result;
 
         log = final_result.trim().isEmpty() ? "No result Found!!" : "Bookings found from all servers for user : " + customerID;
         writeLog(log);
@@ -378,7 +375,7 @@ public class ATWImplementation implements MTBSInterface {
     public String getBookingScheduleForServer(String customerID)  {
         String key = null;
         String log = "";
-        String result = "----------Atwater----------\n";
+        String result = "";
 
         for (Map.Entry<String, Map<String, BookingDetails>> set : ATWdata.entrySet()) {
             key = set.getKey();
@@ -402,7 +399,7 @@ public class ATWImplementation implements MTBSInterface {
         if (result.contains("ATWA") | result.contains("ATWM")| result.contains("ATWE"))
             result += "\n";
         else
-            result += "";
+            result = "";
 
         log = result.trim().isEmpty() ? "No result Found!!" : "Bookings found for Atwater server for user "+ customerID;
         writeLog(log);

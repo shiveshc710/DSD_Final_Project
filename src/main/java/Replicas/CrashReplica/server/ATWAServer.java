@@ -28,7 +28,7 @@ public class ATWAServer {
 
     synchronized private static void listenForUDP(ATWImplementation atw_implementation) {
         while (true) {
-            try (DatagramSocket aSocket = new DatagramSocket(CONFIGURATION.ATW_LISTENER)) {
+            try (DatagramSocket aSocket = new DatagramSocket(CONFIGURATION.CRASH_ATW_LISTENER)) {
                 String result = "";
                 byte[] buffer = new byte[1024];
                 DatagramPacket request = new DatagramPacket(buffer, buffer.length);
