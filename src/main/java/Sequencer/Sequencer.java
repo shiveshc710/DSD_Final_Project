@@ -26,7 +26,7 @@ public class Sequencer {
     public static void main(String[] args) throws InterruptedException {
 
         try {
-            aSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT, InetAddress.getByName(CONFIGURATION.HOSTNAME));
+            aSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT, InetAddress.getByName(CONFIGURATION.SEQUENCER_IP));
             byte[] buffer = new byte[1000];
             System.out.println("Sequencer UDP Server Started");
 
@@ -90,7 +90,7 @@ public class Sequencer {
         socket.send(requestPacket);
 
         byte[] buffer = new byte[1000];
-        DatagramSocket receiveSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT+1);
+        DatagramSocket receiveSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT+1, InetAddress.getByName(CONFIGURATION.SEQUENCER_IP));
         DatagramPacket response = new DatagramPacket(buffer, buffer.length);
         receiveSocket.receive(response);
 
@@ -108,6 +108,8 @@ public class Sequencer {
                     requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, CONFIGURATION.CRASH_MAIN_RM);
                     socket = new DatagramSocket();
                     socket.send(requestPacket);
+                    if (backupTemp.size() == 1)
+                        socket.setSoTimeout(5000);
                     socket.close();
                     backupTemp.removeFirst();
 

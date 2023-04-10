@@ -22,8 +22,11 @@ public class FrontEnd {
     private boolean isCrashReplica = false;
 
     public FrontEnd(String sequencerAddr, int sequencerPrt, String[] replicaAddrs, int[] replicaPrt, int timeoutMs, int frontEndPrt) throws UnknownHostException, SocketException {
-        this.clientSocket = new DatagramSocket(frontEndPrt);
-        this.replicaSocket = new DatagramSocket(CONFIGURATION.FE_RECEIVE_PORT);
+        //Request from Client
+        this.clientSocket = new DatagramSocket(frontEndPrt, InetAddress.getByName(CONFIGURATION.FE_IP));
+
+        //Response from Replica
+        this.replicaSocket = new DatagramSocket(CONFIGURATION.FE_RECEIVE_PORT, InetAddress.getByName(CONFIGURATION.FE_IP));
         this.sequencerAddress = InetAddress.getByName(sequencerAddr);
         this.sequencerPort = sequencerPrt;
         this.replicaAddresses = new InetAddress[replicaAddrs.length];
@@ -135,7 +138,7 @@ public class FrontEnd {
                 }
 
                 //force timeout
-                responses[0] = null;
+//                responses[2] = null;
                 int noResponseServer = -1;
                 //identify which server did not send the response
                 for (int i = 0; i < numReplicas; i++) {
@@ -187,7 +190,7 @@ public class FrontEnd {
 
     public static void main(String[] args) throws SocketException, InterruptedException {
         try {
-            String sequencerAddr = CONFIGURATION.HOSTNAME;
+            String sequencerAddr = CONFIGURATION.SEQUENCER_IP;
             int sequencerPort = CONFIGURATION.SEQUENCER_PORT;
             String[] replicaAddrs = {CONFIGURATION.RM1_IP, CONFIGURATION.RM2_IP, CONFIGURATION.RM3_IP};
             int[] replicaPorts = {CONFIGURATION.RM1_PORT, CONFIGURATION.RM2_PORT, CONFIGURATION.RM3_PORT};
