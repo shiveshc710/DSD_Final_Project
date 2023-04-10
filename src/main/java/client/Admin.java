@@ -190,7 +190,7 @@ public class Admin {
 //                            for (int i = 0; i < showsList.length; i++) {
 //                                System.out.println(showsList[i]);
 //                            }
-                            String req100 = "listSlot,"+movieName;
+                            String req100 = "listSlot,"+userID+","+movieName;
                             sendRequest(req100);
                             break;
                         case 4:

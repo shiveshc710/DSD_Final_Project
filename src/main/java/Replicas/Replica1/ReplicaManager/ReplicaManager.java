@@ -86,7 +86,6 @@ public class ReplicaManager {
 
 
     public void setWebServiceParams(String server) throws MalformedURLException {
-        int port = 0;
         switch (server) {
             case "ATW":
                 port = CONFIGURATION.ATW_PORT;
@@ -97,8 +96,6 @@ public class ReplicaManager {
             case "OUT":
                 port = CONFIGURATION.OUT_PORT;
                 break;
-            default:
-                return;
         }
         URL url = new URL("http://localhost:" + port + "/DMTBS" + server + "/?wsdl");
         QName qname = new QName("http://implementation.Replica1.Replicas/", server + "ImplementationService");
@@ -128,7 +125,10 @@ public class ReplicaManager {
         } else if (parts[0].equals("cancel")) {
             ans = MasterServerRef.cancelMovieTickets(parts[1], parts[2], parts[3], Integer.parseInt(parts[4]));
         } else if (parts[0].equals("listSlot")) {
-            ans = MasterServerRef.listMovieShowsAvailability(parts[1]);
+            if (MasterServerRef != null)
+                ans = MasterServerRef.listMovieShowsAvailability(parts[1]);
+            else
+                System.out.println("Laude null hai");
         } else if (parts[0].equals("listbook")) {
             ans = MasterServerRef.getBookingSchedule(parts[1]);
         } else if (parts[0].equals("exchangeTickets")) {
