@@ -6,7 +6,7 @@ public class CONFIGURATION {
 //    Ports
 
     //    Replica 1 Ports
-    public static final int RM1_PORT = 5000;
+    public static final int RM1_PORT = 5007;
     public static final int ATW_PORT = 5000;
     public static final int VER_PORT = 5001;
     public static final int OUT_PORT = 5002;
@@ -39,6 +39,8 @@ public class CONFIGURATION {
 
     //    Sequencer
     public static final int SEQUENCER_PORT = 1333;
+    public static final int SEQUENCER_BACKUP_PORT = 8006;
+
 
     //    Client Ports
     public static final int CLIENT_PORT_ADMIN = 4000;

@@ -150,7 +150,7 @@ public class OUTServerImpl implements BookingSystemInterface {
                 Set<String> keys = shows.keySet();
                 System.out.print(movieName + ": ");
                 for (String key : keys) {
-                    ans += key + ": " + shows.get(key) + " ";
+                    ans += key + ": " + shows.get(key) + "\n";
                 }
                 return ans;
             } else {

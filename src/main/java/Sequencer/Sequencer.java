@@ -82,44 +82,52 @@ public class Sequencer {
         InetAddress multicastAddress = InetAddress.getByName(address);
         String timeoutRequestData = "Timeout";
         LinkedList<SequenceModel> backupTemp = backupRequestQueue;
-
-        //Sending UDP request to Replica Manager to reInstantiate the servers
-        byte[] timeoutRequestBuffer = timeoutRequestData.getBytes();
-        DatagramPacket requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, port);
-        DatagramSocket socket = new DatagramSocket();
-        socket.send(requestPacket);
-
-        byte[] buffer = new byte[1000];
-        DatagramSocket receiveSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT+1, InetAddress.getByName(CONFIGURATION.SEQUENCER_IP));
-        DatagramPacket response = new DatagramPacket(buffer, buffer.length);
-        receiveSocket.receive(response);
-
-        String sentence = new String(response.getData(), 0, response.getLength());
-        socket.close();
-        receiveSocket.close();
-
-        if (sentence.equals("Replica Restarted")) {
+//
+//        //Sending UDP request to Replica Manager to reInstantiate the servers
+//        byte[] timeoutRequestBuffer = timeoutRequestData.getBytes();
+//        DatagramPacket requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, port);
+//        DatagramSocket socket = new DatagramSocket();
+//        socket.send(requestPacket);
+//
+//        byte[] buffer = new byte[1000];
+//        DatagramSocket receiveSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT+1, InetAddress.getByName(CONFIGURATION.SEQUENCER_IP));
+//        DatagramPacket response = new DatagramPacket(buffer, buffer.length);
+//        receiveSocket.receive(response);
+//
+//        String sentence = new String(response.getData(), 0, response.getLength());
+//        socket.close();
+//        receiveSocket.close();
+//
+//        if (sentence.equals("Replica Restarted")) {
 
             while (backupTemp.peek() != null) {
                     String requestData = backupTemp.getFirst().request;
                     // Define the multicast address and port number
                     requestData = "backup;" + requestData;
-                    timeoutRequestBuffer = requestData.getBytes();
-                    requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, CONFIGURATION.CRASH_MAIN_RM);
-                    socket = new DatagramSocket();
+                    byte[] timeoutRequestBuffer = requestData.getBytes();
+                    DatagramPacket requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, CONFIGURATION.CRASH_MAIN_RM);
+                    DatagramSocket socket = new DatagramSocket();
                     socket.send(requestPacket);
-                    if (backupTemp.size() == 1)
-                        socket.setSoTimeout(5000);
+
+                    byte[] crashbuffer = new byte[1000];
+                    DatagramSocket crashReceiveSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_BACKUP_PORT, InetAddress.getByName(CONFIGURATION.SEQUENCER_IP));
+                    DatagramPacket crashResponse = new DatagramPacket(crashbuffer, crashbuffer.length);
+                    crashReceiveSocket.receive(crashResponse);
+
+                    String backupResponse = new String(crashResponse.getData(), 0, crashResponse.getLength());
+                    System.out.println("Sequencer : " + backupResponse);
+                    crashReceiveSocket.close();
                     socket.close();
+
                     backupTemp.removeFirst();
 
             }
             isRecovering = false;
             sendRequest();
-
-        } else {
-            sendTimeoutRequestToReplica(port,address, backupRequestQueue);
-        }
+//
+//        } else {
+//            sendTimeoutRequestToReplica(port,address, backupRequestQueue);
+//        }
 
     }
 

@@ -7,6 +7,7 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import java.io.IOException;
 import java.net.*;
+import java.util.Map;
 
 public class ReplicaManager {
     private int port;
@@ -46,7 +47,15 @@ public class ReplicaManager {
                     String server = request.split(",")[1];
                     setWebServiceParams(server.substring(0, 3));
                     // call method on replica server and get response
-                    callReplicaServerMethod(request);
+                    String response = callReplicaServerMethod(request);
+
+                    // send response back to frontend
+                    InetAddress sequencerAddress = InetAddress.getByName(CONFIGURATION.SEQUENCER_IP);
+                    int port = CONFIGURATION.SEQUENCER_BACKUP_PORT;
+                    byte[] responseBytes = response.getBytes();
+                    DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, sequencerAddress, port);
+                    socket.send(responsePacket);
+                    System.out.println("Sent response to " + sequencerAddress.getHostAddress() + ":" + port);
 
                 } else {
                     String server = request.split(",")[1];
@@ -104,6 +113,10 @@ public class ReplicaManager {
 
 
     private String callReplicaServerMethod(String request) {
+
+        if (MasterServerRef == null)
+            System.out.println("Null hai");
+
         String ans = "";
         // call method on replica server and return response
         String[] parts = request.split(",");
@@ -116,7 +129,7 @@ public class ReplicaManager {
         } else if (parts[0].equals("cancel")) {
             ans = MasterServerRef.cancelMovieTickets(parts[1], parts[2], parts[3], Integer.parseInt(parts[4]));
         } else if (parts[0].equals("listSlot")) {
-            ans = MasterServerRef.listMovieShowsAvailability(parts[1]);
+            ans = MasterServerRef.listMovieShowsAvailability(parts[2]);
         } else if (parts[0].equals("listbook")) {
             ans = MasterServerRef.getBookingSchedule(parts[1]);
         } else if (parts[0].equals("exchangeTickets")) {
