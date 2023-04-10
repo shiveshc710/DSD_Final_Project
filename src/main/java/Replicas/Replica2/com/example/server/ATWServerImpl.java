@@ -1,11 +1,11 @@
 package Replicas.Replica2.com.example.server;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import Replicas.Replica2.com.example.logging.LoggingHelper;
+import com.sun.javafx.util.Logging;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -15,11 +15,9 @@ import javax.jws.soap.SOAPBinding;
 public class ATWServerImpl implements BookingSystemInterface {
 
 
-
     private HashMap<String, HashMap<String, Integer>> movies = new HashMap<>();
 
     private HashMap<String, List<String[]>> customerBookings = new HashMap<>();
-
 
 
     /**
@@ -33,15 +31,23 @@ public class ATWServerImpl implements BookingSystemInterface {
     @Override
     public String addMovieSlots(String adminID, String movieID, String movieName, int bookingCapacity) {
         String requestParameters = adminID + "," + movieID + "," + movieName + "," + bookingCapacity;
+
         try {
-            if (movies.containsKey(movieName)) {
-                HashMap<String, Integer> possibleMovie = movies.get(movieName);
-                possibleMovie.put(movieID, bookingCapacity);
-                movies.put(movieName, possibleMovie);
+            if (!checkDate(movieID)) {
+
+                LoggingHelper.log(this.getClass().getName(), "Add Movie Slots", requestParameters, "Failed!", "Tickets cannot be booked for Date more than a week or for previous date.");
+                return "Failed";
+
             } else {
-                HashMap<String, Integer> movie = new HashMap<>();
-                movie.put(movieID, bookingCapacity);
-                movies.put(movieName, movie);
+                if (movies.containsKey(movieName)) {
+                    HashMap<String, Integer> possibleMovie = movies.get(movieName);
+                    possibleMovie.put(movieID, bookingCapacity);
+                    movies.put(movieName, possibleMovie);
+                } else {
+                    HashMap<String, Integer> movie = new HashMap<>();
+                    movie.put(movieID, bookingCapacity);
+                    movies.put(movieName, movie);
+                }
             }
 
 
@@ -55,17 +61,17 @@ public class ATWServerImpl implements BookingSystemInterface {
     }
 
     @Override
-    public void createATWObject(){
+    public void createATWObject() {
 
     }
 
     @Override
-    public void createOUTObject()  {
+    public void createOUTObject() {
 
     }
 
     @Override
-    public void createVERObject()  {
+    public void createVERObject() {
 
     }
 
@@ -110,14 +116,14 @@ public class ATWServerImpl implements BookingSystemInterface {
         try {
             if (movies != null) {
                 LoggingHelper.log(this.getClass().getName(), "List Movie Shows Availability", movieName, "Success!", "Success!");
-                String ans = "";
+                String result = "";
                 HashMap<String, Integer> shows = movies.get(movieName);
                 Set<String> keys = shows.keySet();
                 System.out.print(movieName + ": ");
                 for (String key : keys) {
-                    ans += key + ": " + shows.get(key) + " ";
+                    result += key + " : " + shows.get(key) + "\n";
                 }
-                return ans;
+                return result;
             } else {
                 LoggingHelper.log(this.getClass().getName(), "List Movie Shows Availability", movieName, "Failed!", "Failed!");
                 return "";
@@ -206,24 +212,32 @@ public class ATWServerImpl implements BookingSystemInterface {
      */
     @Override
     public String getBookingSchedule(String customerID) {
-        String ans = "";
+
         try {
-            if (customerBookings != null) {
+            String resultReturned = "";
+            if (customerBookings.containsKey(customerID)) {
                 List<String[]> allCustomerBookings = customerBookings.get(customerID);
                 LoggingHelper.log(this.getClass().getName(), "Get Booking Schedule", customerID, "Success!", "Success!");
 
-                for (int i = 0; i < allCustomerBookings.size(); i++) {
-                    String[] details = allCustomerBookings.get(i);
-                    ans += i + 1 + "." + " Your Booking is confirmed for Movie: " + details[1] + " with Movie ID: " + details[0] + " of these many Tickets: " + details[2];
-                    ans += "\n";
+                if (!allCustomerBookings.isEmpty()) {
+                    for (int i = 0; i < allCustomerBookings.size(); i++) {
+                        String[] details = allCustomerBookings.get(i);
+//                    ans += i + 1 + "." + " Your Booking is confirmed for Movie: " + details[1] + " with Movie ID: " + details[0] + " of these many Tickets: " + details[2];
+//                    ans += "\n";
+                        resultReturned = resultReturned + "Movie Name: " + details[1] + " | Show ID: " + details[0] + " | Tickets Booked: " + details[2] + "\n";
+                        System.out.println("Movie Name: " + details[1] + " | Show ID: " + details[0] + " | Tickets Booked: " + details[2]);
+
+                    }
                 }
-                return ans;
+                return resultReturned;
             }
+            return "";
         } catch (Exception e) {
             System.out.println("Exception in implementer class:" + e);
             LoggingHelper.log(this.getClass().getName(), "Get Booking Schedule", customerID, "Failed!", "Failed!");
+            return "";
         }
-        return "";
+
     }
 
     /**
@@ -304,6 +318,37 @@ public class ATWServerImpl implements BookingSystemInterface {
     @Override
     public String exchangeTickets(String customerID, String movieID, String movieName, String new_movieID, String new_movieName, int numberOfTickets) {
         return null;
+    }
+
+    public boolean checkDate(String movieID) throws ParseException {
+
+        String date_temp = movieID.substring(4);
+        Date date = new Date();
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, 7);
+
+
+        String tempCurrentDate = new SimpleDateFormat("ddMMyy").format(new Date());
+        Date currentDate = new SimpleDateFormat("ddMMyy").parse(tempCurrentDate);
+        ;
+        Date nextWeek = null;
+        String temp = new SimpleDateFormat("ddMMyy").format(c.getTime());
+
+        nextWeek = new SimpleDateFormat("ddMMyy").parse(temp);
+        date = new SimpleDateFormat("ddMMyy").parse(date_temp);
+
+        if (date.equals(currentDate)) {
+            return true;
+        } else if (date.before(currentDate)) {
+            return false;
+        } else if (date.after(nextWeek)) {
+            return false;
+        }
+
+        return true;
+
     }
 
 }

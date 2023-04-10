@@ -76,7 +76,7 @@ public class adminClient {
                 URL url = new URL("http://localhost:8080/mainserver?wsdl");
                 QName qname = new QName("http://example.com/mainserver", "MainServerImplService");
                 Service service = Service.create(url, qname);
-                com.example.client.MainServerImpl mainServerImpl = service.getPort(com.example.client.MainServerImpl.class);
+                Replicas.Replica3.com.example.client.MainServerImpl mainServerImpl = service.getPort(Replicas.Replica3.com.example.client.MainServerImpl.class);
                 System.out.println(mainServerImpl.addMovieSlots(id, mID, movieName, capacity));
                 displayMenu();
             } else if (choice == 2) {
@@ -117,7 +117,7 @@ public class adminClient {
                 URL url = new URL("http://localhost:8080/mainserver?wsdl");
                 QName qname = new QName("http://example.com/mainserver", "MainServerImplService");
                 Service service = Service.create(url, qname);
-                com.example.client.MainServerImpl mainServerImpl = service.getPort(com.example.client.MainServerImpl.class);
+                Replicas.Replica3.com.example.client.MainServerImpl mainServerImpl = service.getPort(Replicas.Replica3.com.example.client.MainServerImpl.class);
                 System.out.println(mainServerImpl.removeMovieSlots(id, mID, movieName));
                 displayMenu();
             } else if (choice == 3) {
@@ -126,11 +126,11 @@ public class adminClient {
                 URL url = new URL("http://localhost:8080/mainserver?wsdl");
                 QName qname = new QName("http://example.com/mainserver", "MainServerImplService");
                 Service service = Service.create(url, qname);
-                com.example.client.MainServerImpl mainServerImpl = service.getPort(com.example.client.MainServerImpl.class);
+                Replicas.Replica3.com.example.client.MainServerImpl mainServerImpl = service.getPort(Replicas.Replica3.com.example.client.MainServerImpl.class);
                 System.out.println(mainServerImpl.listMovieShowsAvailability(movieName));
                 displayMenu();
             } else if (choice == 4) {
-                com.example.client.customerClient.displayMenu( 1);
+                Replicas.Replica3.com.example.client.customerClient.displayMenu( 1);
             } else {
                 System.out.println("Thank you for using our system.");
                 System.exit(0);

@@ -1,5 +1,7 @@
 package Replicas.Replica3;
 
+import Replicas.Replica2.com.example.logging.LoggingHelper;
+
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.xml.ws.Endpoint;
@@ -8,10 +10,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @WebService(targetNamespace = "http://example.com/atw")
 public class ATWImpl {
@@ -34,6 +35,11 @@ public class ATWImpl {
         String status = "Success";
         String serverResponse = "Movie Slots Added";
         try {
+            if (!checkDate(movieID)) {
+                status = "Failed";
+                logATW(currentTime, requestType, requestParameters, status,  "Tickets cannot be booked for Date more than a week or for previous date.", adminID);
+                return status;
+            }
             if (!movieInfo.containsKey(movieName)) {
                 HashMap<String, Integer> value = new HashMap<String, Integer>();
                 value.put(movieID, bookingCapacity);
@@ -438,5 +444,36 @@ public class ATWImpl {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean checkDate(String movieID) throws ParseException {
+
+        String date_temp = movieID.substring(4);
+        Date date = new Date();
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, 7);
+
+
+        String tempCurrentDate = new SimpleDateFormat("ddMMyy").format(new Date());
+        Date currentDate = new SimpleDateFormat("ddMMyy").parse(tempCurrentDate);
+        ;
+        Date nextWeek = null;
+        String temp = new SimpleDateFormat("ddMMyy").format(c.getTime());
+
+        nextWeek = new SimpleDateFormat("ddMMyy").parse(temp);
+        date = new SimpleDateFormat("ddMMyy").parse(date_temp);
+
+        if (date.equals(currentDate)) {
+            return true;
+        } else if (date.before(currentDate)) {
+            return false;
+        } else if (date.after(nextWeek)) {
+            return false;
+        }
+
+        return true;
+
     }
 }

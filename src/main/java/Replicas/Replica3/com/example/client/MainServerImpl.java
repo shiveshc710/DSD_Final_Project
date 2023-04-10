@@ -1,5 +1,5 @@
 
-package com.example.client;
+package Replicas.Replica3.com.example.client;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -19,7 +19,7 @@ import javax.xml.ws.ResponseWrapper;
  */
 @WebService(name = "MainServerImpl", targetNamespace = "http://example.com/mainserver")
 @XmlSeeAlso({
-    ObjectFactory.class
+    com.example.client.ObjectFactory.class
 })
 public interface MainServerImpl {
 

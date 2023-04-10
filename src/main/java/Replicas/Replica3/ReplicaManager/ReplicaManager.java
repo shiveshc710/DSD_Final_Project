@@ -14,7 +14,7 @@ import java.net.URL;
 
 public class ReplicaManager {
     private int port;
-    private static com.example.client.MainServerImpl MasterServerRef;
+    private static Replicas.Replica3.com.example.client.MainServerImpl MasterServerRef;
     private DatagramSocket socket;
     private boolean running;
 
@@ -90,7 +90,7 @@ public class ReplicaManager {
             URL url = new URL("http://localhost:8080/mainserver?wsdl");
             QName qname = new QName("http://example.com/mainserver", "MainServerImplService");
             Service service = Service.create(url, qname);
-            MasterServerRef = service.getPort(com.example.client.MainServerImpl.class);
+            MasterServerRef = service.getPort(Replicas.Replica3.com.example.client.MainServerImpl.class);
 
 
         } catch (Exception e) {

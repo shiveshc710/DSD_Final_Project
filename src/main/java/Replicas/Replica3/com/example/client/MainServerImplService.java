@@ -1,5 +1,5 @@
 
-package com.example.client;
+package Replicas.Replica3.com.example.client;
 
 import java.net.MalformedURLException;
 import java.net.URL;

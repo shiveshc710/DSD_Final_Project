@@ -233,9 +233,9 @@ public class MasterServerImpl implements BookingSystemInterface {
 
             String completeAns = "";
 
-            completeAns = atwServerREF.getBookingSchedule(customerID) +
-                    outServerREF.getBookingSchedule(customerID) +
-                    verServerREF.getBookingSchedule(customerID);
+            completeAns = "----------Atwater----------\n" + atwServerREF.getBookingSchedule(customerID) +
+                          "----------Verdun----------\n"+ verServerREF.getBookingSchedule(customerID) +
+                          "----------Outremont----------\n"+outServerREF.getBookingSchedule(customerID);
 
 
             return completeAns;

@@ -1,4 +1,4 @@
-package com.example.client;
+package Replicas.Replica3.com.example.client;
 
 import Replicas.Replica3.com.example.client.adminClient;
 
@@ -74,7 +74,7 @@ public class customerClient {
                 URL url = new URL("http://localhost:8080/mainserver?wsdl");
                 QName qname = new QName("http://example.com/mainserver", "MainServerImplService");
                 Service service = Service.create(url, qname);
-                com.example.client.MainServerImpl mainServerImpl = service.getPort(com.example.client.MainServerImpl.class);
+                Replicas.Replica3.com.example.client.MainServerImpl mainServerImpl = service.getPort(Replicas.Replica3.com.example.client.MainServerImpl.class);
                 System.out.println(mainServerImpl.bookMovieTickets(id, mID, movieName, capacity));
                 displayMenu(check);
             } else if (choice == 2) {
@@ -83,7 +83,7 @@ public class customerClient {
                 URL url = new URL("http://localhost:8080/mainserver?wsdl");
                 QName qname = new QName("http://example.com/mainserver", "MainServerImplService");
                 Service service = Service.create(url, qname);
-                com.example.client.MainServerImpl mainServerImpl = service.getPort(com.example.client.MainServerImpl.class);
+                Replicas.Replica3.com.example.client.MainServerImpl mainServerImpl = service.getPort(Replicas.Replica3.com.example.client.MainServerImpl.class);
                 String result = mainServerImpl.getBookingSchedule(movieName);
                 System.out.println(result);
                 displayMenu(check);
@@ -128,7 +128,7 @@ public class customerClient {
                 URL url = new URL("http://localhost:8080/mainserver?wsdl");
                 QName qname = new QName("http://example.com/mainserver", "MainServerImplService");
                 Service service = Service.create(url, qname);
-                com.example.client.MainServerImpl mainServerImpl = service.getPort(com.example.client.MainServerImpl.class);
+                Replicas.Replica3.com.example.client.MainServerImpl mainServerImpl = service.getPort(Replicas.Replica3.com.example.client.MainServerImpl.class);
                 System.out.println(mainServerImpl.cancelMovieTickets(id, mID, movieName, capacity));
                 displayMenu(check);
             } else if (choice == 4) {
@@ -207,7 +207,7 @@ public class customerClient {
                 URL url = new URL("http://localhost:8080/mainserver?wsdl");
                 QName qname = new QName("http://example.com/mainserver", "MainServerImplService");
                 Service service = Service.create(url, qname);
-                com.example.client.MainServerImpl mainServerImpl = service.getPort(com.example.client.MainServerImpl.class);
+                Replicas.Replica3.com.example.client.MainServerImpl mainServerImpl = service.getPort(Replicas.Replica3.com.example.client.MainServerImpl.class);
                 System.out.println(mainServerImpl.exchangeTickets(id, mID, movieName, mID1, newmovieName, capacity));
                 displayMenu(check);
             } else {

@@ -12,13 +12,13 @@ public class CONFIGURATION {
     public static final int VER_PORT = 5001;
     public static final int OUT_PORT = 5002;
 
-    public static final int Main_PORT_2 = 5006;
+    public static final int Main_PORT_2 = 5007;
 
-    public static final int ATW_PORT_2 = 5003;
+    public static final int ATW_PORT_2 = 5008;
 
-    public static final int OUT_PORT_2 = 5004;
+    public static final int OUT_PORT_2 = 5009;
 
-    public static final int VER_PORT_2 = 5005;
+    public static final int VER_PORT_2 = 5010;
     public static final String ATWSERVER = "ATW";
     public static final String OUTSERVER = "OUT";
     public static final String VERSERVER = "VER";
