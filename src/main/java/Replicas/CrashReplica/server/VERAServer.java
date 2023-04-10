@@ -2,6 +2,7 @@ package Replicas.CrashReplica.server;
 
 import Replicas.CrashReplica.implementation.VERImplementation;
 import config.CONFIGURATION;
+
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -16,14 +17,16 @@ public class VERAServer {
     private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     static FileHandler fh;
     static SimpleFormatter formatter = new SimpleFormatter();
+
     public static void main(String[] args) throws RemoteException {
         VERImplementation ver_implementation = new VERImplementation();
-        Endpoint endPoint = Endpoint.publish("http://localhost:"+CONFIGURATION.CRASH_MAIN_PORT_VER+"/DMTBSVER", ver_implementation);
+        Endpoint endPoint = Endpoint.publish("http://localhost:" + CONFIGURATION.CRASH_MAIN_PORT_VER + "/DMTBSVER", ver_implementation);
         System.out.println("Verdun server published : " + endPoint);
         System.out.println("Verdun server published : " + endPoint.isPublished());
         System.out.println("Verdun server is Up and Running...");
 
-        Runnable task = () -> listenForUDP(ver_implementation);;
+        Runnable task = () -> listenForUDP(ver_implementation);
+        ;
         Thread t = new Thread(task);
         t.start();
     }
@@ -79,10 +82,10 @@ public class VERAServer {
         }
     }
 
-    public static void writeLog(String message){
+    public static void writeLog(String message) {
         try {
 
-            fh = new FileHandler("src/main/java/Replicas/CrashReplica/logs/VERLog.log", 0,1,true);
+            fh = new FileHandler("src/main/java/Replicas/CrashReplica/logs/VERLog.log", 0, 1, true);
 
             fh.setFormatter(formatter);
 
@@ -90,7 +93,7 @@ public class VERAServer {
 
             logger.setUseParentHandlers(false);
 
-            logger.info("Log from  Verdun : "+ message);
+            logger.info("Log from  Verdun : " + message);
 
             fh.close();
             LogManager.getLogManager().reset();

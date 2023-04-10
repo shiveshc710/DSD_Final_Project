@@ -2,6 +2,7 @@ package Replicas.CrashReplica.server;
 
 import Replicas.CrashReplica.implementation.ATWImplementation;
 import config.CONFIGURATION;
+
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -15,9 +16,9 @@ public class ATWAServer {
     static FileHandler fh;
     static SimpleFormatter formatter = new SimpleFormatter();
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         ATWImplementation atw_implementation = new ATWImplementation();
-        Endpoint endPoint = Endpoint.publish("http://localhost:"+CONFIGURATION.CRASH_MAIN_PORT_ATW+"/DMTBSATW", atw_implementation);
+        Endpoint endPoint = Endpoint.publish("http://localhost:" + CONFIGURATION.CRASH_MAIN_PORT_ATW + "/DMTBSATW", atw_implementation);
         System.out.println("Atwater server published : " + endPoint.isPublished());
         System.out.println("Atwater server is Up and Running...");
 
@@ -77,10 +78,10 @@ public class ATWAServer {
         }
     }
 
-    public static void writeLog(String message){
+    public static void writeLog(String message) {
         try {
 
-            fh = new FileHandler("src/logs/ATWLog.log", 0,1,true);
+            fh = new FileHandler("src/logs/ATWLog.log", 0, 1, true);
 
             fh.setFormatter(formatter);
 
@@ -88,7 +89,7 @@ public class ATWAServer {
 
             logger.setUseParentHandlers(false);
 
-            logger.info("Log from  Atwater : "+ message);
+            logger.info("Log from  Atwater : " + message);
 
             fh.close();
 

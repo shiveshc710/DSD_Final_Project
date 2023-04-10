@@ -162,8 +162,7 @@ public class MainServerImpl {
         } else {
             if (same) {
                 customerBookingInDiffAreas.put(customerID, 0);
-            }
-            else {
+            } else {
                 customerBookingInDiffAreas.put(customerID, 1);
             }
         }
@@ -253,7 +252,7 @@ public class MainServerImpl {
     public String getBookingSchedule(String customerID) {
         String result = "";
         try {
-            result+= "----------Atwater----------\n";
+            result += "----------Atwater----------\n";
             URL url = new URL("http://localhost:8081/atw?wsdl");
             QName qname = new QName("http://example.com/atw", "ATWImplService");
             Service service = Service.create(url, qname);
@@ -269,7 +268,7 @@ public class MainServerImpl {
             e.printStackTrace(System.err);
         }
         try {
-            result+= "----------Verdun----------\n";
+            result += "----------Verdun----------\n";
             URL url = new URL("http://localhost:8082/ver?wsdl");
             QName qname = new QName("http://example.com/ver", "VERImplService");
             Service service = Service.create(url, qname);
@@ -285,7 +284,7 @@ public class MainServerImpl {
             e.printStackTrace(System.err);
         }
         try {
-            result+= "----------Outremont----------\n";
+            result += "----------Outremont----------\n";
             URL url = new URL("http://localhost:8083/out?wsdl");
             QName qname = new QName("http://example.com/out", "OUTImplService");
             Service service = Service.create(url, qname);

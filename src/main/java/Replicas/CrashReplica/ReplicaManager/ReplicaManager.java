@@ -26,7 +26,7 @@ public class ReplicaManager {
     public void start() throws Exception {
         running = true;
         try {
-            socket = new DatagramSocket(port,InetAddress.getByName(CONFIGURATION.CRASH_RM_IP));
+            socket = new DatagramSocket(port, InetAddress.getByName(CONFIGURATION.CRASH_RM_IP));
             System.out.println("ReplicaManager started on port " + port);
 
 

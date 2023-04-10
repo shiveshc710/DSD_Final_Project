@@ -23,7 +23,7 @@ public class ReplicaManager {
     public void start() throws Exception {
         running = true;
         try {
-            socket = new DatagramSocket(port,InetAddress.getByName(CONFIGURATION.RM1_IP));
+            socket = new DatagramSocket(port, InetAddress.getByName(CONFIGURATION.RM1_IP));
             System.out.println("ReplicaManager started on port " + port);
 
 
@@ -125,10 +125,7 @@ public class ReplicaManager {
         } else if (parts[0].equals("cancel")) {
             ans = MasterServerRef.cancelMovieTickets(parts[1], parts[2], parts[3], Integer.parseInt(parts[4]));
         } else if (parts[0].equals("listSlot")) {
-            if (MasterServerRef != null)
-                ans = MasterServerRef.listMovieShowsAvailability(parts[1]);
-            else
-                System.out.println("Laude null hai");
+            ans = MasterServerRef.listMovieShowsAvailability(parts[1]);
         } else if (parts[0].equals("listbook")) {
             ans = MasterServerRef.getBookingSchedule(parts[1]);
         } else if (parts[0].equals("exchangeTickets")) {

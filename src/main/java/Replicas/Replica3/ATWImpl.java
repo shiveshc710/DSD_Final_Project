@@ -8,10 +8,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @WebService(targetNamespace = "http://example.com/atw")
 public class ATWImpl {
@@ -25,7 +24,44 @@ public class ATWImpl {
     }
 
     @WebMethod
-    public String addMovieSlotsATW(String adminID, String movieID, String movieName, int bookingCapacity)  {
+    public String addMovieSlotsATW(String adminID, String movieID, String movieName, int bookingCapacity) {
+        boolean checkValidDate;
+        String date_temp = movieID.substring(4);
+        Date date1 = new Date();
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date1);
+        c.add(Calendar.DATE, 7);
+
+        try {
+            String tempCurrentDate = new SimpleDateFormat("ddMMyy").format(new Date());
+            Date currentDate = null;
+
+            currentDate = new SimpleDateFormat("ddMMyy").parse(tempCurrentDate);
+            Date nextWeek = null;
+            String temp = new SimpleDateFormat("ddMMyy").format(c.getTime());
+
+            nextWeek = new SimpleDateFormat("ddMMyy").parse(temp);
+            date1 = new SimpleDateFormat("ddMMyy").parse(date_temp);
+
+            if (date1.equals(currentDate)) {
+                checkValidDate = true;
+            } else if (date1.before(currentDate)) {
+                checkValidDate = false;
+            } else if (date1.after(nextWeek)) {
+                checkValidDate = false;
+            } else {
+                checkValidDate = true;
+            }
+
+            if (!checkValidDate) {
+                return "Failed";
+            }
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
         Date date = new Date();
         DateFormat dateFormat = DateFormat.getTimeInstance();
         String currentTime = dateFormat.format(date);
@@ -85,7 +121,7 @@ public class ATWImpl {
      */
 
     @WebMethod
-    public String removeMovieSlotsATW(String adminID, String movieID, String movieName)  {
+    public String removeMovieSlotsATW(String adminID, String movieID, String movieName) {
         Date date = new Date();
         DateFormat dateFormat = DateFormat.getTimeInstance();
         String currentTime = dateFormat.format(date);
@@ -371,7 +407,7 @@ public class ATWImpl {
                     HashMap<String, Integer> showDetails = movie.getValue();
                     for (Map.Entry<String, Integer> show : showDetails.entrySet()) {
                         if (show.getValue() != 0) {
-                            resultReturned = resultReturned + "Movie Name: " + movieNames + " | Show ID: " + show.getKey() + " | Tickets Booked: " + show.getValue()+"\n";
+                            resultReturned = resultReturned + "Movie Name: " + movieNames + " | Show ID: " + show.getKey() + " | Tickets Booked: " + show.getValue() + "\n";
                             System.out.println("Movie Name: " + movieNames + " | Show ID: " + show.getKey() + " | Tickets Booked: " + show.getValue());
                         }
                     }

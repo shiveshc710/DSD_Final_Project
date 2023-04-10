@@ -20,7 +20,7 @@ public class OUTAServer {
 
     public static void main(String[] args) throws RemoteException {
         OUTImplementation out_implementation = new OUTImplementation();
-        Endpoint endPoint = Endpoint.publish("http://localhost:"+CONFIGURATION.CRASH_MAIN_PORT_OUT+"/DMTBSOUT", out_implementation);
+        Endpoint endPoint = Endpoint.publish("http://localhost:" + CONFIGURATION.CRASH_MAIN_PORT_OUT + "/DMTBSOUT", out_implementation);
         System.out.println("Outremont server published : " + endPoint.isPublished());
         System.out.println("Outremont server is Up and Running...");
 
@@ -79,10 +79,10 @@ public class OUTAServer {
         }
     }
 
-    public static void writeLog(String message){
+    public static void writeLog(String message) {
         try {
 
-            fh = new FileHandler("src/main/java/Replicas/CrashReplica/logs/ATWLog.log", 0,1,true);
+            fh = new FileHandler("src/main/java/Replicas/CrashReplica/logs/ATWLog.log", 0, 1, true);
 
             fh.setFormatter(formatter);
 
@@ -90,7 +90,7 @@ public class OUTAServer {
 
             logger.setUseParentHandlers(false);
 
-            logger.info("Log from  Atwater : "+ message);
+            logger.info("Log from  Atwater : " + message);
 
             fh.close();
             LogManager.getLogManager().reset();

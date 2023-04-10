@@ -25,7 +25,7 @@ public class ReplicaManager {
     public void start() {
         running = true;
         try {
-            socket = new DatagramSocket(port,InetAddress.getByName(CONFIGURATION.RM3_IP));
+            socket = new DatagramSocket(port, InetAddress.getByName(CONFIGURATION.RM3_IP));
             System.out.println("ReplicaManager started on port " + port);
 
             while (running) {
@@ -90,7 +90,7 @@ public class ReplicaManager {
         } else if (parts[0].equals("listbook")) {
             ans = MasterServerRef.getBookingSchedule(parts[1]);
         } else if (parts[0].equals("exchangeTickets")) {
-            ans = MasterServerRef.exchangeTickets(parts[1],parts[2],parts[3],parts[4],parts[5],Integer.parseInt(parts[6]));
+            ans = MasterServerRef.exchangeTickets(parts[1], parts[2], parts[3], parts[4], parts[5], Integer.parseInt(parts[6]));
         }
 
         return ans;

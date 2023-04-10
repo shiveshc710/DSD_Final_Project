@@ -95,13 +95,13 @@ public class FrontEnd {
                             replicaId = 3;
                             responses[replicaId - 1] = response;
 
-                        }else if (port == CONFIGURATION.CRASH_MAIN_RM) {
+                        } else if (port == CONFIGURATION.CRASH_MAIN_RM) {
                             isCrashReplica = true;
                         } else {
                             System.err.println("Received response from unknown port: " + port);
                             continue;
                         }
-                         // Store the response in the correct position of the responses array
+                        // Store the response in the correct position of the responses array
                         numResponses++;
                     } catch (SocketTimeoutException e) {
                         int replicaId = i + 1;
@@ -146,7 +146,6 @@ public class FrontEnd {
                         noResponseServer = (i + 1);
                     }
                 }
-
 
 
                 if (noResponseServer != -1) {

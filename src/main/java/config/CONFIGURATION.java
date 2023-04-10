@@ -5,7 +5,7 @@ public class CONFIGURATION {
 
 //    Ports
 
-//    Replica 1 Ports
+    //    Replica 1 Ports
     public static final int RM1_PORT = 5000;
     public static final int ATW_PORT = 5000;
     public static final int VER_PORT = 5001;
@@ -14,7 +14,7 @@ public class CONFIGURATION {
     public static final int VER_LISTENER = 7002;
     public static final int OUT_LISTENER = 7003;
 
-//    Crash Replica ports
+    //    Crash Replica ports
     public static final int CRASH_ATW_LISTENER = 7004;
     public static final int CRASH_VER_LISTENER = 7005;
     public static final int CRASH_OUT_LISTENER = 7006;
@@ -23,7 +23,7 @@ public class CONFIGURATION {
     public static final int CRASH_MAIN_PORT_VER = 8002;
     public static final int CRASH_MAIN_PORT_OUT = 8003;
 
-//    Replica 2 ports
+    //    Replica 2 ports
     public static final int RM2_PORT = 6000;
     public static final int SERVER_MAIN_PUBLISHER_PORT = 5006;
 
@@ -37,14 +37,14 @@ public class CONFIGURATION {
 
     public static final int RM3_PORT = 7000;
 
-//    Sequencer
+    //    Sequencer
     public static final int SEQUENCER_PORT = 1333;
 
-//    Client Ports
+    //    Client Ports
     public static final int CLIENT_PORT_ADMIN = 4000;
     public static final int CLIENT_PORT_CUSTOMER = 4001;
 
-//    FE Ports
+    //    FE Ports
     public static final int FE_PORT = 9000;
 
     public static final int FE_RECEIVE_PORT = 9001;
@@ -61,7 +61,7 @@ public class CONFIGURATION {
     public static final String TITANIC = "Titanic";
 
 
-//    IP Configuration
+    //    IP Configuration
     public static final String HOSTNAME = "localhost";
 //    public static final String SEQUENCER_IP = "10.0.0.9";
 //    public static final String RM1_IP = "10.0.0.179";

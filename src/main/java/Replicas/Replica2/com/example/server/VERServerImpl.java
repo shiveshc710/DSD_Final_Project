@@ -1,9 +1,8 @@
 package Replicas.Replica2.com.example.server;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import Replicas.Replica2.com.example.logging.LoggingHelper;
 
@@ -15,11 +14,9 @@ import javax.jws.soap.SOAPBinding;
 public class VERServerImpl implements BookingSystemInterface {
 
 
-
     private HashMap<String, HashMap<String, Integer>> movies = new HashMap<>();
 
     private HashMap<String, List<String[]>> customerBookings = new HashMap<>();
-
 
 
     /**
@@ -32,6 +29,45 @@ public class VERServerImpl implements BookingSystemInterface {
      */
     @Override
     public String addMovieSlots(String adminID, String movieID, String movieName, int bookingCapacity) {
+        boolean checkValidDate;
+        String date_temp = movieID.substring(4);
+        Date date1 = new Date();
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date1);
+        c.add(Calendar.DATE, 7);
+
+        try {
+            String tempCurrentDate = new SimpleDateFormat("ddMMyy").format(new Date());
+            Date currentDate = null;
+
+            currentDate = new SimpleDateFormat("ddMMyy").parse(tempCurrentDate);
+
+            Date nextWeek = null;
+            String temp = new SimpleDateFormat("ddMMyy").format(c.getTime());
+
+            nextWeek = new SimpleDateFormat("ddMMyy").parse(temp);
+            date1 = new SimpleDateFormat("ddMMyy").parse(date_temp);
+
+            if (date1.equals(currentDate)) {
+                checkValidDate = true;
+            } else if (date1.before(currentDate)) {
+                checkValidDate = false;
+            } else if (date1.after(nextWeek)) {
+                checkValidDate = false;
+            } else {
+                checkValidDate = true;
+            }
+
+            if (!checkValidDate) {
+                return "Failed";
+            }
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+
         String requestParameters = adminID + "," + movieID + "," + movieName + "," + bookingCapacity;
         try {
             if (movies.containsKey(movieName)) {
@@ -55,12 +91,12 @@ public class VERServerImpl implements BookingSystemInterface {
     }
 
     @Override
-    public void createATWObject(){
+    public void createATWObject() {
 
     }
 
     @Override
-    public void createOUTObject(){
+    public void createOUTObject() {
 
     }
 

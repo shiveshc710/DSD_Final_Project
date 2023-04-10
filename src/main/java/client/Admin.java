@@ -24,6 +24,7 @@ public class Admin {
     static SimpleFormatter formatter = new SimpleFormatter();
     static String URL = null;
     static String userID = null;
+
     public static void main(String[] args) throws UnknownHostException, SocketException {
 
         aSocket = new DatagramSocket(CONFIGURATION.CLIENT_PORT_ADMIN, InetAddress.getByName(CONFIGURATION.HOSTNAME));
@@ -57,7 +58,7 @@ public class Admin {
                     System.out.println("Please enter the proper serverName!");
                     userID = null;
                     writeLog("Invalid Admin ID : Invalid Server Name");
-                }else {
+                } else {
 
 //                    if (serverName.equals("ATW")) {
 //                        url= new URL("http://localhost:5000/DMTBSATW/?wsdl");
@@ -95,7 +96,7 @@ public class Admin {
                     movies.put(2, CONFIGURATION.AVENGERS);
                     movies.put(3, CONFIGURATION.TITANIC);
                     int movie = 0;
-                    String movieName="";
+                    String movieName = "";
                     int numberOfSlots = 0;
                     String movieId = "";
                     boolean exited = false;
@@ -124,9 +125,9 @@ public class Admin {
                             sc.nextLine();
                             System.out.print("\nPlease Enter the Movie ID {ATW/VER/OUT}{M/A/E}{DDMMYY}: ");
                             movieId = sc.next();
-                            writeLog(userID + " : Add slot | Request Parameters : Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Slots: " + numberOfSlots);
+                            writeLog(userID + " : Add slot | Request Parameters : Movie Id: " + movieId + " Movie Name: " + movieName + " Number of Slots: " + numberOfSlots);
 
-                            String req = "addSlot,"+userID+","+movieId+","+movieName+","+numberOfSlots;
+                            String req = "addSlot," + userID + "," + movieId + "," + movieName + "," + numberOfSlots;
                             sendRequest(req);
 
                             break;
@@ -156,7 +157,7 @@ public class Admin {
 //                            result = mtbsInterface.removeMovieSlots(movieId, movieName);
 //                            System.out.println(result);
 
-                            String req1 = "remSlot,"+userID+","+movieId+","+movieName;
+                            String req1 = "remSlot," + userID + "," + movieId + "," + movieName;
                             sendRequest(req1);
                             break;
                         case 3:
@@ -181,7 +182,7 @@ public class Admin {
                             movieName = movies.get(movie);
 
 //                            mtbsInterface = service.getPort(MTBSInterface.class);
-                            System.out.println("\nFetching show details for "+ movieName+"\n");
+                            System.out.println("\nFetching show details for " + movieName + "\n");
                             writeLog(userID + " : Display available slots | Request Parameters : Movie Name: " + movieName);
 //                            result = mtbsInterface.listMovieShowsAvailability(movieName);
                             System.out.println("============================\nAvailable shows for " + movieName
@@ -190,7 +191,7 @@ public class Admin {
 //                            for (int i = 0; i < showsList.length; i++) {
 //                                System.out.println(showsList[i]);
 //                            }
-                            String req100 = "listSlot,"+userID+","+movieName;
+                            String req100 = "listSlot," + userID + "," + movieName;
                             sendRequest(req100);
                             break;
                         case 4:
@@ -220,7 +221,7 @@ public class Admin {
                             System.out.print("Please enter customer ID: ");
                             String customerID = sc.next();
 //                            mtbsInterface = service.getPort(MTBSInterface.class);
-                            writeLog(customerID + " : Book Tickets | Request Parameters : Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Tickets: " + numberOfTicket);
+                            writeLog(customerID + " : Book Tickets | Request Parameters : Movie Id: " + movieId + " Movie Name: " + movieName + " Number of Tickets: " + numberOfTicket);
 //                            result = mtbsInterface.bookMovieTickets(customerID,movieId,movieName,numberOfTicket);
 //                            System.out.println(result);
                             String requestParameters = customerID + "," + movieId + "," + movieName + "," + numberOfTicket;
@@ -267,7 +268,7 @@ public class Admin {
                             System.out.print("Please enter customer ID: ");
                             customerID = sc.next();
 //                            mtbsInterface = service.getPort(MTBSInterface.class);mtbsInterface = service.getPort(MTBSInterface.class);
-                            writeLog(userID + " : Cancel Tickets | Request Parameters : Customer Id: "+customerID+" Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Slots: " + numberOfTicket);
+                            writeLog(userID + " : Cancel Tickets | Request Parameters : Customer Id: " + customerID + " Movie Id: " + movieId + " Movie Name: " + movieName + " Number of Slots: " + numberOfTicket);
 //                            result = mtbsInterface.cancelMovieTickets(customerID,movieId,movieName,numberOfTicket);
 //                            System.out.println(result);
                             String requestParameters3 = customerID + "," + movieId + "," + movieName + "," + numberOfTicket;
@@ -279,7 +280,7 @@ public class Admin {
                             break;
                     }
 
-                    if (exited){
+                    if (exited) {
                         writeLog("Admin Logging out.");
                         System.out.println("Admin Logged out....");
                         System.out.println("\nThank you for using our system!!!");
@@ -295,10 +296,10 @@ public class Admin {
 
     }
 
-    public static void writeLog(String message){
+    public static void writeLog(String message) {
         try {
 
-            fh = new FileHandler("src/main/java/Replicas/Replica1/logs/"+userID+"Log.log", 0,1,true);
+            fh = new FileHandler("src/main/java/Replicas/Replica1/logs/" + userID + "Log.log", 0, 1, true);
 
             fh.setFormatter(formatter);
 
@@ -306,7 +307,7 @@ public class Admin {
 
             logger.setUseParentHandlers(false);
 
-            logger.info("Log from "+ userID +"(Customer) : "+ message);
+            logger.info("Log from " + userID + "(Customer) : " + message);
 
             fh.close();
             LogManager.getLogManager().reset();
@@ -342,6 +343,6 @@ public class Admin {
 
         aSocket.receive(response);
         String sentence = new String(response.getData(), 0, response.getLength());
-        System.out.println(sentence+"\n");
+        System.out.println(sentence + "\n");
     }
 }

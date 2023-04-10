@@ -1,7 +1,6 @@
 package Replicas.Replica2.com.example.server;
 
 
-
 import Replicas.Replica2.com.example.client.VERServerImpl;
 import Replicas.Replica2.com.example.client.ATWServerImpl;
 import Replicas.Replica2.com.example.client.OUTServerImpl;
@@ -33,7 +32,7 @@ public class MasterServerImpl implements BookingSystemInterface {
     @Override
     public void createATWObject() {
         try {
-            URL url = new URL("http://localhost:"+CONFIGURATION.ATW_PORT_2+"/ATWServer?wsdl");
+            URL url = new URL("http://localhost:" + CONFIGURATION.ATW_PORT_2 + "/ATWServer?wsdl");
             QName qname = new QName("http://example.com/atw", "ATWServerImplService");
             Service service = Service.create(url, qname);
             ATWServerImpl port = service.getPort(ATWServerImpl.class);
@@ -48,12 +47,12 @@ public class MasterServerImpl implements BookingSystemInterface {
     public void createOUTObject() {
         //Taking reference from OUT Server
         try {
-            URL url = new URL("http://localhost:"+CONFIGURATION.OUT_PORT_2+"/OUTServer?wsdl");
+            URL url = new URL("http://localhost:" + CONFIGURATION.OUT_PORT_2 + "/OUTServer?wsdl");
             QName qname = new QName("http://example.com/out", "OUTServerImplService");
             Service service = Service.create(url, qname);
             OUTServerImpl port = service.getPort(OUTServerImpl.class);
             outServerREF = port;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error in createOUTObject: " + e);
         }
     }
@@ -62,12 +61,12 @@ public class MasterServerImpl implements BookingSystemInterface {
     public void createVERObject() {
         //Taking reference from OUT Server
         try {
-            URL url = new URL("http://localhost:"+CONFIGURATION.VER_PORT_2+"/VERServer?wsdl");
+            URL url = new URL("http://localhost:" + CONFIGURATION.VER_PORT_2 + "/VERServer?wsdl");
             QName qname = new QName("http://example.com/ver", "VERServerImplService");
             Service service = Service.create(url, qname);
             Replicas.Replica2.com.example.client.VERServerImpl port = service.getPort(VERServerImpl.class);
             verServerREF = port;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error in createVERObject: " + e);
         }
     }
@@ -143,7 +142,7 @@ public class MasterServerImpl implements BookingSystemInterface {
                 }
                 return verServerREF.removeMovieSlots(adminID, movieID, movieName);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error Occurred: " + e);
         }
         return "Failed";
@@ -158,15 +157,15 @@ public class MasterServerImpl implements BookingSystemInterface {
     public String listMovieShowsAvailability(String movieName) {
         try {
 
-            if(atwServerREF == null){
+            if (atwServerREF == null) {
                 this.createATWObject();
             }
 
-            if(outServerREF == null){
+            if (outServerREF == null) {
                 this.createOUTObject();
             }
 
-            if(verServerREF == null){
+            if (verServerREF == null) {
                 this.createVERObject();
             }
 
@@ -198,15 +197,15 @@ public class MasterServerImpl implements BookingSystemInterface {
                 customerBookingInDiffAreas.put(customerID, 0);
             }
 
-            if(atwServerREF == null){
+            if (atwServerREF == null) {
                 this.createATWObject();
             }
 
-            if(outServerREF == null){
+            if (outServerREF == null) {
                 this.createOUTObject();
             }
 
-            if(verServerREF == null){
+            if (verServerREF == null) {
                 this.createVERObject();
             }
 
@@ -227,15 +226,15 @@ public class MasterServerImpl implements BookingSystemInterface {
     public String getBookingSchedule(String customerID) {
         try {
 
-            if(atwServerREF == null){
+            if (atwServerREF == null) {
                 this.createATWObject();
             }
 
-            if(outServerREF == null){
+            if (outServerREF == null) {
                 this.createOUTObject();
             }
 
-            if(verServerREF == null){
+            if (verServerREF == null) {
                 this.createVERObject();
             }
 
@@ -271,54 +270,54 @@ public class MasterServerImpl implements BookingSystemInterface {
 
         try {
 
-            if(atwServerREF == null){
+            if (atwServerREF == null) {
                 this.createATWObject();
             }
 
-            if(outServerREF == null){
+            if (outServerREF == null) {
                 this.createOUTObject();
             }
 
-            if(verServerREF == null){
+            if (verServerREF == null) {
                 this.createVERObject();
             }
             if (movieID.startsWith("ATW")) {
 
-               return atwServerREF.cancelMovieTickets(customerID, movieID, movieName, numberOfTickets);
+                return atwServerREF.cancelMovieTickets(customerID, movieID, movieName, numberOfTickets);
             } else if (movieID.startsWith("OUT")) {
                 return outServerREF.cancelMovieTickets(customerID, movieID, movieName, numberOfTickets);
             } else if (movieID.startsWith("VER")) {
                 return verServerREF.cancelMovieTickets(customerID, movieID, movieName, numberOfTickets);
             }
 
-            }catch(Exception e){
-                System.out.println("Error Occurred in main server: " + e);
+        } catch (Exception e) {
+            System.out.println("Error Occurred in main server: " + e);
+        }
+        return "Failed";
+    }
+
+    @Override
+    public String exchangeTickets(String customerID, String movieID, String movieName, String new_movieID, String
+            new_movieName, int numberOfTickets) {
+
+        String requestParameters = customerID + "," + movieID + "," + movieName + "," + new_movieID + "," + new_movieName + "," + numberOfTickets;
+        try {
+            String ans = cancelMovieTickets(customerID, movieID, movieName, numberOfTickets);
+            if (ans.equals("Success")) {
+                ans = bookMovieTickets(customerID, new_movieID, new_movieName, numberOfTickets);
+                if (ans.equals("Success")) {
+                    return "Success";
+                } else {
+                    bookMovieTickets(customerID, movieID, movieName, numberOfTickets);
+                    return "Failed";
+                }
             }
+            return ans;
+        } catch (Exception e) {
+            System.out.println("Exception in server: " + e);
+            LoggingHelper.log(this.getClass().getName(), "Exchange Tickets", requestParameters, "Failed!", "Failed!");
             return "Failed";
         }
-
-        @Override
-        public String exchangeTickets (String customerID, String movieID, String movieName, String new_movieID, String
-        new_movieName,int numberOfTickets){
-
-            String requestParameters = customerID + "," + movieID + "," + movieName + "," + new_movieID + "," + new_movieName + "," + numberOfTickets;
-            try {
-                String ans = cancelMovieTickets(customerID, movieID, movieName, numberOfTickets);
-                if (ans.equals("Success")) {
-                    ans = bookMovieTickets(customerID, new_movieID, new_movieName, numberOfTickets);
-                    if (ans.equals("Success")) {
-                        return "Success";
-                    } else {
-                        bookMovieTickets(customerID, movieID, movieName, numberOfTickets);
-                        return "Failed";
-                    }
-                }
-                return ans;
-            } catch (Exception e) {
-                System.out.println("Exception in server: " + e);
-                LoggingHelper.log(this.getClass().getName(), "Exchange Tickets", requestParameters, "Failed!", "Failed!");
-                return "Failed";
-           }
 
     }
 }
