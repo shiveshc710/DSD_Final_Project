@@ -95,7 +95,9 @@ public class Customer {
                             System.out.print("\nPlease Enter the Movie ID {ATW/VER/OUT}{M/A/E}{DDMMYY}: ");
                             movieId = sc.next();
                             c.writeLog(userID + " : Book Tickets | Request Parameters : Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Tickets: " + numberOfTicket);
-
+                            String requestParameters = userID + "," + movieId + "," + movieName + "," + numberOfTicket;
+                            String req2 = "book," + requestParameters;
+                            sendRequest(req2);
                             break;
                         case 2:
 
@@ -103,7 +105,9 @@ public class Customer {
                             c.writeLog(userID + " : Get Bookings | Request Parameters : Customer Id: " + userID);
                             System.out.println("================================\nBookings of customer " + userID
                                     + "\n================================\n");
-
+                            String requestParameterslB = userID;
+                            String req200 = "listbook," + requestParameterslB;
+                            sendRequest(req200);
                             break;
                         case 3:
                             do {
@@ -130,7 +134,9 @@ public class Customer {
                             System.out.print("\nPlease Enter the Movie ID {ATW/VER/OUT}{M/A/E}{DDMMYY}: ");
                             movieId = sc.next();
                             c.writeLog(userID + " : Cancel Booking | Request Parameters : Customer Id: "+userID+" Movie Id: " + movieId + " Movie Name: " + movieName+ " Number of Slots: " + numberOfTicket);
-
+                            String requestParameters3 = userID + "," + movieId + "," + movieName + "," + numberOfTicket;
+                            String req3 = "cancel," + requestParameters3;
+                            sendRequest(req3);
                             break;
                         case 4:
                             System.out.print("\nPlease enter number of ticket you want to exchange: ");

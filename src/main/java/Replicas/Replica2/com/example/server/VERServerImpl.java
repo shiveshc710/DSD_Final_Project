@@ -296,7 +296,7 @@ public class VERServerImpl implements BookingSystemInterface {
                                     totalSeatsLeft = availableSeats + bookedSeats;
                                 } else if (bookedSeats > numberOfTickets) {
                                     bookedSeats = bookedSeats - numberOfTickets;
-                                    totalSeatsLeft = availableSeats + (bookedSeats - numberOfTickets);
+                                    totalSeatsLeft = availableSeats + numberOfTickets;
                                     String[] updatedRecord = {movieID, movieName, String.valueOf(bookedSeats)};
                                     customerBooking.remove(booking);
                                     customerBooking.add(updatedRecord);

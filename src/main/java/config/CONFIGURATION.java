@@ -65,22 +65,22 @@ public class CONFIGURATION {
 
     //    IP Configuration
     public static final String HOSTNAME = "localhost";
-//    public static final String SEQUENCER_IP = "10.0.0.9";
-//    public static final String RM1_IP = "10.0.0.179";
-//    public static final String RM2_IP = "10.0.0.179";
-//    public static final String RM3_IP = "10.0.0.179";
-//    public static final String CRASH_RM_IP = "10.0.0.179";
-//    public static final String FE_IP = "10.0.0.9";
+    public static final String SEQUENCER_IP = "172.20.10.3";
+    public static final String RM1_IP = "172.20.10.2";
+    public static final String RM2_IP = "172.20.10.3";
+    public static final String RM3_IP = "172.20.10.4";
+    public static final String CRASH_RM_IP = "172.20.10.2";
+    public static final String FE_IP = "172.20.10.3";
 
-    public static final String SEQUENCER_IP = "localhost";
-    public static final String RM1_IP = "localhost";
-    public static final String RM2_IP = "localhost";
-    public static final String RM3_IP = "localhost";
-    public static final String CRASH_RM_IP = "localhost";
-    public static final String FE_IP = "localhost";
+//    public static final String SEQUENCER_IP = "localhost";
+//    public static final String RM1_IP = "localhost";
+//    public static final String RM2_IP = "localhost";
+//    public static final String RM3_IP = "localhost";
+//    public static final String CRASH_RM_IP = "localhost";
+//    public static final String FE_IP = "localhost";
 
 
 //    CONSTANTS
 
-    public static final int TIMEOUT = 5000;
+    public static final int TIMEOUT = 8000;
 }
