@@ -78,27 +78,9 @@ public class Sequencer {
         }
     }
 
-    private static void sendTimeoutRequestToReplica(int port, String address, LinkedList<SequenceModel> backupRequestQueue) throws IOException {
-        InetAddress multicastAddress = InetAddress.getByName(address);
-        String timeoutRequestData = "Timeout";
+    private static void sendTimeoutRequestToReplica() throws IOException {
+        InetAddress multicastAddress = InetAddress.getByName(CONFIGURATION.CRASH_RM_IP);
         LinkedList<SequenceModel> backupTemp = backupRequestQueue;
-//
-//        //Sending UDP request to Replica Manager to reInstantiate the servers
-//        byte[] timeoutRequestBuffer = timeoutRequestData.getBytes();
-//        DatagramPacket requestPacket = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, multicastAddress, port);
-//        DatagramSocket socket = new DatagramSocket();
-//        socket.send(requestPacket);
-//
-//        byte[] buffer = new byte[1000];
-//        DatagramSocket receiveSocket = new DatagramSocket(CONFIGURATION.SEQUENCER_PORT+1, InetAddress.getByName(CONFIGURATION.SEQUENCER_IP));
-//        DatagramPacket response = new DatagramPacket(buffer, buffer.length);
-//        receiveSocket.receive(response);
-//
-//        String sentence = new String(response.getData(), 0, response.getLength());
-//        socket.close();
-//        receiveSocket.close();
-//
-//        if (sentence.equals("Replica Restarted")) {
 
             while (backupTemp.peek() != null) {
                     String requestData = backupTemp.getFirst().request;
@@ -124,23 +106,14 @@ public class Sequencer {
             }
             isRecovering = false;
             sendRequest();
-//
-//        } else {
-//            sendTimeoutRequestToReplica(port,address, backupRequestQueue);
-//        }
 
     }
 
     private static void handleServerRestart(int i) throws IOException {
         isRecovering = true;
         sendRequest();
-        if (i == 0) {
-            sendTimeoutRequestToReplica(CONFIGURATION.RM1_PORT,CONFIGURATION.RM1_IP, backupRequestQueue);
-        } else if (i == 1) {
-            sendTimeoutRequestToReplica(CONFIGURATION.RM2_PORT,CONFIGURATION.RM2_IP, backupRequestQueue);
-        } else if (i == 2) {
-            sendTimeoutRequestToReplica(CONFIGURATION.RM3_PORT,CONFIGURATION.RM3_IP, backupRequestQueue);
-        }
+        sendTimeoutRequestToReplica();
+
     }
 
     public static void sendRequest() throws IOException {
