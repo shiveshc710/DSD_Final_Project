@@ -20,6 +20,7 @@ public class FrontEnd {
     private int clientPort;
 
     private boolean isCrashReplica = false;
+    private boolean hasCrashed;
 
     public FrontEnd(String sequencerAddr, int sequencerPrt, String[] replicaAddrs, int[] replicaPrt, int timeoutMs, int frontEndPrt) throws UnknownHostException, SocketException {
         //Request from Client
@@ -148,7 +149,19 @@ public class FrontEnd {
                 }
 
 
-                if (noResponseServer != -1) {
+                if (noResponseServer != -1 && hasCrashed) {
+                    System.out.println("CrashReplica timed out.");
+                    System.out.println("Trying to restart CrashReplica " + noResponseServer);
+                    String timeoutRequestString = "CrashReplicaTimeout," + noResponseServer;
+
+                    byte[] timeoutRequestBuffer = timeoutRequestString.getBytes();
+                    // Send request to sequencer
+                    DatagramPacket timeoutSequencerRequest = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, sequencerAddress, sequencerPort);
+                    clientSocket.send(timeoutSequencerRequest);
+                    System.out.println("ayooooooooooooooooooooooooo"+timeoutRequestString);
+                }
+
+                if (noResponseServer != -1 && !hasCrashed) {
                     System.out.println("Replica " + (noResponseServer) + " timed out.");
                     System.out.println("Trying to restart Replica " + noResponseServer);
                     String timeoutRequestString = "Timeout," + noResponseServer;
@@ -157,6 +170,7 @@ public class FrontEnd {
                     // Send request to sequencer
                     DatagramPacket timeoutSequencerRequest = new DatagramPacket(timeoutRequestBuffer, timeoutRequestBuffer.length, sequencerAddress, sequencerPort);
                     clientSocket.send(timeoutSequencerRequest);
+                    hasCrashed = true;
 
                 }
 

@@ -1,2 +1,6 @@
 Apr 07, 2023 3:28:15 PM client.Admin writeLog
 INFO: Log from null(Customer) : Invalid Admin ID
+Apr 12, 2023 12:17:44 AM client.Admin writeLog
+INFO: Log from null(Customer) : Invalid Admin ID
+Apr 12, 2023 1:19:14 AM client.Admin writeLog
+INFO: Log from null(Customer) : Invalid Admin ID

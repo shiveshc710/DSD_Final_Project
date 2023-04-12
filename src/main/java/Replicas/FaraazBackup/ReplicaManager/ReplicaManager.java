@@ -7,10 +7,7 @@ import config.CONFIGURATION;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.URL;
+import java.net.*;
 
 public class ReplicaManager {
     private int port;
@@ -86,6 +83,18 @@ public class ReplicaManager {
     }
 
     private String callReplicaServerMethod(String request) {
+        if (MasterServerRef == null) {
+            System.out.println("Problem here");
+            URL url = null;
+            try {
+                url = new URL("http://localhost:8084/mainserver?wsdl");
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+            QName qname = new QName("http://example.com/mainserver", "MainServerImplService");
+            Service service = Service.create(url, qname);
+            MasterServerRef = service.getPort(com.example.client.MainServerImpl.class);
+        }
         String ans = "";
         // call method on replica server and return response
         String[] parts = request.split(",");

@@ -82,3 +82,142 @@ Apr 08, 2023 11:59:26 AM Replicas.Replica1.implementation.ATWImplementation writ
 INFO: Log from Atwater : Movie slot ATWA090423 added for : Avatar
 Apr 08, 2023 12:00:21 PM Replicas.Replica1.implementation.ATWImplementation writeLog
 INFO: Log from Atwater : Movie slot ATWA090423 added for : Avengers
+Apr 10, 2023 5:25:44 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA100423 added for : Avatar
+Apr 10, 2023 5:26:08 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA110423 added for : Avatar
+Apr 10, 2023 5:27:07 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie show found, no shows booked, deleting it without transfer
+Apr 10, 2023 5:33:15 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Unable to book show ATWA100423 for Avatar
+Apr 10, 2023 5:33:30 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : No movie slots is available for this type!!!
+Apr 10, 2023 5:33:41 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7002
+Apr 10, 2023 5:33:41 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7003
+Apr 10, 2023 5:33:41 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Received response
+Apr 10, 2023 5:33:41 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Outremont : List availabilities | Request Parameters : movieName: Avatar
+Apr 10, 2023 5:33:41 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Sending response to the request server.
+Apr 10, 2023 5:33:41 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7002
+Apr 10, 2023 5:33:41 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7003
+Apr 10, 2023 5:33:43 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : No result Found!!
+Apr 10, 2023 5:34:09 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA110423 added for : Avatar
+Apr 10, 2023 5:35:41 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Tickets for Avatar for 11/04
+Apr 10, 2023 6:13:40 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : No Bookings found
+
+Apr 10, 2023 6:15:16 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7002
+Apr 10, 2023 6:15:16 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7003
+Apr 10, 2023 6:15:16 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Received response
+Apr 10, 2023 6:15:16 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Outremont : Get Bookings for Atwater | Request Parameters : customerID: ATWC1234
+Apr 10, 2023 6:15:16 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Sending response to the request server.
+Apr 10, 2023 6:15:16 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7003
+Apr 10, 2023 6:15:18 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Bookings found from all servers for user : ATWC1234
+Apr 10, 2023 6:16:56 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Unable to book show ATWA100423 for Avatar
+Apr 10, 2023 6:17:15 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7002
+Apr 10, 2023 6:17:15 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7003
+Apr 10, 2023 6:17:15 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Received response
+Apr 10, 2023 6:17:15 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Outremont : List availabilities | Request Parameters : movieName: Avatar
+Apr 10, 2023 6:17:15 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Sending response to the request server.
+Apr 10, 2023 6:17:15 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7002
+Apr 10, 2023 6:17:15 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7003
+Apr 10, 2023 6:17:17 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : No result Found!!
+Apr 10, 2023 6:17:29 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : No movie slots is available for this type!!!
+Apr 10, 2023 6:18:50 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA100423 added for : Avatar
+Apr 10, 2023 6:19:37 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Tickets for Avatar for 10/04
+Apr 10, 2023 6:20:30 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7003
+Apr 10, 2023 6:20:30 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7002
+Apr 10, 2023 6:20:30 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Received response
+Apr 10, 2023 6:20:30 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Outremont : List availabilities | Request Parameters : movieName: Avatar
+Apr 10, 2023 6:20:30 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Sending response to the request server.
+Apr 10, 2023 6:20:32 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Data found from all servers
+Apr 10, 2023 6:24:10 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Received response
+Apr 10, 2023 6:24:10 PM Replicas.Replica1.server.OUTAServer writeLog
+INFO: Log from  Atwater : Outremont : Get Bookings for Atwater | Request Parameters : customerID: ATWC1234
+Apr 10, 2023 6:24:10 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7002
+Apr 10, 2023 6:24:10 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP request sent from Atwater to port 7003
+Apr 10, 2023 6:24:10 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : UDP response received from port 7003
+Apr 10, 2023 6:24:12 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Bookings found from all servers for user : ATWC1234
+Apr 11, 2023 11:17:01 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA110423 added for : Avatar
+Apr 11, 2023 11:22:12 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA110423 added for : Avatar
+Apr 11, 2023 11:29:31 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA110423 added for : Avatar
+Apr 11, 2023 11:35:50 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA110423 added for : Avatar
+Apr 11, 2023 11:42:16 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA110423 added for : Avatar
+Apr 11, 2023 11:47:52 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 11, 2023 11:53:44 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 11, 2023 11:57:32 PM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 12:03:10 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 12:14:06 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 12:17:53 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 12:21:46 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 12:26:55 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 12:31:07 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 12:36:37 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Unable to add slot : Invalid movieID
+Apr 12, 2023 12:36:56 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 12:53:32 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 1:04:23 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 1:08:55 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 1:19:24 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 1:24:40 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
+Apr 12, 2023 1:33:33 AM Replicas.Replica1.implementation.ATWImplementation writeLog
+INFO: Log from Atwater : Movie slot ATWA120423 added for : Avatar
